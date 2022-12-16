@@ -4,19 +4,47 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "prebuild": "pnpm add-asset-prefix",
+    "postbuild": "pnpm remove-asset-prefix",
+    "build": "next build && next export",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "clean": "rm -rf node_modules out",
+    "fund-bundlr": "arkb fund-bundler --wallet ./wallet.json --use-bundler https://node2.bundlr.network",
+    "deploy": "arkb deploy out --use-bundler https://node2.bundlr.network --wallet ./wallet.json",
+    "add-asset-prefix": "node scripts/add-asset-prefix.mjs",
+    "remove-asset-prefix": "node scripts/remove-asset-prefix.mjs"
   },
   "dependencies": {
+    "@fontsource/inter": "4.5.14",
+    "@radix-ui/colors": "0.1.8",
+    "@radix-ui/react-dialog": "1.0.2",
+    "@radix-ui/react-icons": "1.1.1",
+    "@radix-ui/react-switch": "1.0.1",
+    "@radix-ui/react-tooltip": "1.0.2",
+    "@stitches/react": "1.2.8",
+    "@visx/gradient": "2.10.0",
+    "@visx/group": "2.10.0",
+    "@visx/hierarchy": "2.10.0",
+    "@visx/responsive": "2.10.0",
+    "@visx/shape": "2.12.2",
+    "arweave": "1.11.8",
+    "arweave-graphql": "0.0.5",
+    "eslint": "8.29.0",
+    "eslint-config-next": "13.0.6",
+    "next": "12.3.0",
+    "next-themes": "0.2.1",
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
+  },
+  "devDependencies": {
     "@types/node": "18.11.13",
     "@types/react": "18.0.26",
     "@types/react-dom": "18.0.9",
-    "eslint": "8.29.0",
-    "eslint-config-next": "13.0.6",
-    "next": "13.0.6",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "typescript": "4.9.4"
+    "arkb": "1.1.61",
+    "arlocal": "1.1.59",
+    "arweave-wallet-connector": "0.0.31",
+    "prettier": "2.8.1",
+    "typescript": "4.6.4"
   }
 }
