@@ -1,11 +1,22 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Box } from "../components/Box";
 import { Typography } from "../components/Typography";
 import { Button } from "../components/Button";
 import { TreeGraphDialog } from "../modules/TreeGraph/TreeGraphDialog";
+import { getAsset } from "../lib/asset-sdk";
+import { Data } from "../types";
 
 export default function Home() {
   const [showDialog, setShowDialog] = useState(false);
+
+  useEffect(() => {
+    // getData();
+  }, []);
+
+  const getData = async () => {
+    const { asset } = (await fetch("/api/hello")) as any;
+    console.log(asset);
+  };
 
   const handleShowDialog = () => setShowDialog(true);
   const handleCancelDialog = () => setShowDialog(false);
