@@ -1,0 +1,42 @@
+diff --git a/dist/index.cjs.js b/dist/index.cjs.js
+index 5ad77859b6cd4a8678f1e8082bcdc6e1096eebaf..6cdff189f18b284819b58e70fe741163784f117e 100644
+--- a/dist/index.cjs.js
++++ b/dist/index.cjs.js
+@@ -951,7 +951,7 @@ var cancelTimeout = function (timeout) {
+ };
+ 
+ var getTransformStyles = function (x, y, scale) {
+-    return "translate3d(" + x + "px, " + y + "px, 0) scale(" + scale + ")";
++    return "translate(" + x + "px, " + y + "px) scale(" + scale + ")";
+ };
+ var getCenterPosition = function (scale, wrapperComponent, contentComponent) {
+     var contentWidth = contentComponent.offsetWidth * scale;
+@@ -1523,6 +1523,7 @@ var TransformContext = /** @class */ (function (_super) {
+             var _a = _this.transformState, scale = _a.scale, positionX = _a.positionX, positionY = _a.positionY;
+             var transform = getTransformStyles(positionX, positionY, scale);
+             _this.contentComponent.style.transform = transform;
++            _this.contentComponent.style.WebkitTransform = transform;
+             _this.handleRef();
+         };
+         _this.handleRef = function () {
+diff --git a/dist/index.esm.js b/dist/index.esm.js
+index 118927b6db77dbcf13f7f49dec12651d1d28f3ee..376773dbcc5fed2b62ed22472f7accf4e03b875d 100644
+--- a/dist/index.esm.js
++++ b/dist/index.esm.js
+@@ -943,7 +943,7 @@ var cancelTimeout = function (timeout) {
+ };
+ 
+ var getTransformStyles = function (x, y, scale) {
+-    return "translate3d(" + x + "px, " + y + "px, 0) scale(" + scale + ")";
++    return "translate(" + x + "px, " + y + "px) scale(" + scale + ")";
+ };
+ var getCenterPosition = function (scale, wrapperComponent, contentComponent) {
+     var contentWidth = contentComponent.offsetWidth * scale;
+@@ -1515,6 +1515,7 @@ var TransformContext = /** @class */ (function (_super) {
+             var _a = _this.transformState, scale = _a.scale, positionX = _a.positionX, positionY = _a.positionY;
+             var transform = getTransformStyles(positionX, positionY, scale);
+             _this.contentComponent.style.transform = transform;
++            _this.contentComponent.style.WebkitTransform = transform;
+             _this.handleRef();
+         };
+         _this.handleRef = function () {
