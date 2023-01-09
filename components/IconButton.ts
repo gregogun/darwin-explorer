@@ -33,6 +33,10 @@ export const IconButton = styled("button", {
     backgroundColor: "$slate5",
   },
 
+  "&:focus": {
+    boxShadow: "inset 0 0 0 1px $colors$blue8, 0 0 0 1px $colors$blue8",
+  },
+
   "&:disabled": {
     opacity: 0.5,
     cursor: "not-allowed",

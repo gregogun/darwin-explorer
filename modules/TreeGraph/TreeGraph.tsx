@@ -10,7 +10,8 @@ import { withParentSize } from "@visx/responsive";
 import { LinkHorizontal } from "@visx/shape";
 import { AppVersionDialog } from "../AppVersionDialog/AppVersionDialog";
 import { TreeNode } from "../../types";
-import { styled } from "../../stitches.config";
+import { styled, theme } from "../../stitches.config";
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 
 const Rect = styled("rect", {
   "&:hover": {
@@ -24,10 +25,14 @@ const Rect = styled("rect", {
   },
 });
 
-const blue = "#0091ff";
-const green = "#25D0AB";
-const white = "#fbfcfd";
-export const background = "#151718";
+const Text = styled("text");
+
+const StyledLinkHorizontal = styled(LinkHorizontal);
+
+const blue = theme.colors.blue9;
+const green = theme.colors.mint9;
+const white = theme.colors.slate12;
+export const background = theme.colors.slate1;
 
 type HierarchyNode = HierarchyPointNode<TreeNode>;
 
@@ -125,30 +130,38 @@ function Node({ node }: { node: HierarchyNode }) {
   return (
     <Group top={node.x} left={node.y}>
       <Rect
+        css={{
+          fill: background,
+          stroke: green,
+          transitionDuration: "200ms",
+
+          "&:hover": {
+            fill: theme.colors.mint2,
+          },
+        }}
         tabIndex={0}
         height={height}
         width={width}
         y={centerY}
         x={centerX}
-        fill={background}
         cursor="pointer"
-        stroke={green}
-        strokeWidth={1}
-        strokeDasharray="2,2"
+        strokeWidth={2}
         strokeOpacity={0.5}
         rx={12}
         onClick={handleShowDialog}
       />
-      <text
+      <Text
+        css={{
+          fill: green,
+        }}
         dy=".33em"
-        fontSize={15}
+        fontSize={13}
         fontFamily="Inter"
         textAnchor="middle"
-        fill={green}
         style={{ pointerEvents: "none" }}
       >
         {node.data.version}
-      </text>
+      </Text>
 
       <AppVersionDialog
         node={{
@@ -187,30 +200,38 @@ function RootNode({ node }: { node: HierarchyNode }) {
   return (
     <Group top={node.x} left={node.y}>
       <Rect
+        css={{
+          fill: background,
+          stroke: white,
+          transitionDuration: "200ms",
+
+          "&:hover": {
+            fill: theme.colors.slate2,
+          },
+        }}
         tabIndex={0}
         height={height}
         width={width}
         y={centerY}
         x={centerX}
-        fill={background}
         cursor="pointer"
-        stroke={white}
-        strokeWidth={1}
-        strokeDasharray="2,2"
+        strokeWidth={2}
         strokeOpacity={0.5}
         rx={12}
         onClick={handleShowDialog}
       />
-      <text
+      <Text
+        css={{
+          fill: white,
+        }}
         dy=".33em"
-        fontSize={15}
+        fontSize={12}
         fontFamily="Inter"
         textAnchor="middle"
         style={{ pointerEvents: "none" }}
-        fill={white}
       >
         {node.data.version}
-      </text>
+      </Text>
 
       <AppVersionDialog
         node={{
@@ -250,30 +271,38 @@ function ParentNode({ node }: { node: HierarchyNode }) {
   return (
     <Group top={node.x} left={node.y}>
       <Rect
+        css={{
+          fill: background,
+          stroke: blue,
+          transitionDuration: "200ms",
+
+          "&:hover": {
+            fill: theme.colors.blue2,
+          },
+        }}
         tabIndex={0}
         cursor="pointer"
         height={height}
         width={width}
         y={centerY}
         x={centerX}
-        fill={background}
-        stroke={blue}
-        strokeWidth={1}
-        strokeDasharray="2,2"
+        strokeWidth={2}
         strokeOpacity={0.5}
         rx={12}
         onClick={handleShowDialog}
       />
-      <text
+      <Text
+        css={{
+          fill: theme.colors.blue11,
+        }}
         dy=".33em"
-        fontSize={15}
+        fontSize={12}
         fontFamily="Inter"
         textAnchor="middle"
         style={{ pointerEvents: "none" }}
-        fill={blue}
       >
         {node.data.version}
-      </text>
+      </Text>
 
       <AppVersionDialog
         node={{
@@ -308,35 +337,45 @@ const TreeGraph = ({
   const xMax = width! - margin.left - margin.right;
 
   return width! < 10 ? null : (
-    <svg
-      // stroke={white}
-      // strokeWidth={2}
-      // strokeOpacity={0.1}
-      // strokeDasharray="2,2"
-      width={width}
-      height={height}
-    >
-      <rect width={width} height={height} rx={14} fill={background} />
-      <Tree<TreeNode> root={data} size={[yMax, xMax]}>
-        {(tree) => (
-          <Group top={margin.top} left={margin.left}>
-            {tree.links().map((link, i) => (
-              <LinkHorizontal
-                key={`link-${i}`}
-                data={link}
-                stroke={white}
-                strokeWidth={1}
-                strokeOpacity={0.1}
-                fill="none"
-              />
-            ))}
-            {tree.descendants().map((node, i) => (
-              <Node key={`node-${i}`} node={node} />
-            ))}
-          </Group>
-        )}
-      </Tree>
-    </svg>
+    <TransformWrapper minScale={0.5} maxScale={2}>
+      {({ zoomIn, zoomOut, resetTransform }) => (
+        <TransformComponent>
+          <svg
+            // style={{ transform: "scale(0.9)" }}
+            width={width}
+            height={height}
+          >
+            <Rect
+              css={{ fill: background }}
+              width={width}
+              height={height}
+              rx={14}
+            />
+            <Tree<TreeNode> root={data} size={[yMax, xMax]}>
+              {(tree) => (
+                <Group top={margin.top} left={margin.left}>
+                  {tree.links().map((link, i) => (
+                    <StyledLinkHorizontal
+                      css={{
+                        stroke: white,
+                      }}
+                      key={`link-${i}`}
+                      data={link}
+                      strokeWidth={3}
+                      strokeOpacity={0.1}
+                      fill="none"
+                    />
+                  ))}
+                  {tree.descendants().map((node, i) => (
+                    <Node key={`node-${i}`} node={node} />
+                  ))}
+                </Group>
+              )}
+            </Tree>
+          </svg>
+        </TransformComponent>
+      )}
+    </TransformWrapper>
   );
 };
 

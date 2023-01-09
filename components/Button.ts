@@ -32,6 +32,10 @@ export const Button = styled("button", {
     opacity: "50%",
   },
 
+  "&:focus": {
+    boxShadow: "inset 0 0 0 1px $colors$blue8, 0 0 0 1px $colors$blue8",
+  },
+
   // default styles
   $$bg: "$colors$slate3",
   $$border: "$colors$slate7",

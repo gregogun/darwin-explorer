@@ -1,19 +1,20 @@
-import { blueDark, mintDark, slateDark, violetDark } from "@radix-ui/colors";
+import {
+  blueDark as blue,
+  mintDark as mint,
+  slateDark as slate,
+  violetDark as violet,
+} from "@radix-ui/colors";
 import type * as Stitches from "@stitches/react";
 import { createStitches } from "@stitches/react";
-
-const slate = {
-  ...slateDark,
-  ...violetDark,
-  ...blueDark,
-  ...mintDark,
-};
 
 export const { styled, css, theme, globalCss, keyframes, getCssText, config } =
   createStitches({
     theme: {
       colors: {
         ...slate,
+        ...blue,
+        ...mint,
+        ...violet,
       },
       fonts: {
         heading: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",

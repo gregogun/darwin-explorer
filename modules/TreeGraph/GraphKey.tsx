@@ -60,6 +60,8 @@ export const GraphKey = () => {
         br: "$3",
         position: "absolute",
         margin: "$5",
+        zIndex: 999,
+        backgroundColor: "$slate1",
       }}
     >
       {keyItems.map((item) => (
