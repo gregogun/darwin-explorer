@@ -56,18 +56,24 @@ export const GraphKey = () => {
         flexDirection: "column",
         gap: "$2",
         padding: 20,
-        boxShadow: "0 0 0 1px $colors$slate6",
+        boxShadow: "0 0 0 1px $colors$indigo6",
         br: "$3",
         position: "absolute",
         margin: "$5",
         zIndex: 999,
-        backgroundColor: "$slate1",
+        backgroundColor: "$indigo1",
       }}
     >
       {keyItems.map((item) => (
         <KeyItem key={item.name}>
           <Indicator color={item.color} />
-          <Typography>{item.name}</Typography>
+          <Typography
+            css={{
+              color: "$indigo12",
+            }}
+          >
+            {item.name}
+          </Typography>
         </KeyItem>
       ))}
     </Box>

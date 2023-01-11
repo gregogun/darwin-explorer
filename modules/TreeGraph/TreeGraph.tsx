@@ -10,29 +10,16 @@ import { withParentSize } from "@visx/responsive";
 import { LinkHorizontal } from "@visx/shape";
 import { AppVersionDialog } from "../AppVersionDialog/AppVersionDialog";
 import { TreeNode } from "../../types";
-import { styled, theme } from "../../stitches.config";
+import { Box, styled, theme } from "@aura-ui/react";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 
-const Rect = styled("rect", {
-  "&:hover": {
-    strokeOpacity: 0.8,
-    transitionDuration: 200,
-  },
-
-  "&:focus": {
-    strokeOpacity: 0.8,
-    transitionDuration: 200,
-  },
-});
+const Rect = styled("rect");
 
 const Text = styled("text");
 
 const StyledLinkHorizontal = styled(LinkHorizontal);
 
-const blue = theme.colors.blue9;
-const green = theme.colors.mint9;
-const white = theme.colors.slate12;
-export const background = theme.colors.slate1;
+export const background = theme.colors.indigo1;
 
 type HierarchyNode = HierarchyPointNode<TreeNode>;
 
@@ -74,20 +61,6 @@ const rawTree: TreeNode = {
           author: author,
           sourceCode: `${sourceBaseUrl}/v2b`,
           stamps: 28,
-          // children: [
-          //   {
-          //     version: "v3a",
-          //     txid: "gW2GGNGBzeLFMVfIAdOg4L1Akg9fQWq19hsvM5DAG44",
-          //     forkedFrom: null,
-          //     preferred: false,
-          //   },
-          //   {
-          //     version: "v3b",
-          //     txid: "gW2GGNGBzeLFMVfIAdOg4L1Akg9fQWq19hsvM5DAG44",
-          //     forkedFrom: null,
-          //     preferred: false,
-          //   },
-          // ],
         },
       ],
     },
@@ -117,8 +90,8 @@ function Node({ node }: { node: HierarchyNode }) {
   const sourceCode = node.data.sourceCode;
   const stamps = node.data.stamps;
 
-  const width = 80;
-  const height = 40;
+  const width = 120;
+  const height = 50;
   const centerX = -width / 2;
   const centerY = -height / 2;
   const isRoot = node.depth === 0;
@@ -131,12 +104,20 @@ function Node({ node }: { node: HierarchyNode }) {
     <Group top={node.x} left={node.y}>
       <Rect
         css={{
-          fill: background,
-          stroke: green,
+          fill: theme.colors.indigo2,
+          stroke: theme.colors.indigo6,
           transitionDuration: "200ms",
 
           "&:hover": {
-            fill: theme.colors.mint2,
+            fill: "$indigo3",
+            stroke: "$indigo7",
+            transitionDuration: 200,
+          },
+
+          "&:focus": {
+            fill: "$indigo3",
+            stroke: "$indigo8",
+            transitionDuration: 200,
           },
         }}
         tabIndex={0}
@@ -146,13 +127,13 @@ function Node({ node }: { node: HierarchyNode }) {
         x={centerX}
         cursor="pointer"
         strokeWidth={2}
-        strokeOpacity={0.5}
-        rx={12}
+        strokeOpacity={1}
+        rx={6}
         onClick={handleShowDialog}
       />
       <Text
         css={{
-          fill: green,
+          fill: theme.colors.indigo11,
         }}
         dy=".33em"
         fontSize={13}
@@ -193,20 +174,28 @@ function RootNode({ node }: { node: HierarchyNode }) {
   const sourceCode = node.data.sourceCode;
   const stamps = node.data.stamps;
 
-  const width = 80;
-  const height = 40;
+  const width = 120;
+  const height = 50;
   const centerX = -width / 2;
   const centerY = -height / 2;
   return (
     <Group top={node.x} left={node.y}>
       <Rect
         css={{
-          fill: background,
-          stroke: white,
+          fill: theme.colors.indigo2,
+          stroke: theme.colors.indigo6,
           transitionDuration: "200ms",
 
           "&:hover": {
-            fill: theme.colors.slate2,
+            fill: "$indigo3",
+            stroke: "$indigo7",
+            transitionDuration: 200,
+          },
+
+          "&:focus": {
+            fill: "$indigo3",
+            stroke: "$indigo8",
+            transitionDuration: 200,
           },
         }}
         tabIndex={0}
@@ -216,13 +205,13 @@ function RootNode({ node }: { node: HierarchyNode }) {
         x={centerX}
         cursor="pointer"
         strokeWidth={2}
-        strokeOpacity={0.5}
-        rx={12}
+        strokeOpacity={1}
+        rx={6}
         onClick={handleShowDialog}
       />
       <Text
         css={{
-          fill: white,
+          fill: theme.colors.indigo11,
         }}
         dy=".33em"
         fontSize={12}
@@ -263,8 +252,8 @@ function ParentNode({ node }: { node: HierarchyNode }) {
   const sourceCode = node.data.sourceCode;
   const stamps = node.data.stamps;
 
-  const width = 80;
-  const height = 40;
+  const width = 120;
+  const height = 50;
   const centerX = -width / 2;
   const centerY = -height / 2;
 
@@ -272,12 +261,20 @@ function ParentNode({ node }: { node: HierarchyNode }) {
     <Group top={node.x} left={node.y}>
       <Rect
         css={{
-          fill: background,
-          stroke: blue,
+          fill: theme.colors.indigo2,
+          stroke: theme.colors.indigo6,
           transitionDuration: "200ms",
 
           "&:hover": {
-            fill: theme.colors.blue2,
+            fill: "$indigo3",
+            stroke: "$indigo7",
+            transitionDuration: 200,
+          },
+
+          "&:focus": {
+            fill: "$indigo3",
+            stroke: "$indigo8",
+            transitionDuration: 200,
           },
         }}
         tabIndex={0}
@@ -287,13 +284,13 @@ function ParentNode({ node }: { node: HierarchyNode }) {
         y={centerY}
         x={centerX}
         strokeWidth={2}
-        strokeOpacity={0.5}
-        rx={12}
+        strokeOpacity={1}
+        rx={6}
         onClick={handleShowDialog}
       />
       <Text
         css={{
-          fill: theme.colors.blue11,
+          fill: theme.colors.indigo11,
         }}
         dy=".33em"
         fontSize={12}
@@ -337,45 +334,51 @@ const TreeGraph = ({
   const xMax = width! - margin.left - margin.right;
 
   return width! < 10 ? null : (
-    <TransformWrapper minScale={0.5} maxScale={2}>
-      {({ zoomIn, zoomOut, resetTransform }) => (
-        <TransformComponent>
-          <svg
-            // style={{ transform: "scale(0.9)" }}
-            width={width}
-            height={height}
-          >
-            <Rect
-              css={{ fill: background }}
+    <Box
+      css={{
+        backgroundColor: "$indigo1",
+      }}
+    >
+      <TransformWrapper minScale={0.5} maxScale={2}>
+        {({ zoomIn, zoomOut, resetTransform }) => (
+          <TransformComponent>
+            <svg
+              // style={{ transform: "scale(0.9)" }}
               width={width}
               height={height}
-              rx={14}
-            />
-            <Tree<TreeNode> root={data} size={[yMax, xMax]}>
-              {(tree) => (
-                <Group top={margin.top} left={margin.left}>
-                  {tree.links().map((link, i) => (
-                    <StyledLinkHorizontal
-                      css={{
-                        stroke: white,
-                      }}
-                      key={`link-${i}`}
-                      data={link}
-                      strokeWidth={3}
-                      strokeOpacity={0.1}
-                      fill="none"
-                    />
-                  ))}
-                  {tree.descendants().map((node, i) => (
-                    <Node key={`node-${i}`} node={node} />
-                  ))}
-                </Group>
-              )}
-            </Tree>
-          </svg>
-        </TransformComponent>
-      )}
-    </TransformWrapper>
+            >
+              <Rect
+                css={{ fill: background }}
+                width={width}
+                height={height}
+                rx={14}
+              />
+              <Tree<TreeNode> root={data} size={[yMax, xMax]}>
+                {(tree) => (
+                  <Group top={margin.top} left={margin.left}>
+                    {tree.links().map((link, i) => (
+                      <StyledLinkHorizontal
+                        css={{
+                          stroke: theme.colors.indigo11,
+                        }}
+                        key={`link-${i}`}
+                        data={link}
+                        strokeWidth={0.5}
+                        strokeOpacity={0.5}
+                        fill="none"
+                      />
+                    ))}
+                    {tree.descendants().map((node, i) => (
+                      <Node key={`node-${i}`} node={node} />
+                    ))}
+                  </Group>
+                )}
+              </Tree>
+            </svg>
+          </TransformComponent>
+        )}
+      </TransformWrapper>
+    </Box>
   );
 };
 

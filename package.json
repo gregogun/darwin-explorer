@@ -16,15 +16,17 @@
     "remove-asset-prefix": "node scripts/remove-asset-prefix.mjs"
   },
   "dependencies": {
+    "@aura-ui/react": "0.0.3-alpha.5",
     "@bundlr-network/client": "0.9.11",
     "@fontsource/inter": "4.5.14",
+    "@permaweb/asset-graph": "https://arweave.net/-jYaU7HYX3JNpsOTqkMzEKUK4_5Mfy-a88jtgSNrI_k",
+    "@permaweb/asset-sdk": "https://arweave.net/Nx7ryAvP_cr8KLRAyZRYvSMbLzFiGdLxt9vqBy1k45Y",
     "@radix-ui/colors": "0.1.8",
     "@radix-ui/react-dialog": "1.0.2",
     "@radix-ui/react-icons": "1.1.1",
     "@radix-ui/react-switch": "1.0.1",
     "@radix-ui/react-tooltip": "1.0.2",
     "@stitches/react": "1.2.8",
-    "@permaweb/asset-sdk": "https://arweave.net/Nx7ryAvP_cr8KLRAyZRYvSMbLzFiGdLxt9vqBy1k45Y",
     "@visx/gradient": "2.10.0",
     "@visx/group": "2.10.0",
     "@visx/hierarchy": "2.10.0",
@@ -34,11 +36,13 @@
     "arweave-graphql": "0.0.5",
     "eslint": "8.29.0",
     "eslint-config-next": "13.0.6",
+    "formik": "2.2.9",
     "next": "12.3.0",
     "next-themes": "0.2.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-zoom-pan-pinch": "2.1.3",
+    "ts-node": "10.9.1",
     "warp-contracts": "1.2.39"
   },
   "devDependencies": {

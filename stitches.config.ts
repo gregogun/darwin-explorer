@@ -3,6 +3,7 @@ import {
   mintDark as mint,
   slateDark as slate,
   violetDark as violet,
+  indigoDark as indigo,
 } from "@radix-ui/colors";
 import type * as Stitches from "@stitches/react";
 import { createStitches } from "@stitches/react";
@@ -15,6 +16,7 @@ export const { styled, css, theme, globalCss, keyframes, getCssText, config } =
         ...blue,
         ...mint,
         ...violet,
+        ...indigo,
       },
       fonts: {
         heading: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",

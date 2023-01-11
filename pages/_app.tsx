@@ -1,6 +1,7 @@
 import type { AppProps } from "next/app";
-import { globalCss } from "../stitches.config";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
+import { darkTheme, globalCss } from "@aura-ui/react";
+import { ThemeProvider } from "next-themes";
 
 const globalStyles = globalCss({
   "*, *::before, *::after": {
@@ -15,7 +16,7 @@ const globalStyles = globalCss({
     height: "100%",
     fontFamily: "$body",
     margin: 0,
-    backgroundColor: "$slate1",
+    backgroundColor: "$indigo1",
   },
 
   "#__next": {
@@ -32,7 +33,13 @@ globalStyles();
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <TooltipProvider>
-      <Component {...pageProps} />
+      <ThemeProvider
+        disableTransitionOnChange
+        attribute="class"
+        value={{ light: "light-theme", dark: darkTheme.toString() }}
+      >
+        <Component {...pageProps} />
+      </ThemeProvider>
     </TooltipProvider>
   );
 }
