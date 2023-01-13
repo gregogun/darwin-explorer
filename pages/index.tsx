@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Grid,
   Flex,
@@ -9,6 +9,9 @@ import {
   Button,
 } from "@aura-ui/react";
 import { TreeGraphDialog } from "../modules/TreeGraph/TreeGraphDialog";
+import graph from "@permaweb/asset-graph";
+import { TreeNode } from "../types";
+import { FormikErrors, useFormik } from "formik";
 
 const moveBg = keyframes({
   to: {
@@ -16,7 +19,7 @@ const moveBg = keyframes({
   },
 });
 
-const ControlGroup = styled("div", {
+const FormGroup = styled("form", {
   display: "flex",
   flexDirection: "column",
   gap: "$2",
@@ -25,6 +28,34 @@ const ControlGroup = styled("div", {
 
 export default function Home() {
   const [showDialog, setShowDialog] = useState(false);
+  const [rawTree, setRawTree] = useState<TreeNode>();
+  const formik = useFormik<{ id: string }>({
+    initialValues: {
+      id: rawTree?.id || "",
+    },
+    validate: (values) => {
+      const errors: FormikErrors<{ id: string }> = {};
+
+      if (!values.id) {
+        errors.id = "No App Version ID provided";
+      }
+
+      return errors;
+    },
+    onSubmit: async (values, { setSubmitting, validateField }) => {
+      validateField("id");
+      setSubmitting(true);
+      const res = await graph(values.id);
+
+      if (!res) {
+        formik.setErrors({ id: "App Version not found" });
+      }
+
+      setRawTree(res);
+      setSubmitting(false);
+      handleShowDialog();
+    },
+  });
 
   const handleShowDialog = () => setShowDialog(true);
   const handleCancelDialog = () => setShowDialog(false);
@@ -95,9 +126,11 @@ export default function Home() {
             Evolutionary App Explorer
           </Typography>
         </Flex>
-        <ControlGroup>
+        <FormGroup onSubmit={formik.handleSubmit}>
           <TextField
+            name="id"
             size="2"
+            onChange={formik.handleChange}
             variant="outline"
             css={{
               "&[type]": {
@@ -123,10 +156,9 @@ export default function Home() {
                 },
               },
             }}
-            placeholder="Enter your app Asset ID"
+            placeholder="Enter an App Version ID"
           />
           <Button
-            onClick={handleShowDialog}
             css={{
               color: "$indigo11",
               backgroundColor: "$indigoA3",
@@ -144,12 +176,23 @@ export default function Home() {
               },
             }}
             size="3"
+            type="submit"
+            disabled={formik.isSubmitting}
           >
-            View Fork Tree
+            {formik.isSubmitting ? "Loading..." : "View Fork Tree"}
           </Button>
+          {formik.errors && (
+            <Typography css={{ color: "$red11", textAlign: "center" }} size="1">
+              {formik.errors.id}
+            </Typography>
+          )}
 
-          <TreeGraphDialog open={showDialog} onClose={handleCancelDialog} />
-        </ControlGroup>
+          <TreeGraphDialog
+            rawTree={rawTree}
+            open={showDialog}
+            onClose={handleCancelDialog}
+          />
+        </FormGroup>
       </Flex>
     </Grid>
   );

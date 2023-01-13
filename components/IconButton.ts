@@ -1,44 +1,20 @@
-import { styled } from "../stitches.config";
+import { styled, IconButton as IconButtonBase } from "@aura-ui/react";
 
-export const IconButton = styled("button", {
-  // resets
-  border: 0,
-  padding: 0,
-  margin: 0,
-  outline: "none",
-  textDecoration: "none",
-  appearance: "none",
-  boxSizing: "border-box",
-  display: "inline-flex",
-  userSelect: "none",
-  WebkitTapHighlightColor: "rgba(0,0,0,0)",
-  fontFamily: "inherit",
-  lineHeight: 1,
-  br: "$2",
-
-  // custom
-  justifyContent: "center",
-  alignItems: "center",
-  fontSize: 16,
-  color: "$slate12",
-  width: 28,
-  height: 28,
-  backgroundColor: "transparent",
+export const IconButton = styled(IconButtonBase, {
+  br: "$round",
+  backgroundColor: "$indigo2",
+  boxShadow: "inset 0 0 0 1px $colors$indigo5",
+  color: "$indigo11",
 
   "&:hover": {
-    backgroundColor: "$slate4",
+    backgroundColor: "$indigo3",
   },
 
   "&:active": {
-    backgroundColor: "$slate5",
+    backgroundColor: "$indigo4",
   },
 
   "&:focus": {
-    boxShadow: "inset 0 0 0 1px $colors$blue8, 0 0 0 1px $colors$blue8",
-  },
-
-  "&:disabled": {
-    opacity: 0.5,
-    cursor: "not-allowed",
+    boxShadow: "inset 0 0 0 1px $colors$indigo8",
   },
 });

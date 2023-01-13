@@ -1,12 +1,22 @@
-export interface TreeNode {
-  version: string;
-  txid: string;
-  forkedFrom: string | null;
-  preferred: boolean;
-  author: string;
-  sourceCode: string;
+export interface NodeProps {
+  description: string;
+  forks?: string;
+  groupId: string;
+  id: string;
+  metaId: string;
+  published: number;
   stamps: number;
+  title: string;
+  topics?: string;
+  type: string;
+}
+
+export interface TreeNode {
   children?: this[];
+  group: string;
+  id: string;
+  node: NodeProps;
+  version: string;
 }
 
 type Balances = {

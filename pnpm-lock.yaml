@@ -10,7 +10,7 @@ specifiers:
   '@bundlr-network/client': 0.9.11
   '@fontsource/inter': 4.5.14
   '@permaweb/asset-graph': https://arweave.net/-jYaU7HYX3JNpsOTqkMzEKUK4_5Mfy-a88jtgSNrI_k
-  '@permaweb/asset-sdk': https://arweave.net/Nx7ryAvP_cr8KLRAyZRYvSMbLzFiGdLxt9vqBy1k45Y
+  '@permaweb/asset-sdk': https://arweave.net/6EufX9daGYA6tqv1WK900FQLy0JHta2PdMIutTh3t4g
   '@radix-ui/colors': 0.1.8
   '@radix-ui/react-dialog': 1.0.2
   '@radix-ui/react-icons': 1.1.1
@@ -30,6 +30,7 @@ specifiers:
   arweave: 1.11.8
   arweave-graphql: 0.0.5
   arweave-wallet-connector: 0.0.31
+  date-fns: 2.29.3
   eslint: 8.29.0
   eslint-config-next: 13.0.6
   formik: 2.2.9
@@ -48,7 +49,7 @@ dependencies:
   '@bundlr-network/client': 0.9.11
   '@fontsource/inter': 4.5.14
   '@permaweb/asset-graph': '@arweave.net/-jYaU7HYX3JNpsOTqkMzEKUK4_5Mfy-a88jtgSNrI_k'
-  '@permaweb/asset-sdk': '@arweave.net/Nx7ryAvP_cr8KLRAyZRYvSMbLzFiGdLxt9vqBy1k45Y_react@18.2.0'
+  '@permaweb/asset-sdk': '@arweave.net/6EufX9daGYA6tqv1WK900FQLy0JHta2PdMIutTh3t4g_react@18.2.0'
   '@radix-ui/colors': 0.1.8
   '@radix-ui/react-dialog': 1.0.2_ib3m5ricvtkl2cll7qpr2f6lvq
   '@radix-ui/react-icons': 1.1.1_react@18.2.0
@@ -62,6 +63,7 @@ dependencies:
   '@visx/shape': 2.12.2_react@18.2.0
   arweave: 1.11.8
   arweave-graphql: 0.0.5
+  date-fns: 2.29.3
   eslint: 8.29.0
   eslint-config-next: 13.0.6_x7iytnlsncag3ywnbwokfm3b6m
   formik: 2.2.9_react@18.2.0
@@ -2848,7 +2850,7 @@ packages:
   /borsh/0.6.0:
     resolution: {integrity: sha512-sl5k89ViqsThXQpYa9XDtz1sBl3l1lI313cFUY1HKr+wvMILnb+58xpkqTNrYbelh99dY7K8usxoCusQmqix9Q==}
     dependencies:
-      bn.js: 5.2.0
+      bn.js: 5.2.1
       bs58: 4.0.1
       text-encoding-utf-8: 1.0.2
     dev: false
@@ -3451,6 +3453,11 @@ packages:
   /data-uri-to-buffer/4.0.0:
     resolution: {integrity: sha512-Vr3mLBA8qWmcuschSLAOogKgQ/Jwxulv3RNE4FXnYWRGujzrRWQI4m12fQqRkwX06C0KanhLr4hK+GydchZsaA==}
     engines: {node: '>= 12'}
+    dev: false
+
+  /date-fns/2.29.3:
+    resolution: {integrity: sha512-dDCnyH2WnnKusqvZZ6+jA1O51Ibt8ZMRNkDZdyAyK4YfbDwa/cEmuztzG5pk6hqlp9aSBPYcjOlktquahGwGeA==}
+    engines: {node: '>=0.11'}
     dev: false
 
   /debounce-fn/4.0.0:
@@ -6648,7 +6655,7 @@ packages:
     dependencies:
       buffer: 6.0.3
       safe-buffer: 5.2.1
-      undici: 5.14.0
+      undici: 5.15.0
 
   /redstone-smartweave/0.3.10-alpha.19:
     resolution: {integrity: sha512-QL4OtSh0R+ip7D+obkoZm0Uvp1UKhk+DbbxlFVcdEV3QI3fwD/0wkClbFq6XZueJdOWkcPp6xA2VgUcmAVQ7qQ==}
@@ -7523,8 +7530,8 @@ packages:
     resolution: {integrity: sha512-tkZSECUYi+/T1i4u+4+lwZmQgLXd4BLGlrc7KZPcLIW7Jpq99+Xpc30ONv7nS6F5UNOxp/HBZSSL9MafUrvJbw==}
     engines: {node: '>=12.18'}
 
-  /undici/5.14.0:
-    resolution: {integrity: sha512-yJlHYw6yXPPsuOH0x2Ib1Km61vu4hLiRRQoafs+WUgX1vO64vgnxiCEN9dpIrhZyHFsai3F0AEj4P9zy19enEQ==}
+  /undici/5.15.0:
+    resolution: {integrity: sha512-wCAZJDyjw9Myv+Ay62LAoB+hZLPW9SmKbQkbHIhMw/acKSlpn7WohdMUc/Vd4j1iSMBO0hWwU8mjB7a5p5bl8g==}
     engines: {node: '>=12.18'}
     dependencies:
       busboy: 1.6.0
@@ -7965,11 +7972,11 @@ packages:
       zod: 3.20.2
     dev: false
 
-  '@arweave.net/Nx7ryAvP_cr8KLRAyZRYvSMbLzFiGdLxt9vqBy1k45Y_react@18.2.0':
-    resolution: {tarball: https://arweave.net/Nx7ryAvP_cr8KLRAyZRYvSMbLzFiGdLxt9vqBy1k45Y}
-    id: '@arweave.net/Nx7ryAvP_cr8KLRAyZRYvSMbLzFiGdLxt9vqBy1k45Y'
+  '@arweave.net/6EufX9daGYA6tqv1WK900FQLy0JHta2PdMIutTh3t4g_react@18.2.0':
+    resolution: {tarball: https://arweave.net/6EufX9daGYA6tqv1WK900FQLy0JHta2PdMIutTh3t4g}
+    id: '@arweave.net/6EufX9daGYA6tqv1WK900FQLy0JHta2PdMIutTh3t4g'
     name: '@permaweb/asset-sdk'
-    version: 0.0.26
+    version: 0.0.25
     engines: {node: '>=18'}
     dependencies:
       '@bundlr-network/client': 0.9.11

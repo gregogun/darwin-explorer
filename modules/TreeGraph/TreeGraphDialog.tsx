@@ -11,6 +11,7 @@ import {
 import { GraphKey } from "./GraphKey";
 import { TreeGraph } from "./TreeGraph";
 import { Cross1Icon } from "@radix-ui/react-icons";
+import { TreeNode } from "../../types";
 
 const StyledDialogContent = styled(DialogContent, {
   width: "100%",
@@ -25,9 +26,14 @@ const StyledDialogContent = styled(DialogContent, {
 interface TreeGraphDialogProps {
   open: boolean;
   onClose: () => void;
+  rawTree: TreeNode | undefined;
 }
 
-export const TreeGraphDialog = ({ open, onClose }: TreeGraphDialogProps) => {
+export const TreeGraphDialog = ({
+  open,
+  onClose,
+  rawTree,
+}: TreeGraphDialogProps) => {
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogPortal>
@@ -44,7 +50,10 @@ export const TreeGraphDialog = ({ open, onClose }: TreeGraphDialogProps) => {
           >
             <DialogClose asChild>
               <IconButton
+                aria-label="Close dialog"
+                size="1"
                 css={{
+                  br: "$round",
                   top: "$5",
                   right: "$5",
                   zIndex: 1,
@@ -68,8 +77,7 @@ export const TreeGraphDialog = ({ open, onClose }: TreeGraphDialogProps) => {
                 <Cross1Icon />
               </IconButton>
             </DialogClose>
-            <GraphKey />
-            <TreeGraph />
+            {rawTree && <TreeGraph rawTree={rawTree} />}
           </Box>
         </StyledDialogContent>
       </DialogPortal>

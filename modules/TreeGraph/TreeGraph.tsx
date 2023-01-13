@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { KeyboardEvent, useMemo, useState } from "react";
 import { Group } from "@visx/group";
 import { Tree, hierarchy } from "@visx/hierarchy";
 import { HierarchyPointNode } from "@visx/hierarchy/lib/types";
@@ -8,7 +8,7 @@ import {
 } from "@visx/responsive/lib/enhancers/withParentSize";
 import { withParentSize } from "@visx/responsive";
 import { LinkHorizontal } from "@visx/shape";
-import { AppVersionDialog } from "../AppVersionDialog/AppVersionDialog";
+import { NodeDialog } from "../NodeDialog/NodeDialog";
 import { TreeNode } from "../../types";
 import { Box, styled, theme } from "@aura-ui/react";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
@@ -26,82 +26,43 @@ type HierarchyNode = HierarchyPointNode<TreeNode>;
 const author = "QyvsIuytjHV8kDgnnjC66IoeZyWpGzZ0uffb_TxFg7g";
 const sourceBaseUrl = "https://github.com/gregogun/fair-forks-test-app/tree/";
 
-const rawTree: TreeNode = {
-  version: "v0",
-  txid: "gW2GGNGBzeLFMVfIAdOg4L1Akg9fQWq19hsvM5DAG44",
-  forkedFrom: null,
-  preferred: true,
-  author: author,
-  sourceCode: `${sourceBaseUrl}/v0`,
-  stamps: 20,
-  children: [
-    {
-      version: "v1a",
-      txid: "nnEagkfN_4PGsV1NAs8xHGYOxyzZT7lT62W8qj8JCS4",
-      forkedFrom: "gW2GGNGBzeLFMVfIAdOg4L1Akg9fQWq19hsvM5DAG44",
-      preferred: false,
-      author: author,
-      sourceCode: `${sourceBaseUrl}/v1a`,
-      stamps: 40,
-      children: [
-        {
-          version: "v2a",
-          txid: "HcZhyddr0UZNHWCJJL0jgPMKVXcpSOFRwTI3GgylRso",
-          forkedFrom: "nnEagkfN_4PGsV1NAs8xHGYOxyzZT7lT62W8qj8JCS4",
-          preferred: false,
-          author: author,
-          sourceCode: `${sourceBaseUrl}/v2a`,
-          stamps: 35,
-        },
-        {
-          version: "v2b",
-          txid: "wgEneGiXfJKE0khVa8aaHDVac9NJ1nGiDo7-lsK0MRA",
-          forkedFrom: "nnEagkfN_4PGsV1NAs8xHGYOxyzZT7lT62W8qj8JCS4",
-          preferred: false,
-          author: author,
-          sourceCode: `${sourceBaseUrl}/v2b`,
-          stamps: 28,
-        },
-      ],
-    },
-    {
-      version: "v1b",
-      txid: "LVaFOEKTjGw6bBP959q8c01yhl-jHt6afDIVdTlr4_c",
-      forkedFrom: "gW2GGNGBzeLFMVfIAdOg4L1Akg9fQWq19hsvM5DAG44",
-      preferred: false,
-      author: author,
-      sourceCode: `${sourceBaseUrl}/v1b`,
-      stamps: 15,
-    },
-  ],
-};
-
 /** Handles rendering Root, Parent, and other Nodes. */
-function Node({ node }: { node: HierarchyNode }) {
+function Node({ node: baseNode }: { node: HierarchyNode }) {
   const [showDialog, setShowDialog] = useState(false);
+
+  const node = baseNode.data.node;
 
   const handleShowDialog = () => setShowDialog(true);
   const handleCancelDialog = () => setShowDialog(false);
-  const version = node.data.version;
-  const txid = node.data.txid;
-  const forkedFrom = node.data.forkedFrom;
-  const preferred = node.data.preferred;
-  const author = node.data.author;
-  const sourceCode = node.data.sourceCode;
-  const stamps = node.data.stamps;
+  const handleKeyDown = (e: KeyboardEvent<SVGElement>) => {
+    if (e.key === "Enter" || e.code === "Space") {
+      setShowDialog(true);
+    }
+  };
+
+  // const version = node.data.version;
+  const id = node.id;
+  const forks = node.forks;
+  const title = node.title;
+  const description = node.description;
+  const metaId = node.metaId;
+  const groupId = node.groupId;
+  const published = node.published;
+  const stamps = node.stamps;
+  const topics = node.topics;
 
   const width = 120;
   const height = 50;
   const centerX = -width / 2;
   const centerY = -height / 2;
-  const isRoot = node.depth === 0;
-  const isParent = !!node.children;
+  const isRoot = baseNode.depth === 0;
+  const isParent = !!baseNode.children;
 
-  if (isRoot) return <RootNode node={node} />;
-  if (isParent) return <ParentNode node={node} />;
+  if (isRoot) return <RootNode node={baseNode} />;
+  if (isParent) return <ParentNode node={baseNode} />;
 
   return (
-    <Group top={node.x} left={node.y}>
+    <Group top={baseNode.x} left={baseNode.y}>
       <Rect
         css={{
           fill: theme.colors.indigo2,
@@ -130,6 +91,7 @@ function Node({ node }: { node: HierarchyNode }) {
         strokeOpacity={1}
         rx={6}
         onClick={handleShowDialog}
+        onKeyDown={handleKeyDown}
       />
       <Text
         css={{
@@ -141,17 +103,22 @@ function Node({ node }: { node: HierarchyNode }) {
         textAnchor="middle"
         style={{ pointerEvents: "none" }}
       >
-        {node.data.version}
+        {node.title}
       </Text>
 
-      <AppVersionDialog
+      <NodeDialog
         node={{
-          version,
-          txid,
-          preferred,
-          forkedFrom,
-          author,
-          sourceCode,
+          // version,
+          id,
+          title,
+          description,
+          metaId,
+          groupId,
+          published,
+          forks,
+          topics,
+          // author,
+          // sourceCode,
           stamps,
         }}
         open={showDialog}
@@ -161,25 +128,37 @@ function Node({ node }: { node: HierarchyNode }) {
   );
 }
 
-function RootNode({ node }: { node: HierarchyNode }) {
+function RootNode({ node: baseNode }: { node: HierarchyNode }) {
   const [showDialog, setShowDialog] = useState(false);
+
+  const node = baseNode.data.node;
 
   const handleShowDialog = () => setShowDialog(true);
   const handleCancelDialog = () => setShowDialog(false);
-  const version = node.data.version;
-  const txid = node.data.txid;
-  const forkedFrom = node.data.forkedFrom;
-  const preferred = node.data.preferred;
-  const author = node.data.author;
-  const sourceCode = node.data.sourceCode;
-  const stamps = node.data.stamps;
+
+  const handleKeyDown = (e: KeyboardEvent<SVGElement>) => {
+    if (e.key === "Enter" || e.code === "Space") {
+      setShowDialog(true);
+    }
+  };
+
+  // const version = node.data.version;
+  const id = node.id;
+  const forks = node.forks;
+  const title = node.title;
+  const description = node.description;
+  const metaId = node.metaId;
+  const groupId = node.groupId;
+  const published = node.published;
+  const stamps = node.stamps;
+  const topics = node.topics;
 
   const width = 120;
   const height = 50;
   const centerX = -width / 2;
   const centerY = -height / 2;
   return (
-    <Group top={node.x} left={node.y}>
+    <Group top={baseNode.x} left={baseNode.y}>
       <Rect
         css={{
           fill: theme.colors.indigo2,
@@ -208,6 +187,7 @@ function RootNode({ node }: { node: HierarchyNode }) {
         strokeOpacity={1}
         rx={6}
         onClick={handleShowDialog}
+        onKeyDown={handleKeyDown}
       />
       <Text
         css={{
@@ -219,17 +199,22 @@ function RootNode({ node }: { node: HierarchyNode }) {
         textAnchor="middle"
         style={{ pointerEvents: "none" }}
       >
-        {node.data.version}
+        {node.title}
       </Text>
 
-      <AppVersionDialog
+      <NodeDialog
         node={{
-          version,
-          txid,
-          preferred,
-          forkedFrom,
-          author,
-          sourceCode,
+          // version,
+          id,
+          title,
+          description,
+          metaId,
+          groupId,
+          published,
+          forks,
+          topics,
+          // author,
+          // sourceCode,
           stamps,
         }}
         open={showDialog}
@@ -239,18 +224,30 @@ function RootNode({ node }: { node: HierarchyNode }) {
   );
 }
 
-function ParentNode({ node }: { node: HierarchyNode }) {
+function ParentNode({ node: baseNode }: { node: HierarchyNode }) {
   const [showDialog, setShowDialog] = useState(false);
+
+  const node = baseNode.data.node;
 
   const handleShowDialog = () => setShowDialog(true);
   const handleCancelDialog = () => setShowDialog(false);
-  const version = node.data.version;
-  const txid = node.data.txid;
-  const forkedFrom = node.data.forkedFrom;
-  const preferred = node.data.preferred;
-  const author = node.data.author;
-  const sourceCode = node.data.sourceCode;
-  const stamps = node.data.stamps;
+
+  const handleKeyDown = (e: KeyboardEvent<SVGElement>) => {
+    if (e.code === "Space") {
+      setShowDialog(true);
+    }
+  };
+
+  // const version = node.data.version;
+  const id = node.id;
+  const forks = node.forks;
+  const title = node.title;
+  const description = node.description;
+  const metaId = node.metaId;
+  const groupId = node.groupId;
+  const published = node.published;
+  const stamps = node.stamps;
+  const topics = node.topics;
 
   const width = 120;
   const height = 50;
@@ -258,7 +255,7 @@ function ParentNode({ node }: { node: HierarchyNode }) {
   const centerY = -height / 2;
 
   return (
-    <Group top={node.x} left={node.y}>
+    <Group top={baseNode.x} left={baseNode.y}>
       <Rect
         css={{
           fill: theme.colors.indigo2,
@@ -287,6 +284,7 @@ function ParentNode({ node }: { node: HierarchyNode }) {
         strokeOpacity={1}
         rx={6}
         onClick={handleShowDialog}
+        onKeyDown={handleKeyDown}
       />
       <Text
         css={{
@@ -298,17 +296,22 @@ function ParentNode({ node }: { node: HierarchyNode }) {
         textAnchor="middle"
         style={{ pointerEvents: "none" }}
       >
-        {node.data.version}
+        {node.title}
       </Text>
 
-      <AppVersionDialog
+      <NodeDialog
         node={{
-          version,
-          txid,
-          preferred,
-          forkedFrom,
-          author,
-          sourceCode,
+          // version,
+          id,
+          title,
+          description,
+          metaId,
+          groupId,
+          published,
+          forks,
+          topics,
+          // author,
+          // sourceCode,
           stamps,
         }}
         open={showDialog}
@@ -322,12 +325,14 @@ const defaultMargin = { top: 10, left: 80, right: 80, bottom: 10 };
 
 interface TreeGraphProps extends WithParentSizeProps {
   margin?: { top: number; right: number; bottom: number; left: number };
+  rawTree: TreeNode;
 }
 
 const TreeGraph = ({
   parentWidth: width,
   parentHeight: height,
   margin = defaultMargin,
+  rawTree,
 }: TreeGraphProps & WithParentSizeProvidedProps) => {
   const data = useMemo(() => hierarchy(rawTree), []);
   const yMax = height! - margin.top - margin.bottom;
