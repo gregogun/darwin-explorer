@@ -6,7 +6,5 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  await getAsset().then((data) => {
-    res.status(200).json({ asset: data });
-  });
+  res.status(200).json({ name: "Bob" });
 }

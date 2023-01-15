@@ -1,5 +1,4 @@
 import type { AppProps } from "next/app";
-import { TooltipProvider } from "@radix-ui/react-tooltip";
 import { darkTheme, globalCss } from "@aura-ui/react";
 import { ThemeProvider } from "next-themes";
 
@@ -32,14 +31,12 @@ globalStyles();
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <TooltipProvider>
-      <ThemeProvider
-        disableTransitionOnChange
-        attribute="class"
-        value={{ light: "light-theme", dark: darkTheme.toString() }}
-      >
-        <Component {...pageProps} />
-      </ThemeProvider>
-    </TooltipProvider>
+    <ThemeProvider
+      disableTransitionOnChange
+      attribute="class"
+      value={{ light: "light-theme", dark: darkTheme.toString() }}
+    >
+      <Component {...pageProps} />
+    </ThemeProvider>
   );
 }

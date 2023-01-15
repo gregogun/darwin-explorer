@@ -12,6 +12,7 @@ import { TreeGraphDialog } from "../modules/TreeGraph/TreeGraphDialog";
 import graph from "@permaweb/asset-graph";
 import { TreeNode } from "../types";
 import { FormikErrors, useFormik } from "formik";
+import { config } from "../config";
 
 const moveBg = keyframes({
   to: {
@@ -65,7 +66,7 @@ export default function Home() {
       css={{
         placeItems: "center",
         height: "100%",
-        background: "url(/img/bg.png)",
+        background: `url(${config.gatewayUrl}/rZxyRryWyH-8cis1yzrXR4Dyzx8LaNllkVVA29rdggE)`,
         backgroundRepeat: "no-repeat",
         backgroundPosition: "center center",
       }}

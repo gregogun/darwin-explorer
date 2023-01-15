@@ -1,4 +1,9 @@
-import { CheckIcon, CopyIcon, Cross2Icon } from "@radix-ui/react-icons";
+import {
+  ArrowRightIcon,
+  CheckIcon,
+  CopyIcon,
+  Cross2Icon,
+} from "@radix-ui/react-icons";
 import {
   Dialog,
   DialogTitle,
@@ -10,14 +15,54 @@ import {
   DialogPortal,
   DialogOverlay,
   DialogContent,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
   Flex,
   Separator as SeparatorBase,
+  DropdownMenuTrigger,
+  DropdownMenuPortal,
 } from "@aura-ui/react";
 import { NodeProps } from "../../types";
 import { formatDistance } from "date-fns";
 import { useEffect, useState } from "react";
 import { config } from "../../config";
 import arweaveGraphql from "arweave-graphql";
+import { arweave } from "../../lib/arweave";
+import { VscRepoForked } from "react-icons/vsc";
+import { RxDownload, RxFile, RxFileText } from "react-icons/rx";
+
+const StyledDropdownMenuItem = styled(DropdownMenuItem, {
+  color: "$indigo11",
+  px: "$3",
+  gap: "$2",
+  justifyContent: "start",
+
+  variants: {
+    color: {
+      indigo: {
+        "&[data-disabled]": {
+          color: "$indigo8",
+          pointerEvents: "none",
+        },
+
+        "&[data-highlighted]": {
+          backgroundColor: "$indigo4",
+          color: "$indigo12",
+        },
+
+        "&:hover": {
+          backgroundColor: "$indigo4",
+          color: "$indigo12",
+        },
+      },
+    },
+  },
+
+  defaultVariants: {
+    color: "indigo",
+  },
+});
 
 const DescriptionContainer = styled("div", {
   pl: 60,
@@ -36,6 +81,7 @@ const TagsContainer = styled("div", {
 const TagsWrapper = styled("div", {
   display: "flex",
   flexWrap: "wrap",
+  gap: "$2",
 });
 
 const Tag = styled("div", {
@@ -264,19 +310,33 @@ interface NodeDialogProps {
 
 export const NodeDialog = ({ onClose, open, node }: NodeDialogProps) => {
   const [author, setAuthor] = useState<string>();
+  const [appUrl, setAppUrl] = useState<string>();
+  const [sourceUrl, setSourceUrl] = useState<string>();
 
   useEffect(() => {
-    getAuthor();
-  }, []);
+    if (open) {
+      getAuthor();
+    }
+  }, [open]);
 
   const getAuthor = async () => {
     const data = await arweaveGraphql(
       `${config.gatewayUrl}/graphql`
     ).getTransactions({
-      ids: node.metaId,
+      ids: node.id,
     });
 
+    await arweave.transactions
+      .getData(node.id, { decode: true })
+      .then((data: any) => {
+        console.log(data);
+
+        setAppUrl(data.manifest);
+        setSourceUrl(data.sourceCode);
+      });
+
     const metadata = data.transactions.edges[0];
+    console.log(metadata);
 
     const author = metadata.node.owner.address;
 
@@ -364,19 +424,47 @@ export const NodeDialog = ({ onClose, open, node }: NodeDialogProps) => {
               <Cross2Icon />
             </IconButton>
             <Flex gap="2">
-              <Button variant="outline" colorScheme="indigo">
-                Fork Project
-              </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" colorScheme="indigo">
+                    <VscRepoForked />
+                    Fork Project
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuPortal>
+                  <DropdownMenuContent
+                    css={{
+                      backgroundColor: "$indigo2",
+                      border: "1px solid $indigo6",
+                    }}
+                    sideOffset={8}
+                  >
+                    <StyledDropdownMenuItem
+                      as="a"
+                      href={`${config.gatewayUrl}/${sourceUrl}`}
+                    >
+                      <RxDownload />
+                      Download Source
+                    </StyledDropdownMenuItem>
+                    <StyledDropdownMenuItem>
+                      <RxFileText />
+                      Fork Documentation
+                    </StyledDropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenuPortal>
+              </DropdownMenu>
               <Button
                 css={{ cursor: "pointer" }}
                 as="a"
-                href={`${config.gatewayUrl}/${node.metaId}`}
+                href={`${config.gatewayUrl}/${appUrl}`}
                 target="_blank"
                 rel="noreferrer"
                 variant="solid"
                 colorScheme="indigo"
+                aria-disabled={!appUrl}
               >
                 Go to app
+                <ArrowRightIcon />
               </Button>
             </Flex>
           </Flex>
@@ -430,7 +518,9 @@ export const NodeDialog = ({ onClose, open, node }: NodeDialogProps) => {
                 Topics
               </Typography>
               <TagsWrapper>
-                <Tag>{node.topics}</Tag>
+                {node.topics?.split(",").map((topic) => (
+                  <Tag key={topic}>{topic}</Tag>
+                ))}
               </TagsWrapper>
             </TagsContainer>
           </Box>

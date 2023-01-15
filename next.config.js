@@ -9,7 +9,6 @@ const nextConfig = {
     config.resolve.fallback = { fs: false };
     return config;
   },
-  swcMinify: true,
 };
 
 module.exports = nextConfig;
