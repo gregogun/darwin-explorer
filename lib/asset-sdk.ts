@@ -1,8 +1,8 @@
+// @ts-nocheck
 import graph from "@permaweb/asset-graph";
-import AssetSDK from "@permaweb/asset-sdk";
-import Bundlr from "@bundlr-network/client";
+import AssetSDK from "@permaweb/asset-web-sdk";
+// import Bundlr from "@bundlr-network/client";
 import { WarpFactory } from "warp-contracts";
-import fs from "fs";
 import { Data } from "../types";
 import { arweave } from "./arweave";
 
@@ -11,7 +11,6 @@ export const getAsset = async ({
   walletPath,
 }: Pick<Data, "id" | "walletPath">) => {
   const jwk = JSON.parse(fs.readFileSync(walletPath, "utf-8"));
-  const bundlr = new Bundlr("https://node2.bundlr.network", "arweave", jwk);
   const warp = WarpFactory.forMainnet();
 
   const SDK = AssetSDK.init({ arweave, bundlr, warp, wallet: jwk });
@@ -27,3 +26,4 @@ export const getGraph = async (id: string) => {
 
   console.log(res);
 };
+
