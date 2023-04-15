@@ -19,6 +19,7 @@
     "@fontsource/inter": "4.5.14",
     "@permaweb/asset-graph": "https://arweave.net/-jYaU7HYX3JNpsOTqkMzEKUK4_5Mfy-a88jtgSNrI_k",
     "@permaweb/asset-sdk": "https://arweave.net/6EufX9daGYA6tqv1WK900FQLy0JHta2PdMIutTh3t4g",
+    "@permaweb/stampjs": "https://js_stamps.g8way.io",
     "@radix-ui/colors": "0.1.8",
     "@radix-ui/react-dialog": "1.0.2",
     "@radix-ui/react-icons": "1.1.1",
