@@ -1,5 +1,6 @@
 import {
   ArrowRightIcon,
+  BadgeIcon,
   CheckIcon,
   CopyIcon,
   Cross2Icon,
@@ -31,6 +32,8 @@ import arweaveGraphql from "arweave-graphql";
 import { arweave } from "../../lib/arweave";
 import { VscRepoForked } from "react-icons/vsc";
 import { RxDownload, RxFile, RxFileText } from "react-icons/rx";
+import { HiBadgeCheck } from "react-icons/hi";
+import { getStampCount, stampAsset } from "../../lib/stamps";
 
 const StyledDropdownMenuItem = styled(DropdownMenuItem, {
   color: "$indigo11",
@@ -312,19 +315,30 @@ export const NodeDialog = ({ onClose, open, node }: NodeDialogProps) => {
   const [author, setAuthor] = useState<string>();
   const [appUrl, setAppUrl] = useState<string>();
   const [sourceUrl, setSourceUrl] = useState<string>();
+  const [stampCount, setStampCount] = useState<number>();
 
   useEffect(() => {
     if (open) {
-      getAuthor();
+      getData();
     }
   }, [open]);
 
-  const getAuthor = async () => {
+  // const getStamps = async () => {
+  //   const stamps = await getStampCount(node.id);
+  //   console.log("stamps", stamps);
+
+  //   setStampCount(stamps);
+  // };
+
+  const getData = async () => {
     const data = await arweaveGraphql(
       `${config.gatewayUrl}/graphql`
     ).getTransactions({
       ids: node.id,
     });
+    const stamps = await getStampCount(node.id);
+
+    setStampCount(stamps);
 
     await arweave.transactions
       .getData(node.id, { decode: true })
@@ -424,11 +438,25 @@ export const NodeDialog = ({ onClose, open, node }: NodeDialogProps) => {
               <Cross2Icon />
             </IconButton>
             <Flex gap="2">
+              <Button
+                onClick={() =>
+                  stampAsset(node.id).then(async () => {
+                    const stamps = await getStampCount(node.id);
+
+                    setStampCount(stamps);
+                  })
+                }
+                variant="outline"
+                colorScheme="indigo"
+              >
+                <HiBadgeCheck />
+                {stampCount ? stampCount : 0}
+              </Button>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="outline" colorScheme="indigo">
                     <VscRepoForked />
-                    Fork Project
+                    Fork
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuPortal>
@@ -463,7 +491,7 @@ export const NodeDialog = ({ onClose, open, node }: NodeDialogProps) => {
                 colorScheme="indigo"
                 aria-disabled={!appUrl}
               >
-                Go to app
+                Visit
                 <ArrowRightIcon />
               </Button>
             </Flex>

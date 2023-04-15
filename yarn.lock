@@ -867,6 +867,10 @@
     fpjson-lang "^0.1.3"
     ramda "^0.28.0"
 
+"@permaweb/stampjs@https://js_stamps.g8way.io":
+  version "0.0.3"
+  resolved "https://js_stamps.g8way.io#c16fdeca85df21a300d9872693ac47cda0120639"
+
 "@pkgr/utils@^2.3.1":
   version "2.3.1"
   resolved "https://registry.yarnpkg.com/@pkgr/utils/-/utils-2.3.1.tgz#0a9b06ffddee364d6642b3cd562ca76f55b34a03"
