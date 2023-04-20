@@ -13,6 +13,7 @@ import graph from "@permaweb/asset-graph";
 import { TreeNode } from "../types";
 import { FormikErrors, useFormik } from "formik";
 import { config } from "../config";
+import { getAsset } from "../lib/asset-sdk";
 
 const moveBg = keyframes({
   to: {
@@ -60,6 +61,10 @@ export default function Home() {
 
   const handleShowDialog = () => setShowDialog(true);
   const handleCancelDialog = () => setShowDialog(false);
+
+  useEffect(() => {
+    getAsset("vCU8cXnxkkMupiACruf9ih2M4k_CWIEvGsozbY9jlzg");
+  }, []);
 
   return (
     <Grid
