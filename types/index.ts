@@ -38,3 +38,18 @@ export interface Data {
   // need to extend data to support Uint8Array when generalizing cli for all assets
   data?: string;
 }
+
+export interface Asset {
+  data: string;
+  description: string;
+  forks: string | undefined;
+  groupId: string;
+  id: string;
+  metaId: string | undefined;
+  owner: string;
+  published: string;
+  stamps: number;
+  title: string;
+  topics?: string;
+  type: string;
+}
