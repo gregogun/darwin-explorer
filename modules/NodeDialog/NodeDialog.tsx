@@ -34,6 +34,7 @@ import { VscRepoForked } from "react-icons/vsc";
 import { RxDownload, RxFile, RxFileText } from "react-icons/rx";
 import { HiBadgeCheck } from "react-icons/hi";
 import { getStampCount, stampAsset } from "../../lib/stamps";
+import { getAsset } from "../../lib/asset-sdk";
 
 const StyledDropdownMenuItem = styled(DropdownMenuItem, {
   color: "$indigo11",
@@ -323,38 +324,11 @@ export const NodeDialog = ({ onClose, open, node }: NodeDialogProps) => {
     }
   }, [open]);
 
-  // const getStamps = async () => {
-  //   const stamps = await getStampCount(node.id);
-  //   console.log("stamps", stamps);
-
-  //   setStampCount(stamps);
-  // };
-
   const getData = async () => {
-    const data = await arweaveGraphql(
-      `${config.gatewayUrl}/graphql`
-    ).getTransactions({
-      ids: node.id,
-    });
-    const stamps = await getStampCount(node.id);
+    const asset = await getAsset(node.id);
 
-    setStampCount(stamps);
-
-    await arweave.transactions
-      .getData(node.id, { decode: true })
-      .then((data: any) => {
-        console.log(data);
-
-        setAppUrl(data.manifest);
-        setSourceUrl(data.sourceCode);
-      });
-
-    const metadata = data.transactions.edges[0];
-    console.log(metadata);
-
-    const author = metadata.node.owner.address;
-
-    setAuthor(author);
+    setStampCount(asset.stamps);
+    setAuthor(asset.owner);
   };
 
   const mainData: MainInfo = {
@@ -452,7 +426,7 @@ export const NodeDialog = ({ onClose, open, node }: NodeDialogProps) => {
                 <HiBadgeCheck />
                 {stampCount ? stampCount : 0}
               </Button>
-              <DropdownMenu>
+              {/* <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="outline" colorScheme="indigo">
                     <VscRepoForked />
@@ -480,16 +454,16 @@ export const NodeDialog = ({ onClose, open, node }: NodeDialogProps) => {
                     </StyledDropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenuPortal>
-              </DropdownMenu>
+              </DropdownMenu> */}
               <Button
                 css={{ cursor: "pointer" }}
                 as="a"
-                href={`${config.gatewayUrl}/${appUrl}`}
+                href={`${config.gatewayUrl}/${node.id}`}
                 target="_blank"
                 rel="noreferrer"
                 variant="solid"
                 colorScheme="indigo"
-                aria-disabled={!appUrl}
+                aria-disabled={!node.id}
               >
                 Visit
                 <ArrowRightIcon />
