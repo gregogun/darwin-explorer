@@ -47,6 +47,7 @@ export default function Home() {
       validateField("id");
       setSubmitting(true);
       const res = await graph(values.id);
+      console.log(res);
 
       if (!res) {
         formik.setErrors({ id: "App Version not found" });

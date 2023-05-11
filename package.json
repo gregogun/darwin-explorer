@@ -18,7 +18,7 @@
     "@bundlr-network/client": "0.9.11",
     "@fontsource/inter": "4.5.14",
     "@permaweb/asset-graph": "https://arweave.net/-jYaU7HYX3JNpsOTqkMzEKUK4_5Mfy-a88jtgSNrI_k",
-    "@permaweb/asset-web-sdk": "0.0.3",
+    "@permaweb/asset-web-sdk": "0.0.4",
     "@permaweb/stampjs": "0.0.15",
     "@radix-ui/colors": "0.1.8",
     "@radix-ui/react-dialog": "1.0.2",

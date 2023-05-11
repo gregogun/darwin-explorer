@@ -19,8 +19,8 @@ dependencies:
     specifier: https://arweave.net/-jYaU7HYX3JNpsOTqkMzEKUK4_5Mfy-a88jtgSNrI_k
     version: '@arweave.net/-jYaU7HYX3JNpsOTqkMzEKUK4_5Mfy-a88jtgSNrI_k'
   '@permaweb/asset-web-sdk':
-    specifier: 0.0.3
-    version: 0.0.3(react@18.2.0)
+    specifier: 0.0.4
+    version: 0.0.4(react@18.2.0)
   '@permaweb/stampjs':
     specifier: 0.0.15
     version: 0.0.15(react@18.2.0)
@@ -1006,8 +1006,8 @@ packages:
     dev: true
     optional: true
 
-  /@permaweb/asset-web-sdk@0.0.3(react@18.2.0):
-    resolution: {integrity: sha512-07jnVA7W3WFqVwZ/FJ3LQsR0eXQbbSHtEMIyvq3486yTy0q9II+wEmTxWNvJhpZFqYpBpZRpzEEIDSsE1kOOqQ==}
+  /@permaweb/asset-web-sdk@0.0.4(react@18.2.0):
+    resolution: {integrity: sha512-gDeewKCtdAohs6fq4SuvYl9mUj9VoPLbcnAV2aUNMNbzc31s1pNLJ7N/TrIoXIvyvKM3yuvo1DQ3apIpL60IhA==}
     dependencies:
       '@permaweb/stampjs': 0.0.15(react@18.2.0)
       arweave: 1.13.5
