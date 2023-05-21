@@ -1,6 +1,7 @@
-import type { AppProps } from "next/app";
+import type AppProps from "next/app";
 import { darkTheme, globalCss } from "@aura-ui/react";
 import { ThemeProvider } from "next-themes";
+import { ConnectProvider } from "arweave-wallet-ui-test";
 
 const globalStyles = globalCss({
   "*, *::before, *::after": {
@@ -16,6 +17,10 @@ const globalStyles = globalCss({
     fontFamily: "$body",
     margin: 0,
     backgroundColor: "$indigo1",
+
+    [`.${darkTheme} &`]: {
+      backgroundColor: "#08090A",
+    },
   },
 
   "#__next": {
@@ -37,7 +42,9 @@ export default function App({ Component, pageProps }: AppProps) {
       value={{ light: "light-theme", dark: darkTheme.toString() }}
       forcedTheme="dark"
     >
-      <Component {...pageProps} />
+      <ConnectProvider>
+        <Component {...pageProps} />
+      </ConnectProvider>
     </ThemeProvider>
   );
 }
