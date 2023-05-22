@@ -1,4 +1,11 @@
-import { Box, Button, darkTheme, Flex, Typography } from "@aura-ui/react";
+import {
+  Box,
+  Button,
+  darkTheme,
+  Flex,
+  Textarea,
+  Typography,
+} from "@aura-ui/react";
 import {
   ArrowRightIcon,
   CheckIcon,
@@ -190,6 +197,60 @@ const AppVersion = () => {
                 >
                   {isCopied ? "Copied!" : "Copy Version ID"}
                   {isCopied ? <CheckIcon /> : <CopyIcon />}
+                </Button>
+              </Flex>
+              <Box
+                css={{
+                  background:
+                    "linear-gradient(89.46deg, #1A1B1E 1.67%, rgba(26, 29, 30, 0) 89.89%)",
+                  height: 1,
+                  my: "$3",
+                }}
+              />
+              <Flex
+                css={{
+                  mt: "$3",
+                  p: "$3",
+                  boxShadow: "0 0 0 1px $colors$slate3",
+                  br: "$3",
+
+                  "&:hover": {
+                    boxShadow: "0 0 0 1px $colors$slate4",
+                  },
+
+                  "&:focus-within": {
+                    boxShadow: "0 0 0 2px $colors$blue8",
+                  },
+                }}
+                direction="column"
+                gap="5"
+              >
+                <Textarea
+                  css={{
+                    mt: "$2",
+                    // p: "$5",
+                    boxShadow: "none",
+                    minHeight: 80,
+                    resize: "none",
+
+                    "&:hover": {
+                      boxShadow: "none",
+                    },
+
+                    "&:focus": {
+                      boxShadow: "none",
+                    },
+                  }}
+                  maxLength={300}
+                  variant="outline"
+                  placeholder="Share your thoughts..."
+                />
+                <Button
+                  css={{ alignSelf: "end" }}
+                  variant="solid"
+                  colorScheme="indigo"
+                >
+                  Comment
                 </Button>
               </Flex>
             </Box>
