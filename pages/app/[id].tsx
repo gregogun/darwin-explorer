@@ -10,32 +10,38 @@ import {
 } from "@aura-ui/react";
 import { MouseEvent, useEffect, useState } from "react";
 import { AppHeader } from "../../modules/Layout/AppHeader";
-import arweaveGql, { Transaction } from "arweave-graphql";
 import { getAppVersions } from "../../lib/getAppVersions";
 import { CaretUpIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
 import { stampAsset } from "../../lib/stamps";
+import arweaveGql, { Transaction } from "arweave-graphql";
+import { HiArrowUp } from "react-icons/hi";
 
 const StampButton = styled("button", {
   all: "unset",
   cursor: "pointer",
   boxSizing: "border-box",
   userSelect: "none",
-  display: "grid",
-  placeItems: "center",
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  alignItems: "center",
   fontSize: "$2",
   lineHeight: "$2",
-  px: "$4",
-  pt: "$1",
-  pb: "$2",
-  br: "$2",
-  maxW: 48,
-  maxH: 48,
+  // py: "$2",
+  // px: "$4",
+  br: "$1",
+  width: 48,
+  height: 56,
   boxShadow: "0 0 0 1px $colors$slate6",
   zindex: 999,
 
+  "& svg": {
+    size: 12,
+  },
+
   "&:hover": {
-    boxShadow: "0 0 0 1px $colors$slate7",
+    boxShadow: "0 0 0 1px $colors$slate8",
   },
 });
 
@@ -54,6 +60,34 @@ const VersionItem = ({
   topics,
   stamps,
 }: VersionItemProps) => {
+  const [info, setInfo] = useState<{
+    logo: string | undefined;
+    owner: string;
+  }>();
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  const getData = async () => {
+    try {
+      const res = await arweaveGql(`${"arweave.net"}/graphql`).getTransactions({
+        ids: [id],
+      });
+      const data = res.transactions.edges.map((edge) => {
+        const logo = edge.node.tags.find((x) => x.name === "Logo")?.value;
+        const owner = edge.node.owner.address;
+        return {
+          logo,
+          owner,
+        };
+      });
+      setInfo(data[0]);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const handleClick = (e: MouseEvent) => {
     e.stopPropagation();
 
@@ -68,9 +102,8 @@ const VersionItem = ({
         justify="between"
         align="center"
         css={{
-          "@bp2": { width: "100%" },
-          "@bp3": { maxW: 500 },
-          "@bp4": { maxW: 734 },
+          width: "100%",
+          maxW: 600,
           cursor: "pointer",
           p: "$5",
           br: "$3",
@@ -81,21 +114,29 @@ const VersionItem = ({
         }}
       >
         <Flex gap="3">
-          <Avatar
-            size="5"
-            css={{
-              br: "$3",
-            }}
-            shape="square"
-          >
-            <AvatarImage
-              src={`https://g8way.io/${id}/favicon.ico`}
-              alt={`${title} logo`}
+          {info?.logo ? (
+            <Avatar
+              size="5"
+              css={{
+                br: "$3",
+              }}
+              shape="square"
+            >
+              <AvatarImage
+                src={`https://g8way.io/${id}/${info?.logo}`}
+                alt={`${title} logo`}
+              />
+              <AvatarFallback variant="solid" delayMs={300}>
+                {title.slice(0, 2).toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+          ) : (
+            <Box
+              css={{
+                size: 48,
+              }}
             />
-            <AvatarFallback variant="solid" delayMs={300}>
-              {title.slice(0, 2).toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
+          )}
           <Flex justify="center" direction="column" gap="1">
             <Flex direction="column">
               <Typography size="2" css={{ color: "$slate12" }}>
@@ -120,7 +161,7 @@ const VersionItem = ({
           </Flex>
         </Flex>
         <StampButton onClick={handleClick}>
-          <CaretUpIcon />
+          <HiArrowUp />
           <Typography>{stamps}</Typography>
         </StampButton>
       </Flex>
@@ -181,23 +222,19 @@ const AppGroup = () => {
       <AppHeader />
       <Flex
         direction="column"
+        align="center"
         css={{
-          "@bp2": { width: "100%" },
-          "@bp3": { maxW: 500 },
-          "@bp4": { maxW: 734 },
-          mx: "auto",
           mt: "$10",
         }}
         gap="3"
       >
         <Flex
           css={{
-            "@bp2": { width: "100%" },
-            "@bp3": { maxW: 500 },
-            "@bp4": { maxW: 734 },
-            px: "$5",
+            width: "100%",
+            maxW: 600,
           }}
           justify="between"
+          align="center"
         >
           <Box>
             <Typography size="5" weight="6">
@@ -209,6 +246,7 @@ const AppGroup = () => {
           </Box>
           <Button
             variant="outline"
+            colorScheme="indigo"
             as="a"
             href={`https://g8way.io/${appInfo?.id}`}
             css={{
@@ -224,6 +262,7 @@ const AppGroup = () => {
               "linear-gradient(89.46deg, #1A1B1E 1.67%, rgba(26, 29, 30, 0) 89.89%)",
             height: 2,
             width: "100%",
+            maxW: 600,
           }}
         />
         {versions && versions.length > 0 ? (

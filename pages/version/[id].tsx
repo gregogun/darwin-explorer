@@ -121,15 +121,17 @@ const AppVersion = () => {
                 css={{
                   "& p": {
                     color: "$slate11",
+                    fontSize: "$2",
+                    lineHeight: "$2",
                   },
                 }}
                 align="center"
                 gap="1"
               >
                 <Typography>
-                  {abbreviateAddress({ address: x.owner })}
+                  Created by {abbreviateAddress({ address: x.owner })}
                 </Typography>
-                <Typography>•</Typography>
+                <Typography>-</Typography>
                 <Typography>{timeAgo(Number(x.published))}</Typography>
               </Flex>
               <Flex css={{ mt: "$10" }} direction="column" gap="1">
