@@ -22,7 +22,7 @@ export const AppHeader = () => (
       justify="center"
       align="center"
       gap="5"
-      css={{ "& a": { color: "$slate11", "&:hover": { color: "$slate12" } } }}
+      css={{ "& a": { color: "$slate12", "&:hover": { color: "$indigo11" } } }}
     >
       <Link href="/">Explore</Link>
       <Link href="/search">Search</Link>
