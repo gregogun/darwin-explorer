@@ -19,7 +19,7 @@
     "@fontsource/inter": "4.5.14",
     "@permaweb/asset-graph": "https://arweave.net/-jYaU7HYX3JNpsOTqkMzEKUK4_5Mfy-a88jtgSNrI_k",
     "@permaweb/asset-web-sdk": "0.0.4",
-    "@permaweb/stampjs": "0.0.15",
+    "@permaweb/stampjs": "0.2.2",
     "@radix-ui/colors": "0.1.8",
     "@radix-ui/react-dialog": "1.0.2",
     "@radix-ui/react-icons": "1.1.1",
@@ -31,7 +31,7 @@
     "@visx/hierarchy": "2.10.0",
     "@visx/responsive": "2.10.0",
     "@visx/shape": "2.12.2",
-    "arweave": "1.11.8",
+    "arweave": "1.13.7",
     "arweave-account": "1.3.4",
     "arweave-graphql": "0.0.5",
     "arweave-wallet-ui-test": "0.0.11",
@@ -48,7 +48,7 @@
     "react-icons": "4.7.1",
     "react-zoom-pan-pinch": "2.1.3",
     "ts-node": "10.9.1",
-    "warp-contracts": "1.2.39"
+    "warp-contracts": "1.4.8"
   },
   "devDependencies": {
     "@types/node": "18.11.13",
