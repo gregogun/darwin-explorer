@@ -1,7 +1,11 @@
 import Stamps from "@permaweb/stampjs";
 import { WarpFactory } from "warp-contracts";
+import Arweave from "arweave";
 
-const stamps = Stamps.init({ warp: WarpFactory.forMainnet() });
+const stamps = Stamps.init({
+  warp: WarpFactory.forMainnet(),
+  arweave: Arweave.init({}),
+});
 
 export const stampAsset = async (assetId: string) => {
   try {
@@ -26,9 +30,9 @@ export const getStampCount = async (assetId: string) => {
   }
 };
 
-export const userHasStamped = async (address: string, assetId: string) => {
+export const userHasStamped = async (assetId: string) => {
   try {
-    const res: any = await stamps.hasStamped(address, assetId);
+    const res: any = await stamps.hasStamped(assetId);
     return res;
   } catch (error) {
     console.error(error);
