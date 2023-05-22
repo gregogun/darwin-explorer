@@ -209,7 +209,7 @@ const AppVersion = () => {
               />
               <Flex
                 css={{
-                  mt: "$3",
+                  mt: "$5",
                   p: "$3",
                   boxShadow: "0 0 0 1px $colors$slate3",
                   br: "$3",
@@ -227,8 +227,6 @@ const AppVersion = () => {
               >
                 <Textarea
                   css={{
-                    mt: "$2",
-                    // p: "$5",
                     boxShadow: "none",
                     minHeight: 80,
                     resize: "none",
