@@ -13,7 +13,7 @@ export const getApps = async (gateway?: string) => {
     });
     const data = res.transactions.edges
       .filter((edge) => edge.node.tags.find((x) => x.name === "Title"))
-      .filter((edge) => edge.node.tags.find((x) => x.name === "Base"))
+      .filter((edge) => edge.node.tags.find((x) => x.name === "Wrapper-For"))
       .filter((edge) => edge.node.tags.find((x) => x.name === "Published"))
       .map((edge) => filter(edge.node as Transaction));
     return Promise.all(data);
@@ -26,8 +26,10 @@ export const getApps = async (gateway?: string) => {
 const filter = async (node: Transaction) => {
   const title = node.tags.find((x) => x.name === "Title")?.value;
   const description = node.tags.find((x) => x.name === "Description")?.value;
-  const baseId = node.tags.find((x) => x.name === "Base")?.value;
+  const baseId = node.tags.find((x) => x.name === "Wrapper-For")?.value;
   const published = node.tags.find((x) => x.name === "Published")?.value;
+  const logo = node.tags.find((x) => x.name === "Logo")?.value;
+  const topics = node.tags.filter((x) => x.name.includes("Topic"));
   const txid = node.id;
 
   if (!title || !baseId || !published) {
@@ -38,5 +40,9 @@ const filter = async (node: Transaction) => {
     title,
     description,
     txid,
+    baseId,
+    logo,
+    topics,
+    published,
   };
 };

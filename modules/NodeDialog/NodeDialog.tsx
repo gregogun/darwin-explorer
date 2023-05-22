@@ -35,6 +35,7 @@ import { RxDownload, RxFile, RxFileText } from "react-icons/rx";
 import { HiBadgeCheck } from "react-icons/hi";
 import { getStampCount, stampAsset } from "../../lib/stamps";
 import { getAsset } from "../../lib/asset-sdk";
+import { timeAgo } from "../../utils";
 
 const StyledDropdownMenuItem = styled(DropdownMenuItem, {
   color: "$indigo11",
@@ -123,9 +124,6 @@ const MainInfoItem = ({
   title: string;
   value: string | number;
 }) => {
-  const timeAgo = (date: number) => {
-    return formatDistance(new Date(date), new Date(), { addSuffix: true });
-  };
   return (
     <InfoItemContainer>
       <Typography

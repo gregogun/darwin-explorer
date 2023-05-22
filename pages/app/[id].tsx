@@ -79,7 +79,7 @@ const VersionItem = ({
           },
         }}
       >
-        <Flex>
+        <Flex gap="3">
           <Avatar
             size="5"
             css={{
@@ -108,7 +108,7 @@ const VersionItem = ({
               {topics.split(",").map((topic) => (
                 <Typography
                   key={topic}
-                  css={{ color: "$slate11" }}
+                  css={{ color: "$slate11", opacity: 0.7 }}
                   size="1"
                   as="span"
                 >
@@ -149,7 +149,7 @@ const AppGroup = () => {
   // run graph function and flatten into array to present in list
   const fetchVersions = async (tx: string) => {
     const res = await getBaseTx(tx);
-    const baseTx = res.tags.find((x) => x.name === "Base")?.value;
+    const baseTx = res.tags.find((x) => x.name === "Wrapper-For")?.value;
     const title = res.tags.find((x) => x.name === "Title")?.value;
     const description = res.tags.find((x) => x.name === "Description")?.value;
     const id = res.id;
