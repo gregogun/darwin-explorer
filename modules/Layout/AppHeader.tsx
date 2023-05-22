@@ -9,17 +9,21 @@ const Image = styled("img", {
 });
 
 export const AppHeader = () => (
-  <Flex
-    align="center"
-    justify="between"
+  <Grid
     css={{
       p: "$5",
+      gridTemplateColumns: "repeat(3, 1fr)",
     }}
   >
     <Link href="/">
       <Image css={{ cursor: "pointer" }} src="/app-logo.svg" alt="app logo" />
     </Link>
-    <Flex justify="center" gap="5" css={{ "& a": { color: "$slate11" } }}>
+    <Flex
+      justify="center"
+      align="center"
+      gap="5"
+      css={{ "& a": { color: "$slate11", "&:hover": { color: "$slate12" } } }}
+    >
       <Link href="/">Explore</Link>
       <Link href="/search">Search</Link>
     </Flex>
@@ -31,7 +35,8 @@ export const AppHeader = () => (
       connectButtonVariant="outline"
       connectButtonStyles={{
         br: "$pill",
+        justifySelf: "end",
       }}
     />
-  </Flex>
+  </Grid>
 );
