@@ -13,6 +13,7 @@ import graph from "@permaweb/asset-graph";
 import { TreeNode } from "../types";
 import { FormikErrors, useFormik } from "formik";
 import { config } from "../config";
+import { useRouter } from "next/dist/client/router";
 
 const moveBg = keyframes({
   to: {
@@ -30,6 +31,29 @@ const FormGroup = styled("form", {
 export default function Home() {
   const [showDialog, setShowDialog] = useState(false);
   const [rawTree, setRawTree] = useState<TreeNode>();
+  const router = useRouter();
+
+  useEffect(() => {
+    // console.log(router.query.tx);
+
+    if (router.query.tx) {
+      //@ts-ignore
+      validateTx(router.query.tx);
+    } else {
+      return;
+    }
+  }, [router.query.tx]);
+
+  const validateTx = async (tx: string) => {
+    try {
+      const res = await graph(tx);
+      setRawTree(res);
+      handleShowDialog();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const formik = useFormik<{ id: string }>({
     initialValues: {
       id: rawTree?.id || "",
