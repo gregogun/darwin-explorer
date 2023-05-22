@@ -1,5 +1,5 @@
 import type AppProps from "next/app";
-import { darkTheme, globalCss } from "@aura-ui/react";
+import { darkTheme, globalCss, TooltipProvider } from "@aura-ui/react";
 import { ThemeProvider } from "next-themes";
 import { ConnectProvider } from "arweave-wallet-ui-test";
 
@@ -36,15 +36,17 @@ globalStyles();
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <ThemeProvider
-      disableTransitionOnChange
-      attribute="class"
-      value={{ light: "light-theme", dark: darkTheme.toString() }}
-      forcedTheme="dark"
-    >
-      <ConnectProvider>
-        <Component {...pageProps} />
-      </ConnectProvider>
-    </ThemeProvider>
+    <TooltipProvider>
+      <ThemeProvider
+        disableTransitionOnChange
+        attribute="class"
+        value={{ light: "light-theme", dark: darkTheme.toString() }}
+        forcedTheme="dark"
+      >
+        <ConnectProvider>
+          <Component {...pageProps} />
+        </ConnectProvider>
+      </ThemeProvider>
+    </TooltipProvider>
   );
 }

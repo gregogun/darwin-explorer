@@ -1,5 +1,6 @@
 import {
   Box,
+  darkTheme,
   Dialog,
   DialogClose,
   DialogContent,
@@ -12,6 +13,7 @@ import { GraphKey } from "./GraphKey";
 import { TreeGraph } from "./TreeGraph";
 import { Cross1Icon } from "@radix-ui/react-icons";
 import { TreeNode } from "../../types";
+import { useEffect, useState } from "react";
 
 const StyledDialogContent = styled(DialogContent, {
   width: "100%",

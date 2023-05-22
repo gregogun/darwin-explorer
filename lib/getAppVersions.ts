@@ -12,17 +12,10 @@ interface TreeNode {
   children?: TreeNode[];
 }
 
-export const getAppVersions = async (tx: string, gateway?: string) => {
-  try {
-    const res = await graph(tx);
+export const getAppVersions = async (graph: any, gateway?: string) => {
+  const versionList = flattenTree(graph);
 
-    const versionList = flattenTree(res);
-
-    return versionList;
-  } catch (error) {
-    console.error(error);
-    throw new Error("Error occured whilst fetching data");
-  }
+  return versionList;
 };
 
 function flattenTree(tree: TreeNode) {
@@ -35,6 +28,8 @@ function flattenTree(tree: TreeNode) {
   }[] = [];
 
   function traverse(node: TreeNode) {
+    console.log("node", node);
+
     const {
       id,
       node: { title, description, topics, stamps },

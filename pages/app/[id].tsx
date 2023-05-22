@@ -5,7 +5,12 @@ import {
   Box,
   Button,
   Flex,
+  Kbd,
   styled,
+  Tooltip,
+  TooltipContent,
+  TooltipPortal,
+  TooltipTrigger,
   Typography,
 } from "@aura-ui/react";
 import { MouseEvent, useEffect, useState } from "react";
@@ -16,6 +21,9 @@ import Link from "next/link";
 import { stampAsset } from "../../lib/stamps";
 import arweaveGql, { Transaction } from "arweave-graphql";
 import { HiArrowUp } from "react-icons/hi";
+import graph from "@permaweb/asset-graph";
+import { TreeNode } from "../../types";
+import { TreeGraphDialog } from "../../modules/TreeGraph/TreeGraphDialog";
 
 const StampButton = styled("button", {
   all: "unset",
@@ -171,6 +179,9 @@ const VersionItem = ({
 
 const AppGroup = () => {
   const [versions, setVersions] = useState<VersionItemProps[]>();
+  const [rawTree, setRawTree] = useState<TreeNode>();
+  const [showDialog, setShowDialog] = useState(false);
+  const [optionKeyPressed, setOptionKeyPressed] = useState(false);
   const [appInfo, setAppInfo] = useState<{
     title: string;
     description: string | undefined;
@@ -188,6 +199,30 @@ const AppGroup = () => {
     fetchVersions(tx);
   }, []);
 
+  useEffect(() => {
+    const handleKeyDown = (event: any) => {
+      if (event.key === "Alt") {
+        setOptionKeyPressed(true);
+      } else if (event.key === "Tab" && optionKeyPressed) {
+        handleShowDialog();
+      }
+    };
+
+    const handleKeyUp = (event: any) => {
+      if (event.key === "Alt") {
+        setOptionKeyPressed(false);
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("keyup", handleKeyUp);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("keyup", handleKeyUp);
+    };
+  }, [optionKeyPressed]);
+
   // run graph function and flatten into array to present in list
   const fetchVersions = async (tx: string) => {
     const res = await getBaseTx(tx);
@@ -198,7 +233,11 @@ const AppGroup = () => {
     if (!baseTx || !title) {
       return;
     }
-    const data = await getAppVersions(baseTx);
+    const graphRes = await graph(baseTx);
+
+    // prob not most perf approach, need to think of better design at some point
+    setRawTree(graphRes);
+    const data = await getAppVersions(graphRes);
     setAppInfo({ title, description, id });
 
     setVersions(data);
@@ -216,6 +255,9 @@ const AppGroup = () => {
       throw new Error("Error occured whilst fetching data");
     }
   };
+
+  const handleShowDialog = () => setShowDialog(true);
+  const handleCancelDialog = () => setShowDialog(false);
 
   return (
     <>
@@ -244,17 +286,31 @@ const AppGroup = () => {
               {appInfo?.description}
             </Typography>
           </Box>
-          <Button
-            variant="outline"
-            colorScheme="indigo"
-            as="a"
-            href={`https://g8way.io/${appInfo?.id}`}
-            css={{
-              br: "$pill",
-            }}
-          >
-            Visit app
-          </Button>
+          <Flex gap="3">
+            <Tooltip delayDuration={200}>
+              <TooltipTrigger asChild>
+                <Button
+                  onClick={handleShowDialog}
+                  variant="subtle"
+                  colorScheme="indigo"
+                  as="a"
+                >
+                  View Fork Tree
+                </Button>
+              </TooltipTrigger>
+              <TooltipPortal>
+                <TooltipContent>⌥ + Tab</TooltipContent>
+              </TooltipPortal>
+            </Tooltip>
+            <Button
+              variant="outline"
+              colorScheme="indigo"
+              as="a"
+              href={`https://g8way.io/${appInfo?.id}`}
+            >
+              Visit app
+            </Button>
+          </Flex>
         </Flex>
         <Box
           css={{
@@ -278,6 +334,12 @@ const AppGroup = () => {
         ) : (
           <Typography>Loading versions...</Typography>
         )}
+
+        <TreeGraphDialog
+          rawTree={rawTree}
+          open={showDialog}
+          onClose={handleCancelDialog}
+        />
       </Flex>
     </>
   );
