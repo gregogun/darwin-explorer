@@ -1,6 +1,8 @@
 import { Box, Button, darkTheme, Flex, Typography } from "@aura-ui/react";
 import {
   ArrowRightIcon,
+  CheckIcon,
+  CopyIcon,
   DownloadIcon,
   FileTextIcon,
 } from "@radix-ui/react-icons";
@@ -25,6 +27,7 @@ interface VersionProps {
 
 const AppVersion = () => {
   const [version, setVersion] = useState<VersionProps[]>();
+  const [isCopied, setIsCopied] = useState(false);
   useEffect(() => {
     // invoke function on mount
     const tx = window.location.pathname.split("/")[2];
@@ -42,6 +45,15 @@ const AppVersion = () => {
 
     const res = await getVersionInfo(tx);
     setVersion(res as VersionProps[]);
+  };
+
+  const handleCopy = (tx: string) => {
+    navigator.clipboard.writeText(tx).then(() => {
+      setIsCopied(true);
+      setTimeout(() => {
+        setIsCopied(false);
+      }, 2000);
+    });
   };
 
   return (
@@ -158,6 +170,24 @@ const AppVersion = () => {
                 >
                   Download source
                   <DownloadIcon />
+                </Button>
+                <Button
+                  variant="ghost"
+                  css={{
+                    gap: "$2",
+                    p: 0,
+                    pointerEvents: isCopied ? "none" : "auto",
+                    color: isCopied ? "$green11" : "$slate11",
+                    "&:hover": {
+                      backgroundColor: "transparent",
+                      color: "$slate12",
+                    },
+                    "&:active": { backgroundColor: "transparent" },
+                  }}
+                  onClick={() => handleCopy(x.txid)}
+                >
+                  {isCopied ? "Copied!" : "Copy Version ID"}
+                  {isCopied ? <CheckIcon /> : <CopyIcon />}
                 </Button>
               </Flex>
             </Box>
