@@ -62,7 +62,7 @@ const VersionItem = ({
       .catch((error) => console.error(error));
   };
   return (
-    <Link href="/version">
+    <Link href={`/version/${id}`}>
       <Flex
         as="a"
         justify="between"
@@ -71,6 +71,7 @@ const VersionItem = ({
           "@bp2": { width: "100%" },
           "@bp3": { maxW: 500 },
           "@bp4": { maxW: 734 },
+          cursor: "pointer",
           p: "$5",
           br: "$3",
           "&:hover": {
