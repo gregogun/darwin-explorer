@@ -116,7 +116,7 @@ export const VersionItem = ({
                 alt={`${title} logo`}
               />
               <AvatarFallback variant="solid" delayMs={300}>
-                {title.slice(0, 2).toUpperCase()}
+                {title?.slice(0, 2).toUpperCase()}
               </AvatarFallback>
             </Avatar>
           ) : (
@@ -136,14 +136,14 @@ export const VersionItem = ({
               </Typography>
             </Flex>
             <Flex gap="2">
-              {topics.split(",").map((topic) => (
+              {topics?.map((topic) => (
                 <Typography
-                  key={topic}
+                  key={topic.value}
                   css={{ color: "$slate11", opacity: 0.7 }}
                   size="1"
                   as="span"
                 >
-                  {topic}
+                  {topic.value}
                 </Typography>
               ))}
             </Flex>

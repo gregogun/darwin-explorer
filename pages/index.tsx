@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import { Flex, Typography } from "@aura-ui/react";
 import { getApps } from "../lib/getApps";
 import { AppHeader } from "../modules/Layout/AppHeader";
-import { AppGroup } from "../types";
+import { AppItemProps } from "../types";
 import { AppItem } from "../modules/Cards/AppItem";
 
 export default function Home() {
-  const [data, setData] = useState<AppGroup[] | undefined>([]);
+  const [data, setData] = useState<AppItemProps[] | undefined>([]);
   useEffect(() => {
     fetchApps();
   }, []);
@@ -22,7 +22,7 @@ export default function Home() {
 
     console.log(`https://g8way.io/${data[0]?.baseId}/${data[0]?.logo}`);
 
-    setData(data as AppGroup[]);
+    setData(data as AppItemProps[]);
   };
 
   return (

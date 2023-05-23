@@ -11,7 +11,20 @@ import {
 import { AppHeader } from "../modules/Layout/AppHeader";
 import { useRouter } from "next/router";
 import { searchData } from "../lib/search";
-import { SearchFilter, TypeFilter } from "../types";
+import {
+  AppItemProps,
+  SearchFilter,
+  TypeFilter,
+  VersionItemProps,
+} from "../types";
+import { AppItem } from "../modules/Cards/AppItem";
+import { VersionItem } from "../modules/Cards/VersionItem";
+
+function isVersionItem(
+  item: VersionItemProps | AppItemProps
+): item is VersionItemProps {
+  return (item as VersionItemProps).id !== undefined;
+}
 
 interface ParamsProps {
   type: TypeFilter;
@@ -20,7 +33,7 @@ interface ParamsProps {
 }
 
 export default function Search() {
-  const [results, setResults] = useState<[]>();
+  const [results, setResults] = useState<AppItemProps[] | VersionItemProps[]>();
   const router = useRouter();
 
   useEffect(() => {
@@ -43,6 +56,9 @@ export default function Search() {
 
     try {
       const res = await searchData(params.type, params.filter, params.value);
+      // console.log("search found", res);
+
+      setResults(res);
     } catch (error) {
       console.error(error);
     }
@@ -56,7 +72,33 @@ export default function Search() {
           Search Results
         </Typography>
         {results && results.length > 0 ? (
-          <Typography>{results}</Typography>
+          results.map((app) => {
+            if (isVersionItem(app)) {
+              return (
+                <VersionItem
+                  key={app.id}
+                  title={app.title}
+                  description={app.description}
+                  topics={app.topics}
+                  stamps={app.stamps}
+                  id={app.id}
+                />
+              );
+            } else {
+              return (
+                <AppItem
+                  key={app.txid}
+                  title={app.title}
+                  description={app.description}
+                  txid={app.txid}
+                  baseId={app.baseId}
+                  logo={app.logo}
+                  topics={app.topics}
+                  published={app.published}
+                />
+              );
+            }
+          })
         ) : (
           <Typography>No results</Typography>
         )}

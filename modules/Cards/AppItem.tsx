@@ -7,7 +7,7 @@ import {
 } from "@aura-ui/react";
 import Link from "next/link";
 import { timeAgo } from "../../utils";
-import { AppGroup } from "../../types";
+import { AppItemProps } from "../../types";
 
 export const AppItem = ({
   title,
@@ -17,7 +17,7 @@ export const AppItem = ({
   logo,
   topics,
   published,
-}: AppGroup) => (
+}: AppItemProps) => (
   <Link href={`/app/${txid}`} passHref>
     <Flex
       as="a"
@@ -48,7 +48,7 @@ export const AppItem = ({
             alt={`${title} logo`}
           />
           <AvatarFallback variant="solid" delayMs={300}>
-            {title.slice(0, 2).toUpperCase()}
+            {title?.slice(0, 2).toUpperCase()}
           </AvatarFallback>
         </Avatar>
         <Flex justify="center" direction="column" gap="1">
@@ -61,7 +61,7 @@ export const AppItem = ({
             </Typography>
           </Flex>
           <Flex gap="2">
-            {topics.map((topic) => (
+            {topics?.map((topic) => (
               <Typography
                 key={topic.value}
                 css={{ color: "$slate11", opacity: 0.7 }}

@@ -1,4 +1,6 @@
 import graph from "@permaweb/asset-graph";
+import arweaveGql, { Tag, Transaction } from "arweave-graphql";
+import { versionResultsFilter, versionTagFilter } from "../utils/query";
 
 interface TreeNode {
   id: string;
@@ -13,40 +15,39 @@ interface TreeNode {
 }
 
 export const getAppVersions = async (graph: any, gateway?: string) => {
+  // const versionList = await
   const versionList = flattenTree(graph);
 
-  return versionList;
+  const res = await arweaveGql(`${"arweave.net"}/graphql`).getTransactions({
+    ids: versionList,
+    tags: versionTagFilter,
+  });
+  try {
+    const data = res.transactions.edges
+      .filter((edge) => edge.node.tags.find((x) => x.name === "Title"))
+      .filter((edge) => edge.node.tags.find((x) => x.name === "Source-Code"))
+      .filter((edge) => edge.node.tags.find((x) => x.name === "Published"))
+      .map((edge) => versionResultsFilter(edge.node as Transaction));
+
+    return Promise.all(data);
+  } catch (error) {
+    // console.error(error);
+    throw new Error(error as any);
+  }
 };
 
-function flattenTree(tree: TreeNode) {
-  const result: {
-    id: string;
-    title: string;
-    description: string;
-    topics: string;
-    stamps: number;
-  }[] = [];
+function flattenTree(node: TreeNode): string[] {
+  const result: string[] = [];
 
-  function traverse(node: TreeNode) {
-    console.log("node", node);
+  const { id } = node;
+  result.push(id);
 
-    const {
-      id,
-      node: { title, description, topics, stamps },
-    } = node;
-    result.push({
-      id,
-      title,
-      description,
-      topics,
-      stamps,
+  if (node.children) {
+    node.children.forEach((child: TreeNode) => {
+      const childIds = flattenTree(child);
+      result.push(...childIds);
     });
-    if (node.children) {
-      node.children.forEach((child: TreeNode) => traverse(child));
-    }
   }
-
-  traverse(tree);
 
   return result;
 }

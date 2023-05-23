@@ -1,13 +1,11 @@
 import arweaveGql, { Transaction } from "arweave-graphql";
+import { versionTagFilter } from "../utils/query";
 
 export const getVersionInfo = async (tx: string, gateway?: string) => {
   try {
     const res = await arweaveGql(`${"arweave.net"}/graphql`).getTransactions({
       ids: [tx],
-      tags: [
-        { name: "App-Name", values: ["SmartWeaveContract"] },
-        { name: "Type", values: ["app"] },
-      ],
+      tags: versionTagFilter,
     });
     const data = res.transactions.edges.map((edge) =>
       filter(edge.node as Transaction)

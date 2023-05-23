@@ -62,18 +62,19 @@ export type TypeFilter = "app" | "version";
 
 export interface VersionItemProps {
   id: string;
-  title: string;
-  description: string;
-  topics: string;
+  title: string | undefined;
+  description: string | undefined;
+  logo?: string;
+  topics: Tag[] | undefined;
   stamps: number;
 }
 
-export interface AppGroup {
-  title: string;
-  description: string;
+export interface AppItemProps {
+  title: string | undefined;
+  description: string | undefined;
   txid: string;
-  baseId: string;
-  logo: string;
-  topics: Tag[];
-  published: string;
+  baseId: string | undefined;
+  logo: string | undefined;
+  topics: Tag[] | undefined;
+  published: string | undefined;
 }
