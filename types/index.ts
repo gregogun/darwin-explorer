@@ -53,3 +53,7 @@ export interface Asset {
   topics?: string;
   type: string;
 }
+
+export type SearchFilter = "name" | "id";
+
+export type TypeFilter = "app" | "version";
