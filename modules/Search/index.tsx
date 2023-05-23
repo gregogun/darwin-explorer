@@ -3,7 +3,7 @@ import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { SearchFilter, TypeFilter } from "../../types";
-import { AdvancedFilter } from "./filter";
+import { AdvancedFilter } from "./AdvancedFilter";
 
 export const Search = () => {
   const [filter, setFilter] = useState<SearchFilter>("name");
