@@ -126,6 +126,7 @@ const AppVersion = () => {
               </Flex>
               <Flex
                 css={{
+                  mt: "$1",
                   "& p": {
                     color: "$slate11",
                     fontSize: "$2",
@@ -138,7 +139,7 @@ const AppVersion = () => {
                 <Typography>
                   Created by {abbreviateAddress({ address: x.owner })}
                 </Typography>
-                <Typography>-</Typography>
+                <Typography>•</Typography>
                 <Typography>{timeAgo(Number(x.published))}</Typography>
               </Flex>
               <Flex css={{ mt: "$10" }} direction="column" gap="1">
