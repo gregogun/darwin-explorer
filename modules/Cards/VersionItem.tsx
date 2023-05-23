@@ -122,7 +122,7 @@ export const VersionItem = ({
           ) : (
             <Box
               css={{
-                size: 48,
+                size: 64,
               }}
             />
           )}

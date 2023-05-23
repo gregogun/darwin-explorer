@@ -1,12 +1,7 @@
 import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
   Box,
   Button,
   Flex,
-  Kbd,
-  styled,
   Tooltip,
   TooltipContent,
   TooltipPortal,
@@ -16,12 +11,12 @@ import {
 import { useEffect, useState } from "react";
 import { AppHeader } from "../../modules/Layout/AppHeader";
 import { getAppVersions } from "../../lib/getAppVersions";
-import { CaretUpIcon } from "@radix-ui/react-icons";
 import arweaveGql from "arweave-graphql";
 import graph from "@permaweb/asset-graph";
 import { TreeNode, VersionItemProps } from "../../types";
 import { TreeGraphDialog } from "../../modules/TreeGraph/TreeGraphDialog";
 import { VersionItem } from "../../modules/Cards/VersionItem";
+import { Skeleton } from "../../ui/Skeleton";
 
 const AppGroup = () => {
   const [versions, setVersions] = useState<VersionItemProps[]>();
@@ -124,14 +119,34 @@ const AppGroup = () => {
           justify="between"
           align="center"
         >
-          <Box>
-            <Typography size="5" weight="6">
-              {appInfo?.title}
-            </Typography>
-            <Typography size="2" css={{ color: "$slate11" }}>
-              {appInfo?.description}
-            </Typography>
-          </Box>
+          <Flex direction="column" gap="1">
+            {appInfo ? (
+              <Typography size="5" weight="6">
+                {appInfo.title}
+              </Typography>
+            ) : (
+              <Skeleton
+                css={{
+                  br: "$1",
+                  width: 140,
+                  height: "$7",
+                }}
+              />
+            )}
+            {appInfo ? (
+              <Typography size="2" css={{ color: "$slate11" }}>
+                {appInfo.description}
+              </Typography>
+            ) : (
+              <Skeleton
+                css={{
+                  br: "$1",
+                  width: 200,
+                  height: "$5",
+                }}
+              />
+            )}
+          </Flex>
           <Flex gap="3">
             <Tooltip delayDuration={200}>
               <TooltipTrigger asChild>
@@ -170,6 +185,7 @@ const AppGroup = () => {
         {versions && versions.length > 0 ? (
           versions.map((version) => (
             <VersionItem
+              key={version.id}
               title={version.title}
               description={version.description}
               topics={version.topics}
@@ -178,7 +194,29 @@ const AppGroup = () => {
             />
           ))
         ) : (
-          <Typography>Loading versions...</Typography>
+          <>
+            <Skeleton
+              css={{
+                width: "100%",
+                maxW: 600,
+                height: 96,
+              }}
+            />
+            <Skeleton
+              css={{
+                width: "100%",
+                maxW: 600,
+                height: 96,
+              }}
+            />
+            <Skeleton
+              css={{
+                width: "100%",
+                maxW: 600,
+                height: 96,
+              }}
+            />
+          </>
         )}
 
         <TreeGraphDialog

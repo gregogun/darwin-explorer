@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { Flex, Typography } from "@aura-ui/react";
+import { Box, Flex, Typography } from "@aura-ui/react";
 import { getApps } from "../lib/getApps";
 import { AppHeader } from "../modules/Layout/AppHeader";
 import { AppItemProps } from "../types";
 import { AppItem } from "../modules/Cards/AppItem";
+import { Skeleton } from "../ui/Skeleton";
 
 export default function Home() {
   const [data, setData] = useState<AppItemProps[] | undefined>([]);
@@ -46,7 +47,33 @@ export default function Home() {
             />
           ))
         ) : (
-          <Typography>Loading apps...</Typography>
+          <Flex
+            css={{
+              width: "100%",
+              maxW: 600,
+            }}
+            direction="column"
+            gap="3"
+          >
+            <Skeleton
+              css={{
+                width: "100%",
+                height: 96,
+              }}
+            />
+            <Skeleton
+              css={{
+                width: "100%",
+                height: 96,
+              }}
+            />
+            <Skeleton
+              css={{
+                width: "100%",
+                height: 96,
+              }}
+            />
+          </Flex>
         )}
       </Flex>
     </>
