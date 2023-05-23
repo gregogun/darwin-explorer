@@ -40,8 +40,9 @@ export const AppHeader = () => (
         }}
       >
         <Link href="/">Explore</Link>
-        <Link href="/">Create</Link>
-        <Link href="/search">Learn more</Link>
+        <Link href="https://github.com/gregogun/evolutionary-apps-cli/blob/main/README.md">
+          Create
+        </Link>
       </Flex>
     </Flex>
     <ConnectWallet
