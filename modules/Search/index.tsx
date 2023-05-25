@@ -1,7 +1,7 @@
 import { darkTheme, Flex, IconButton, styled, TextField } from "@aura-ui/react";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { iconButton } from "../../components/IconButton";
 import { SearchFilter, TypeFilter } from "../../types";
 import { AdvancedFilter } from "./AdvancedFilter";
@@ -14,15 +14,13 @@ export const Search = () => {
   const [filter, setFilter] = useState<SearchFilter>("name");
   const [type, setType] = useState<TypeFilter>("app");
   const [value, setValue] = useState<string>();
-  const [pathname, setPathname] = useState<string>();
+  const location = useLocation();
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      console.log("hostname:", window.location);
-
-      setPathname(window.location.pathname);
+    if (value) {
+      setValue("");
     }
-  }, []);
+  }, [location]);
 
   return (
     <Flex
@@ -36,6 +34,7 @@ export const Search = () => {
     >
       <TextField
         onChange={(e) => setValue(e.currentTarget.value)}
+        value={value || ""}
         css={{
           "&[type]": {
             lineHeight: "$sizes$11",
