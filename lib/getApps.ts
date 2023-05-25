@@ -32,9 +32,9 @@ const filter = async (node: Transaction) => {
   const topics = node.tags.filter((x) => x.name.includes("Topic"));
   const txid = node.id;
 
-  if (!title || !baseId || !published) {
-    return;
-  }
+  // if (!title || !baseId || !published) {
+  //   return;
+  // }
 
   return {
     title,
