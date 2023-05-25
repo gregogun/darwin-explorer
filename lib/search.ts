@@ -36,7 +36,7 @@ export const searchData = async (
 const validateApp = async (filter: SearchFilter, value: string) => {
   try {
     const res = await arweaveGql(
-      `${"arweave-search.goldsky.com"}/graphql`
+      `${"https://arweave-search.goldsky.com"}/graphql`
     ).getTransactions({
       ids: filter === "id" ? [value] : undefined,
       tags: [
@@ -85,7 +85,7 @@ const validateVersion = async (filter: SearchFilter, value: string) => {
 
   try {
     const res = await arweaveGql(
-      `${"arweave-search.goldsky.com"}/graphql`
+      `${"https://arweave-search.goldsky.com"}/graphql`
     ).getTransactions({
       ids: filter === "id" ? [value] : undefined,
       tags: [

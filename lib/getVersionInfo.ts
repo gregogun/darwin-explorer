@@ -1,9 +1,12 @@
 import arweaveGql, { Transaction } from "arweave-graphql";
+import { config } from "../config";
 import { versionTagFilter } from "../utils/query";
 
 export const getVersionInfo = async (tx: string, gateway?: string) => {
   try {
-    const res = await arweaveGql(`${"arweave.net"}/graphql`).getTransactions({
+    const res = await arweaveGql(
+      `${config.gatewayUrl}/graphql`
+    ).getTransactions({
       ids: [tx],
       tags: versionTagFilter,
     });

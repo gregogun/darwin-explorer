@@ -1,5 +1,6 @@
 import graph from "@permaweb/asset-graph";
 import arweaveGql, { Tag, Transaction } from "arweave-graphql";
+import { config } from "../config";
 import { versionResultsFilter, versionTagFilter } from "../utils/query";
 
 interface TreeNode {
@@ -18,7 +19,7 @@ export const getAppVersions = async (graph: any, gateway?: string) => {
   // const versionList = await
   const versionList = flattenTree(graph);
 
-  const res = await arweaveGql(`${"arweave.net"}/graphql`).getTransactions({
+  const res = await arweaveGql(`${config.gatewayUrl}/graphql`).getTransactions({
     ids: versionList,
     tags: versionTagFilter,
   });

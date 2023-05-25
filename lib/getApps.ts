@@ -2,7 +2,7 @@ import arweaveGql, { Transaction } from "arweave-graphql";
 
 export const getApps = async (gateway?: string) => {
   try {
-    const res = await arweaveGql(`${"arweave.net"}/graphql`).getTransactions({
+    const res = await arweaveGql(`${gateway}/graphql`).getTransactions({
       tags: [
         { name: "Data-Protocol", values: ["Evoapps"] },
         {
