@@ -1,8 +1,8 @@
-import { darkTheme, Flex, IconButton, styled, TextField } from "@aura-ui/react";
+import { darkTheme, Flex, styled, TextField } from "@aura-ui/react";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { iconButton } from "../../components/IconButton";
+import { iconButton } from "../../styles/iconButton";
 import { SearchFilter, TypeFilter } from "../../types";
 import { AdvancedFilter } from "./AdvancedFilter";
 

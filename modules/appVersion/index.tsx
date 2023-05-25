@@ -14,12 +14,10 @@ import {
   FileTextIcon,
 } from "@radix-ui/react-icons";
 import { Tag } from "arweave-graphql";
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { HiThumbUp } from "react-icons/hi";
 import { useLocation } from "react-router-dom";
 import { getVersionInfo } from "../../lib/getVersionInfo";
-import { AppHeader } from "../../modules/Layout/AppHeader";
 import { Skeleton } from "../../ui/Skeleton";
 import { abbreviateAddress, timeAgo } from "../../utils";
 

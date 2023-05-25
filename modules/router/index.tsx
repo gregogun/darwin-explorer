@@ -3,8 +3,8 @@ import { Routes, Route } from "react-router-dom";
 import { Explore } from "../../modules/explore";
 import AppGroup from "../../modules/appGroup";
 import AppVersion from "../../modules/appVersion";
-import { AppHeader } from "../Layout/AppHeader";
-import Search from "../Search/search";
+import { AppHeader } from "../layout/AppHeader";
+import Search from "../search/search";
 
 export const Router = () => (
   <HashRouter>

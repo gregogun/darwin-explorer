@@ -4,17 +4,8 @@ import {
   PopoverPortal,
   PopoverTrigger,
 } from "../../ui/Popover";
-import {
-  Flex,
-  IconButton,
-  Label,
-  Radio,
-  RadioGroup,
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@aura-ui/react";
-import { InfoCircledIcon, MixerHorizontalIcon } from "@radix-ui/react-icons";
+import { Flex, IconButton, Label, Radio, RadioGroup } from "@aura-ui/react";
+import { MixerHorizontalIcon } from "@radix-ui/react-icons";
 import { SearchFilter, TypeFilter } from "../../types";
 import { SetStateAction } from "react";
 
@@ -66,25 +57,11 @@ export const AdvancedFilter = ({
                 <Radio colorScheme="indigo" value="app">
                   App
                 </Radio>
-                {/* <Tooltip>
-                  <TooltipTrigger asChild>
-                    <InfoCircledIcon />
-                  </TooltipTrigger>
-                  <TooltipContent></TooltipContent>
-                </Tooltip> */}
               </Flex>
               <Flex align="center" gap="1">
                 <Radio colorScheme="indigo" value="version">
                   Version
                 </Radio>
-                {/* <Tooltip>
-                  <TooltipTrigger asChild>
-                    <InfoCircledIcon />
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    Relates to specific versions of an app
-                  </TooltipContent>
-                </Tooltip> */}
               </Flex>
             </RadioGroup>
           </Flex>

@@ -2,7 +2,7 @@ import { Flex, styled } from "@aura-ui/react";
 import { ConnectWallet } from "arweave-wallet-ui-test";
 import { Link } from "react-router-dom";
 import { account } from "../../lib/arweave";
-import { Search } from "../Search";
+import { Search } from "../search";
 
 const Image = styled("img", {
   width: 40,

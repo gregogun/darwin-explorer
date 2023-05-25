@@ -1,4 +1,3 @@
-import { AppHeader } from "../modules/Layout/AppHeader";
 import { Router as StaticRouter } from "../modules/router";
 import dynamic from "next/dynamic";
 

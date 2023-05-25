@@ -1,15 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  Grid,
-  Flex,
-  Typography,
-  keyframes,
-  styled,
-  TextField,
-  Button,
-} from "@aura-ui/react";
-import { AppHeader } from "../../modules/Layout/AppHeader";
-import { useRouter } from "next/router";
+import { Flex, Typography } from "@aura-ui/react";
 import { searchData } from "../../lib/search";
 import {
   AppItemProps,
@@ -17,8 +7,8 @@ import {
   TypeFilter,
   VersionItemProps,
 } from "../../types";
-import { AppItem } from "../../modules/Cards/AppItem";
-import { VersionItem } from "../../modules/Cards/VersionItem";
+import { AppItem } from "../explore/AppItem";
+import { VersionItem } from "../appGroup/VersionItem";
 import { useLocation } from "react-router-dom";
 
 function isVersionItem(

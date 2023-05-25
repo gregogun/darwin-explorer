@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@aura-ui/react";
 import { MouseEvent, useEffect, useState } from "react";
-import arweaveGql, { Transaction } from "arweave-graphql";
+import arweaveGql from "arweave-graphql";
 import { VersionItemProps } from "../../types";
 import { stampAsset } from "../../lib/stamps";
 import { Link } from "react-router-dom";

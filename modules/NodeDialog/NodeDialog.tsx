@@ -1,13 +1,11 @@
 import {
   ArrowRightIcon,
-  BadgeIcon,
   CheckIcon,
   CopyIcon,
   Cross2Icon,
 } from "@radix-ui/react-icons";
 import {
   Dialog,
-  DialogTitle,
   Button,
   Box,
   IconButton,
@@ -16,22 +14,13 @@ import {
   DialogPortal,
   DialogOverlay,
   DialogContent,
-  DropdownMenu,
-  DropdownMenuContent,
   DropdownMenuItem,
   Flex,
   Separator as SeparatorBase,
-  DropdownMenuTrigger,
-  DropdownMenuPortal,
 } from "@aura-ui/react";
 import { NodeProps } from "../../types";
-import { formatDistance } from "date-fns";
 import { useEffect, useState } from "react";
 import { config } from "../../config";
-import arweaveGraphql from "arweave-graphql";
-import { arweave } from "../../lib/arweave";
-import { VscRepoForked } from "react-icons/vsc";
-import { RxDownload, RxFile, RxFileText } from "react-icons/rx";
 import { HiBadgeCheck } from "react-icons/hi";
 import { getStampCount, stampAsset } from "../../lib/stamps";
 import { getAsset } from "../../lib/asset-sdk";
@@ -312,8 +301,6 @@ interface NodeDialogProps {
 
 export const NodeDialog = ({ onClose, open, node }: NodeDialogProps) => {
   const [author, setAuthor] = useState<string>();
-  const [appUrl, setAppUrl] = useState<string>();
-  const [sourceUrl, setSourceUrl] = useState<string>();
   const [stampCount, setStampCount] = useState<number>();
 
   useEffect(() => {

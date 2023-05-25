@@ -1,5 +1,4 @@
-import { Box } from "../../components/Box";
-import { Typography } from "../../components/Typography";
+import { Box, Typography } from "@aura-ui/react";
 import { styled } from "../../stitches.config";
 
 interface KeyItem {
