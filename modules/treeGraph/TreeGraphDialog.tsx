@@ -1,5 +1,6 @@
 import {
   Box,
+  darkTheme,
   Dialog,
   DialogClose,
   DialogContent,
@@ -8,7 +9,6 @@ import {
   IconButton,
   styled,
 } from "@aura-ui/react";
-import { GraphKey } from "./GraphKey";
 import { TreeGraph } from "./TreeGraph";
 import { Cross1Icon } from "@radix-ui/react-icons";
 import { TreeNode } from "../../types";

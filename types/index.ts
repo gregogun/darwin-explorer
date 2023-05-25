@@ -1,3 +1,5 @@
+import { Tag } from "arweave-graphql";
+
 export interface NodeProps {
   description: string;
   forks?: string;
@@ -52,4 +54,27 @@ export interface Asset {
   title: string;
   topics?: string;
   type: string;
+}
+
+export type SearchFilter = "name" | "id";
+
+export type TypeFilter = "app" | "version";
+
+export interface VersionItemProps {
+  id: string;
+  title: string | undefined;
+  description: string | undefined;
+  logo?: string;
+  topics: Tag[] | undefined;
+  stamps: number;
+}
+
+export interface AppItemProps {
+  title: string | undefined;
+  description: string | undefined;
+  txid: string;
+  baseId: string | undefined;
+  logo: string | undefined;
+  topics: Tag[] | undefined;
+  published: string | undefined;
 }

@@ -1,32 +1,28 @@
 import fs from "fs";
 
 async function main() {
-  const file = "next.config.js";
+const filePath = './next.config.js';
 
-  const CONFIG_ASSET_PREFIX = `
-  /** @type {import('next').NextConfig} */
-  const nextConfig = {
-  reactStrictMode: false,
-  trailingSlash: true,
-  images: {
-    domains: ["arweave.net"],
-  },
-  webpack: (config) => {
-    config.resolve.fallback = { fs: false };
-    return config;
-  },
-};
+fs.readFile(filePath, 'utf8', (err, data) => {
+  if (err) {
+    console.error(err);
+    return;
+  }
 
-module.exports = nextConfig;
-  `
+  const updatedData = data.replace(
+    /assetPrefix: '\.\/',\n?/,
+    ''
+  );
 
-  fs.writeFileSync(file, CONFIG_ASSET_PREFIX, "utf-8", (err) => {
+  fs.writeFile(filePath, updatedData, (err) => {
     if (err) {
-      console.log(error);
-    } else {
-      console.log('write successful');
+      console.error(err);
+      return;
     }
+
+    console.log('assetPrefix property has been removed from next.config.js');
   });
+});
 }
 
 main();

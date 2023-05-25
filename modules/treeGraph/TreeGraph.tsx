@@ -8,9 +8,9 @@ import {
 } from "@visx/responsive/lib/enhancers/withParentSize";
 import { withParentSize } from "@visx/responsive";
 import { LinkHorizontal } from "@visx/shape";
-import { NodeDialog } from "../NodeDialog/NodeDialog";
+import { NodeDialog } from "../nodeDialog/NodeDialog";
 import { TreeNode } from "../../types";
-import { Box, styled, theme } from "@aura-ui/react";
+import { Box, darkTheme, styled, theme } from "@aura-ui/react";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 
 const Rect = styled("rect");
@@ -19,7 +19,7 @@ const Text = styled("text");
 
 const StyledLinkHorizontal = styled(LinkHorizontal);
 
-export const background = theme.colors.indigo1;
+export const background = "#08090A";
 
 type HierarchyNode = HierarchyPointNode<TreeNode>;
 
@@ -342,6 +342,10 @@ const TreeGraph = ({
     <Box
       css={{
         backgroundColor: "$indigo1",
+
+        [`.${darkTheme} &`]: {
+          backgroundColor: "#08090A",
+        },
       }}
     >
       <TransformWrapper minScale={0.5} maxScale={2}>
