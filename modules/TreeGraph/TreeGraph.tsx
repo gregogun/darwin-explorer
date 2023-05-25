@@ -8,7 +8,7 @@ import {
 } from "@visx/responsive/lib/enhancers/withParentSize";
 import { withParentSize } from "@visx/responsive";
 import { LinkHorizontal } from "@visx/shape";
-import { NodeDialog } from "../NodeDialog/NodeDialog";
+import { NodeDialog } from "../nodeDialog/NodeDialog";
 import { TreeNode } from "../../types";
 import { Box, darkTheme, styled, theme } from "@aura-ui/react";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";

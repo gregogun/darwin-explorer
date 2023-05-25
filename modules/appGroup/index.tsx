@@ -13,7 +13,7 @@ import { getAppVersions } from "../../lib/getAppVersions";
 import arweaveGql from "arweave-graphql";
 import graph from "@permaweb/asset-graph";
 import { TreeNode, VersionItemProps } from "../../types";
-import { TreeGraphDialog } from "../TreeGraph/TreeGraphDialog";
+import { TreeGraphDialog } from "../treeGraph/TreeGraphDialog";
 import { VersionItem } from "./VersionItem";
 import { Skeleton } from "../../ui/Skeleton";
 import { useLocation } from "react-router-dom";
