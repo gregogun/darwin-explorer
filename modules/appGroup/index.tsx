@@ -9,35 +9,39 @@ import {
   Typography,
 } from "@aura-ui/react";
 import { useEffect, useState } from "react";
-import { AppHeader } from "../../modules/Layout/AppHeader";
+import { AppHeader } from "../Layout/AppHeader";
 import { getAppVersions } from "../../lib/getAppVersions";
 import arweaveGql from "arweave-graphql";
 import graph from "@permaweb/asset-graph";
 import { TreeNode, VersionItemProps } from "../../types";
-import { TreeGraphDialog } from "../../modules/TreeGraph/TreeGraphDialog";
-import { VersionItem } from "../../modules/Cards/VersionItem";
+import { TreeGraphDialog } from "../TreeGraph/TreeGraphDialog";
+import { VersionItem } from "../Cards/VersionItem";
 import { Skeleton } from "../../ui/Skeleton";
+import { useRouter } from "next/router";
+import { useLocation } from "react-router-dom";
 
 const AppGroup = () => {
   const [versions, setVersions] = useState<VersionItemProps[]>();
   const [rawTree, setRawTree] = useState<TreeNode>();
   const [showDialog, setShowDialog] = useState(false);
   const [optionKeyPressed, setOptionKeyPressed] = useState(false);
+  const location = useLocation();
   const [appInfo, setAppInfo] = useState<{
     title: string;
     description: string | undefined;
     id: string;
   }>();
   useEffect(() => {
-    // invoke function on mount
-    const tx = window.location.pathname.split("/")[2];
-    if (!tx) {
+    const query = location.search;
+    const urlParams = new URLSearchParams(query);
+
+    const id = urlParams.get("tx");
+
+    if (id) {
+      fetchVersions(id);
+    } else {
       return;
     }
-    if (tx.length !== 43) {
-      return;
-    }
-    fetchVersions(tx);
   }, []);
 
   useEffect(() => {
@@ -102,23 +106,18 @@ const AppGroup = () => {
 
   return (
     <>
-      <AppHeader />
+      {/* <AppHeader /> */}
       <Flex
         direction="column"
         align="center"
         css={{
           mt: "$10",
+          mx: "auto",
+          maxW: 600,
         }}
         gap="3"
       >
-        <Flex
-          css={{
-            width: "100%",
-            maxW: 600,
-          }}
-          justify="between"
-          align="center"
-        >
+        <Flex gap="20" justify="between" align="center">
           <Flex direction="column" gap="1">
             {appInfo ? (
               <Typography size="5" weight="6">
@@ -178,7 +177,7 @@ const AppGroup = () => {
             background:
               "linear-gradient(89.46deg, #1A1B1E 1.67%, rgba(26, 29, 30, 0) 89.89%)",
             height: 2,
-            width: "100%",
+            // width: "100%",
             maxW: 600,
           }}
         />

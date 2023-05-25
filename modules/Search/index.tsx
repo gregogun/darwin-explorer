@@ -1,22 +1,28 @@
-import { darkTheme, Flex, IconButton, TextField } from "@aura-ui/react";
+import { darkTheme, Flex, IconButton, styled, TextField } from "@aura-ui/react";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
-import Link from "next/link";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { iconButton } from "../../components/IconButton";
 import { SearchFilter, TypeFilter } from "../../types";
 import { AdvancedFilter } from "./AdvancedFilter";
+
+const SearchButton = styled(Link, {
+  ...iconButton,
+});
 
 export const Search = () => {
   const [filter, setFilter] = useState<SearchFilter>("name");
   const [type, setType] = useState<TypeFilter>("app");
   const [value, setValue] = useState<string>();
+  const [pathname, setPathname] = useState<string>();
 
   useEffect(() => {
-    console.log(type);
-  }, [type]);
+    if (typeof window !== "undefined") {
+      console.log("hostname:", window.location);
 
-  useEffect(() => {
-    console.log(filter);
-  }, [filter]);
+      setPathname(window.location.pathname);
+    }
+  }, []);
 
   return (
     <Flex
@@ -58,14 +64,17 @@ export const Search = () => {
           setType={setType}
           setFilter={setFilter}
         />
-        <Link
-          href={`/search?type=${type}&filter=${filter}&value=${value}`}
-          passHref
+        <SearchButton
+          size="1"
+          variant="outline"
+          // aria-label="Search"
+          to={{
+            pathname: "/search",
+            search: `?type=${type}&filter=${filter}&value=${value}`,
+          }}
         >
-          <IconButton as="a" size="1" variant="outline" aria-label="Search">
-            <MagnifyingGlassIcon />
-          </IconButton>
-        </Link>
+          <MagnifyingGlassIcon />
+        </SearchButton>
       </Flex>
     </Flex>
   );

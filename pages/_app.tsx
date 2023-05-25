@@ -1,11 +1,11 @@
-import type AppProps from "next/app";
+import type { AppProps } from "next/app";
 import { darkTheme, globalCss, TooltipProvider } from "@aura-ui/react";
 import { ThemeProvider } from "next-themes";
 import { ConnectProvider } from "arweave-wallet-ui-test";
 
 const globalStyles = globalCss({
   "*, *::before, *::after": {
-    boxSizing: "inherit",
+    boxSizing: "border-box",
   },
   "*": {
     "*:focus:not(.focus-visible)": {
@@ -29,6 +29,7 @@ const globalStyles = globalCss({
   },
   a: {
     textDecoration: "none",
+    width: "100%",
   },
 });
 

@@ -2,6 +2,7 @@
 const nextConfig = {
   reactStrictMode: false,
   trailingSlash: true,
+  swcMinify: false,
   images: {
     domains: ["arweave.net"],
   },
@@ -10,5 +11,4 @@ const nextConfig = {
     return config;
   },
 };
-
 module.exports = nextConfig;

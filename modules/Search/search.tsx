@@ -8,17 +8,18 @@ import {
   TextField,
   Button,
 } from "@aura-ui/react";
-import { AppHeader } from "../modules/Layout/AppHeader";
+import { AppHeader } from "../../modules/Layout/AppHeader";
 import { useRouter } from "next/router";
-import { searchData } from "../lib/search";
+import { searchData } from "../../lib/search";
 import {
   AppItemProps,
   SearchFilter,
   TypeFilter,
   VersionItemProps,
-} from "../types";
-import { AppItem } from "../modules/Cards/AppItem";
-import { VersionItem } from "../modules/Cards/VersionItem";
+} from "../../types";
+import { AppItem } from "../../modules/Cards/AppItem";
+import { VersionItem } from "../../modules/Cards/VersionItem";
+import { useLocation } from "react-router-dom";
 
 function isVersionItem(
   item: VersionItemProps | AppItemProps
@@ -34,20 +35,26 @@ interface ParamsProps {
 
 export default function Search() {
   const [results, setResults] = useState<AppItemProps[] | VersionItemProps[]>();
-  const router = useRouter();
+  const location = useLocation();
 
   useEffect(() => {
-    const query = router.query;
-    if (query && query.type && query.filter && query.value) {
+    const query = location.search;
+
+    const urlParams = new URLSearchParams(query);
+    const type = urlParams.get("type");
+    const filter = urlParams.get("filter");
+    const value = urlParams.get("value");
+
+    if (type && filter && value) {
       fetchResults({
-        type: query.type as TypeFilter,
-        filter: query.filter as SearchFilter,
-        value: query.value as string,
+        type: type as TypeFilter,
+        filter: filter as SearchFilter,
+        value: value as string,
       });
     } else {
       return;
     }
-  }, [router.query]);
+  }, []);
 
   const fetchResults = async (params: ParamsProps) => {
     if (!params) {
@@ -56,7 +63,6 @@ export default function Search() {
 
     try {
       const res = await searchData(params.type, params.filter, params.value);
-      // console.log("search found", res);
 
       setResults(res);
     } catch (error) {
@@ -66,8 +72,11 @@ export default function Search() {
 
   return (
     <>
-      <AppHeader />
-      <Flex direction="column" align="center" css={{ mt: "$10" }}>
+      <Flex
+        direction="column"
+        align="center"
+        css={{ mt: "$10", mx: "auto", maxW: 600 }}
+      >
         <Typography css={{ mb: "$5" }} size="6" weight="6">
           Search Results
         </Typography>

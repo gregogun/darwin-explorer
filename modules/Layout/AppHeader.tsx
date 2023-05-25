@@ -1,6 +1,6 @@
-import { Flex, Grid, styled, Typography } from "@aura-ui/react";
+import { Flex, styled } from "@aura-ui/react";
 import { ConnectWallet } from "arweave-wallet-ui-test";
-import Link from "next/link";
+import { Link } from "react-router-dom";
 import { account } from "../../lib/arweave";
 import { Search } from "../Search";
 
@@ -19,15 +19,9 @@ export const AppHeader = () => (
     justify="between"
     align="center"
   >
-    <Flex
-      css={{
-        // border: "1px solid red",
-        flex: 1,
-      }}
-      gap="5"
-    >
-      <Link href="/">
-        <Image css={{ cursor: "pointer" }} src="/app-logo.svg" alt="app logo" />
+    <Flex gap="5">
+      <Link to="/">
+        <Image css={{ cursor: "pointer" }} src="app-logo.svg" alt="app logo" />
       </Link>
       <Search />
       <Flex
@@ -39,8 +33,8 @@ export const AppHeader = () => (
           "& a": { color: "$slate12", "&:hover": { color: "$indigo11" } },
         }}
       >
-        <Link href="/">Explore</Link>
-        <Link href="https://github.com/gregogun/evolutionary-apps-cli/blob/main/README.md">
+        <Link to="/">Explore</Link>
+        <Link to="https://github.com/gregogun/evolutionary-apps-cli/blob/main/README.md">
           Create
         </Link>
       </Flex>

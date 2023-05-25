@@ -5,9 +5,10 @@ import {
   AvatarImage,
   AvatarFallback,
 } from "@aura-ui/react";
-import Link from "next/link";
 import { timeAgo } from "../../utils";
 import { AppItemProps } from "../../types";
+import { config } from "../../config";
+import { Link } from "react-router-dom";
 
 export const AppItem = ({
   title,
@@ -18,14 +19,17 @@ export const AppItem = ({
   topics,
   published,
 }: AppItemProps) => (
-  <Link href={`/app/${txid}`} passHref>
+  <Link
+    to={{
+      pathname: "/app",
+      search: `?tx=${txid}`,
+    }}
+  >
     <Flex
-      as="a"
       gap="3"
       justify="between"
       css={{
         width: "100%",
-        maxW: 600,
         cursor: "pointer",
         p: "$5",
         br: "$3",
@@ -44,7 +48,7 @@ export const AppItem = ({
           shape="square"
         >
           <AvatarImage
-            src={`https://g8way.io/${baseId}/${logo}`}
+            src={`${config.gatewayUrl}/${baseId}/${logo}`}
             alt={`${title} logo`}
           />
           <AvatarFallback variant="solid" delayMs={300}>

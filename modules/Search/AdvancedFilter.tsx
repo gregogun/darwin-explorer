@@ -66,25 +66,25 @@ export const AdvancedFilter = ({
                 <Radio colorScheme="indigo" value="app">
                   App
                 </Radio>
-                <Tooltip>
+                {/* <Tooltip>
                   <TooltipTrigger asChild>
                     <InfoCircledIcon />
                   </TooltipTrigger>
                   <TooltipContent></TooltipContent>
-                </Tooltip>
+                </Tooltip> */}
               </Flex>
               <Flex align="center" gap="1">
                 <Radio colorScheme="indigo" value="version">
                   Version
                 </Radio>
-                <Tooltip>
+                {/* <Tooltip>
                   <TooltipTrigger asChild>
                     <InfoCircledIcon />
                   </TooltipTrigger>
                   <TooltipContent>
                     Relates to specific versions of an app
                   </TooltipContent>
-                </Tooltip>
+                </Tooltip> */}
               </Flex>
             </RadioGroup>
           </Flex>

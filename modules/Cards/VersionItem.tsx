@@ -11,8 +11,9 @@ import { MouseEvent, useEffect, useState } from "react";
 import arweaveGql, { Transaction } from "arweave-graphql";
 import { VersionItemProps } from "../../types";
 import { stampAsset } from "../../lib/stamps";
-import Link from "next/link";
+import { Link } from "react-router-dom";
 import { HiArrowUp } from "react-icons/hi";
+import { config } from "../../config";
 
 const StampButton = styled("button", {
   all: "unset",
@@ -25,8 +26,7 @@ const StampButton = styled("button", {
   alignItems: "center",
   fontSize: "$2",
   lineHeight: "$2",
-  // py: "$2",
-  // px: "$4",
+  color: "$slate11",
   br: "$1",
   width: 48,
   height: 56,
@@ -39,6 +39,7 @@ const StampButton = styled("button", {
 
   "&:hover": {
     boxShadow: "0 0 0 1px $colors$slate8",
+    color: "$slate12",
   },
 });
 
@@ -60,7 +61,9 @@ export const VersionItem = ({
 
   const getData = async () => {
     try {
-      const res = await arweaveGql(`${"arweave.net"}/graphql`).getTransactions({
+      const res = await arweaveGql(
+        `${"https://arweave.net"}/graphql`
+      ).getTransactions({
         ids: [id],
       });
       const data = res.transactions.edges.map((edge) => {
@@ -85,14 +88,17 @@ export const VersionItem = ({
       .catch((error) => console.error(error));
   };
   return (
-    <Link href={`/version/${id}`}>
+    <Link
+      to={{
+        pathname: "/version",
+        search: `?tx=${id}`,
+      }}
+    >
       <Flex
-        as="a"
         justify="between"
         align="center"
         css={{
           width: "100%",
-          maxW: 600,
           cursor: "pointer",
           p: "$5",
           br: "$3",
@@ -112,7 +118,7 @@ export const VersionItem = ({
               shape="square"
             >
               <AvatarImage
-                src={`https://g8way.io/${id}/${info?.logo}`}
+                src={`${config.gatewayUrl}/${id}/${info?.logo}`}
                 alt={`${title} logo`}
               />
               <AvatarFallback variant="solid" delayMs={300}>

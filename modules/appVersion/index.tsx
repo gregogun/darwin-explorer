@@ -14,8 +14,10 @@ import {
   FileTextIcon,
 } from "@radix-ui/react-icons";
 import { Tag } from "arweave-graphql";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { HiThumbUp } from "react-icons/hi";
+import { useLocation } from "react-router-dom";
 import { getVersionInfo } from "../../lib/getVersionInfo";
 import { AppHeader } from "../../modules/Layout/AppHeader";
 import { Skeleton } from "../../ui/Skeleton";
@@ -36,21 +38,22 @@ interface VersionProps {
 const AppVersion = () => {
   const [version, setVersion] = useState<VersionProps>();
   const [isCopied, setIsCopied] = useState(false);
+  const location = useLocation();
+
   useEffect(() => {
-    // invoke function on mount
-    const tx = window.location.pathname.split("/")[2];
-    if (!tx) {
+    const query = location.search;
+    const urlParams = new URLSearchParams(query);
+
+    const id = urlParams.get("tx");
+
+    if (id) {
+      fetchVersionInfo(id);
+    } else {
       return;
     }
-    if (tx.length !== 43) {
-      return;
-    }
-    fetchVersionInfo(tx);
   }, []);
 
   const fetchVersionInfo = async (tx: string) => {
-    console.log(tx);
-
     try {
       const res = await getVersionInfo(tx);
       setVersion(res[0] as VersionProps);
@@ -73,7 +76,7 @@ const AppVersion = () => {
 
   return (
     <>
-      <AppHeader />
+      {/* <AppHeader /> */}
       <Flex
         direction="column"
         css={{
