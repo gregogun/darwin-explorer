@@ -65,7 +65,7 @@ export interface VersionItemProps {
   title: string | undefined;
   description: string | undefined;
   logo?: string;
-  topics: string;
+  topics: Tag[] | string;
   // stamps: number;
 }
 

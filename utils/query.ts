@@ -23,7 +23,6 @@ export const versionResultsFilter = async (
   const logo = node.tags.find((x) => x.name === "Logo")?.value;
   const topics = node.tags.filter((x) => x.name.includes("Topic"));
   const id = node.id;
-  const stamps = await getStampCount(id);
 
   return {
     title,
@@ -31,6 +30,5 @@ export const versionResultsFilter = async (
     id,
     logo,
     topics,
-    stamps,
   };
 };

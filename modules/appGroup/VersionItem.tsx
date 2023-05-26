@@ -14,6 +14,7 @@ import { Link } from "react-router-dom";
 import { HiArrowUp } from "react-icons/hi";
 import { config } from "../../config";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
+import { isTopicArray } from "../../utils";
 
 const StampButton = styled("button", {
   all: "unset",
@@ -161,16 +162,27 @@ export const VersionItem = ({
               </Typography>
             </Flex>
             <Flex gap="2">
-              {topics?.split(",").map((topic) => (
-                <Typography
-                  key={topic}
-                  css={{ color: "$slate11", opacity: 0.7 }}
-                  size="1"
-                  as="span"
-                >
-                  {topic}
-                </Typography>
-              ))}
+              {isTopicArray(topics)
+                ? topics.map((topic) => (
+                    <Typography
+                      key={topic.value}
+                      css={{ color: "$slate11", opacity: 0.7 }}
+                      size="1"
+                      as="span"
+                    >
+                      {topic.value}
+                    </Typography>
+                  ))
+                : topics?.split(",").map((topic) => (
+                    <Typography
+                      key={topic}
+                      css={{ color: "$slate11", opacity: 0.7 }}
+                      size="1"
+                      as="span"
+                    >
+                      {topic}
+                    </Typography>
+                  ))}
             </Flex>
           </Flex>
         </Flex>

@@ -1,3 +1,4 @@
+import { Tag } from "arweave-graphql";
 import { formatDistance } from "date-fns";
 
 export const timeAgo = (date: number) => {
@@ -27,4 +28,8 @@ export const abbreviateAddress = ({
   const firstFive = address?.substring(0, startChars);
   const lastFour = address?.substring(address.length - endChars);
   return `${firstFive}${dot.repeat(noOfEllipsis)}${lastFour}`;
+};
+
+export const isTopicArray = (topics: Tag[] | string): topics is Tag[] => {
+  return (topics as Tag[]) !== undefined;
 };

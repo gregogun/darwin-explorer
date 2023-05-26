@@ -79,7 +79,6 @@ export default function Search() {
                   title={app.title}
                   description={app.description}
                   topics={app.topics}
-                  stamps={app.stamps}
                   id={app.id}
                 />
               );
