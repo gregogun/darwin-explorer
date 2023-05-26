@@ -7,13 +7,14 @@ import {
   styled,
   Typography,
 } from "@aura-ui/react";
-import { MouseEvent, useEffect, useState } from "react";
 import arweaveGql from "arweave-graphql";
 import { VersionItemProps } from "../../types";
-import { stampAsset } from "../../lib/stamps";
+import { getStampCount, stampAsset } from "../../lib/stamps";
 import { Link } from "react-router-dom";
 import { HiArrowUp } from "react-icons/hi";
 import { config } from "../../config";
+import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
+import { isTopicArray } from "../../utils";
 
 const StampButton = styled("button", {
   all: "unset",
@@ -46,23 +47,31 @@ const StampButton = styled("button", {
 export const VersionItem = ({
   title,
   description,
-  id,
   topics,
-  stamps,
+  id,
 }: VersionItemProps) => {
-  const [info, setInfo] = useState<{
-    logo: string | undefined;
-    owner: string;
-  }>();
+  const queryClient = useQueryClient();
+  const {
+    data: info,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["versionItemInfo"],
+    queryFn: () => getInfo(),
+  });
+  const {
+    data: stamps,
+    isLoading: stampsLoading,
+    isError: stampsError,
+  } = useQuery({
+    queryKey: ["stamps"],
+    queryFn: () => getStampCount(id),
+  });
 
-  useEffect(() => {
-    getData();
-  }, []);
-
-  const getData = async () => {
+  const getInfo = async () => {
     try {
       const res = await arweaveGql(
-        `${"https://arweave.net"}/graphql`
+        `${config.gatewayUrl}/graphql`
       ).getTransactions({
         ids: [id],
       });
@@ -74,42 +83,50 @@ export const VersionItem = ({
           owner,
         };
       });
-      setInfo(data[0]);
+      return data[0];
     } catch (error) {
       console.error(error);
+      throw new Error(error as any);
     }
   };
 
-  const handleClick = (e: MouseEvent) => {
-    e.stopPropagation();
+  const mutation = useMutation({
+    mutationFn: stampAsset,
+    onSuccess: (data) => {
+      console.log(data);
+      queryClient.invalidateQueries({ queryKey: ["stamps"] });
+    },
+    onError: (error: any) => {
+      console.error(error);
+    },
+  });
 
-    stampAsset(id)
-      .then(() => console.log("Asset stamped!"))
-      .catch((error) => console.error(error));
+  const handleClick = () => {
+    mutation.mutate(id);
   };
+
   return (
-    <Link
-      to={{
-        pathname: "/version",
-        search: `?tx=${id}`,
+    <Flex
+      justify="between"
+      align="center"
+      css={{
+        width: "100%",
+        p: "$5",
+        br: "$3",
+        "&:hover": {
+          background:
+            "linear-gradient(89.46deg, #1A1B1E 1.67%, rgba(26, 29, 30, 0) 89.89%)",
+        },
       }}
     >
-      <Flex
-        justify="between"
-        align="center"
-        css={{
-          width: "100%",
-          cursor: "pointer",
-          p: "$5",
-          br: "$3",
-          "&:hover": {
-            background:
-              "linear-gradient(89.46deg, #1A1B1E 1.67%, rgba(26, 29, 30, 0) 89.89%)",
-          },
+      <Link
+        to={{
+          pathname: "/version",
+          search: `?tx=${id}`,
         }}
       >
         <Flex gap="3">
-          {info?.logo ? (
+          {!isLoading && info?.logo && (
             <Avatar
               size="5"
               css={{
@@ -125,9 +142,12 @@ export const VersionItem = ({
                 {title?.slice(0, 2).toUpperCase()}
               </AvatarFallback>
             </Avatar>
-          ) : (
+          )}
+          {isLoading && (
             <Box
               css={{
+                backgroundColor: "$slate1",
+                br: "$3",
                 size: 64,
               }}
             />
@@ -142,24 +162,35 @@ export const VersionItem = ({
               </Typography>
             </Flex>
             <Flex gap="2">
-              {topics?.map((topic) => (
-                <Typography
-                  key={topic.value}
-                  css={{ color: "$slate11", opacity: 0.7 }}
-                  size="1"
-                  as="span"
-                >
-                  {topic.value}
-                </Typography>
-              ))}
+              {isTopicArray(topics)
+                ? topics.map((topic) => (
+                    <Typography
+                      key={topic.value}
+                      css={{ color: "$slate11", opacity: 0.7 }}
+                      size="1"
+                      as="span"
+                    >
+                      {topic.value}
+                    </Typography>
+                  ))
+                : topics?.split(",").map((topic) => (
+                    <Typography
+                      key={topic}
+                      css={{ color: "$slate11", opacity: 0.7 }}
+                      size="1"
+                      as="span"
+                    >
+                      {topic}
+                    </Typography>
+                  ))}
             </Flex>
           </Flex>
         </Flex>
-        <StampButton onClick={handleClick}>
-          <HiArrowUp />
-          <Typography>{stamps}</Typography>
-        </StampButton>
-      </Flex>
-    </Link>
+      </Link>
+      <StampButton onClick={handleClick}>
+        <HiArrowUp />
+        <Typography>{stampsLoading || stampsError ? "-" : stamps}</Typography>
+      </StampButton>
+    </Flex>
   );
 };

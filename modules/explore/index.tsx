@@ -1,27 +1,16 @@
-import { Box, Flex, Typography } from "@aura-ui/react";
+import { Flex, Typography } from "@aura-ui/react";
 import { AppItem } from "./AppItem";
 import { Skeleton } from "../../ui/Skeleton";
-import { useEffect, useState } from "react";
 import { getApps } from "../../lib/getApps";
-import { AppItemProps } from "../../types";
-import { AppHeader } from "../layout/AppHeader";
+import { config } from "../../config";
+import { useQuery } from "@tanstack/react-query";
 
 export const Explore = () => {
-  const [data, setData] = useState<AppItemProps[] | undefined>([]);
-  useEffect(() => {
-    fetchApps();
-  }, []);
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["apps"],
+    queryFn: () => getApps(config.gatewayUrl),
+  });
 
-  const fetchApps = async () => {
-    const data = await getApps("https://arweave.net");
-
-    if (data.length === 1 && typeof data[0] === "undefined") {
-      setData(undefined);
-      return;
-    }
-
-    setData(data as AppItemProps[]);
-  };
   return (
     <Flex
       direction="column"
@@ -29,9 +18,11 @@ export const Explore = () => {
       css={{ mt: "$10", mx: "auto", maxW: 600 }}
     >
       <Typography css={{ mb: "$5" }} size="6" weight="6">
-        Explore Apps
+        Explore
       </Typography>
-      {data && data.length > 0 ? (
+      {!isLoading &&
+        data &&
+        data.length > 0 &&
         data.map((app) => (
           <AppItem
             key={app.txid}
@@ -43,12 +34,11 @@ export const Explore = () => {
             topics={app.topics}
             published={app.published}
           />
-        ))
-      ) : (
+        ))}
+      {isLoading && (
         <Flex
           css={{
             width: "100%",
-            // maxW: 600,
           }}
           direction="column"
           gap="3"
@@ -72,6 +62,11 @@ export const Explore = () => {
             }}
           />
         </Flex>
+      )}
+      {isError && (
+        <Typography>
+          Error occured while fetching data. Please try again.
+        </Typography>
       )}
     </Flex>
   );
