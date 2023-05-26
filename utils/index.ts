@@ -29,7 +29,3 @@ export const abbreviateAddress = ({
   const lastFour = address?.substring(address.length - endChars);
   return `${firstFive}${dot.repeat(noOfEllipsis)}${lastFour}`;
 };
-
-export const isTopicArray = (topics: Tag[] | string): topics is Tag[] => {
-  return (topics as Tag[]) !== undefined;
-};
