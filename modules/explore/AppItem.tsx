@@ -22,7 +22,7 @@ export const AppItem = ({
   <Link
     to={{
       pathname: "/app",
-      search: `?tx=${txid}`,
+      search: `?tx=${txid}&baseId=${baseId}`,
     }}
   >
     <Flex

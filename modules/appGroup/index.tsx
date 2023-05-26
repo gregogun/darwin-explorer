@@ -9,38 +9,63 @@ import {
   Typography,
 } from "@aura-ui/react";
 import { useEffect, useState } from "react";
-import { getAppVersions } from "../../lib/getAppVersions";
-import arweaveGql from "arweave-graphql";
 import graph from "@permaweb/asset-graph";
-import { TreeNode, VersionItemProps } from "../../types";
 import { TreeGraphDialog } from "../treeGraph/TreeGraphDialog";
 import { VersionItem } from "./VersionItem";
 import { Skeleton } from "../../ui/Skeleton";
 import { useLocation } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { getAppInfo } from "../../lib/getAppInfo";
+import { flattenGraph } from "../../utils/flattenGraph";
 
 const AppGroup = () => {
-  const [versions, setVersions] = useState<VersionItemProps[]>();
-  const [rawTree, setRawTree] = useState<TreeNode>();
   const [showDialog, setShowDialog] = useState(false);
   const [optionKeyPressed, setOptionKeyPressed] = useState(false);
-  const location = useLocation();
+  const [appTree, setAppTree] = useState<any>();
   const [appInfo, setAppInfo] = useState<{
-    title: string;
+    title: string | undefined;
     description: string | undefined;
-    id: string;
+    txid: string;
+    baseId: string | undefined;
   }>();
+  const location = useLocation();
+
   useEffect(() => {
+    getInfo();
+  }, []);
+
+  const getInfo = async () => {
     const query = location.search;
     const urlParams = new URLSearchParams(query);
-
     const id = urlParams.get("tx");
 
-    if (id) {
-      fetchVersions(id);
-    } else {
+    if (!id) {
+      console.error("No transaction ID was found");
       return;
     }
+
+    const res = await getAppInfo(id);
+    setAppInfo(res);
+  };
+
+  useEffect(() => {
+    getAppTree();
   }, []);
+
+  const getAppTree = async () => {
+    const query = location.search;
+    const urlParams = new URLSearchParams(query);
+    const id = urlParams.get("baseId");
+
+    if (!id) {
+      console.error("No transaction ID was found");
+      return;
+    }
+
+    const res = await getVersions(id);
+
+    setAppTree(res);
+  };
 
   useEffect(() => {
     const handleKeyDown = (event: any) => {
@@ -66,37 +91,10 @@ const AppGroup = () => {
     };
   }, [optionKeyPressed]);
 
-  // run graph function and flatten into array to present in list
-  const fetchVersions = async (tx: string) => {
-    const res = await getBaseTx(tx);
-    const baseTx = res.tags.find((x) => x.name === "Wrapper-For")?.value;
-    const title = res.tags.find((x) => x.name === "Title")?.value;
-    const description = res.tags.find((x) => x.name === "Description")?.value;
-    const id = res.id;
-    if (!baseTx || !title) {
-      return;
-    }
-    const graphRes = await graph(baseTx);
+  const getVersions = async (tx: string) => {
+    const graphRes = await graph(tx);
 
-    // prob not most perf approach, need to think of better design at some point
-    setRawTree(graphRes);
-    const data = await getAppVersions(graphRes);
-    setAppInfo({ title, description, id });
-
-    setVersions(data);
-  };
-
-  const getBaseTx = async (tx: string) => {
-    try {
-      const res = await arweaveGql(`${"arweave.net"}/graphql`).getTransactions({
-        ids: [tx],
-      });
-      const data = res.transactions.edges.map((edge) => edge.node);
-      return data[0];
-    } catch (error) {
-      console.error(error);
-      throw new Error("Error occured whilst fetching data");
-    }
+    return graphRes;
   };
 
   const handleShowDialog = () => setShowDialog(true);
@@ -113,7 +111,7 @@ const AppGroup = () => {
       }}
       gap="3"
     >
-      <Flex gap="20" justify="between" align="center">
+      <Flex css={{ width: "100%" }} justify="between">
         <Flex direction="column" gap="1">
           {appInfo ? (
             <Typography size="5" weight="6">
@@ -162,7 +160,7 @@ const AppGroup = () => {
             variant="outline"
             colorScheme="indigo"
             as="a"
-            href={`https://g8way.io/${appInfo?.id}`}
+            href={`https://g8way.io/${appInfo?.txid}`}
           >
             Visit app
           </Button>
@@ -173,18 +171,16 @@ const AppGroup = () => {
           background:
             "linear-gradient(89.46deg, #1A1B1E 1.67%, rgba(26, 29, 30, 0) 89.89%)",
           height: 2,
-          // width: "100%",
           maxW: 600,
         }}
       />
-      {versions && versions.length > 0 ? (
-        versions.map((version) => (
+      {appTree ? (
+        flattenGraph(appTree).map((version) => (
           <VersionItem
             key={version.id}
             title={version.title}
             description={version.description}
             topics={version.topics}
-            stamps={version.stamps}
             id={version.id}
           />
         ))
@@ -215,7 +211,7 @@ const AppGroup = () => {
       )}
 
       <TreeGraphDialog
-        rawTree={rawTree}
+        rawTree={appTree}
         open={showDialog}
         onClose={handleCancelDialog}
       />
