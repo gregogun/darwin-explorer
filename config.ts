@@ -1,5 +1,5 @@
 export const config = {
-  gatewayUrl: "https://arweave.net",
+  gatewayUrl: "https://g8way.io",
   twitterUrl: "https://twitter.com",
   githubUrl: "https://github.com",
   viewblockAddress: "https://viewblock.io/arweave/address",
