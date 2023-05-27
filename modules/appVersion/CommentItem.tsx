@@ -8,15 +8,14 @@ import {
 } from "@aura-ui/react";
 import { abbreviateAddress, timeAgo } from "../../utils";
 import { BsPatchCheckFill } from "react-icons/bs";
-import { ArAccount } from "arweave-account";
-import { config } from "../../config";
+import { Account } from "../../types";
 
 interface CommentItemProps {
   owner: string | undefined;
   txid: string | undefined;
   isOwner: boolean;
   published: string | undefined;
-  account: ArAccount | undefined;
+  account: Account | undefined;
   comment: string;
 }
 
@@ -28,8 +27,8 @@ export const CommentItem = ({
   comment,
 }: CommentItemProps) => {
   const name =
-    account && account.profile.handleName
-      ? account.profile.handleName
+    account && account.handle
+      ? account.handle
       : abbreviateAddress({ address: owner });
 
   return (
@@ -41,9 +40,9 @@ export const CommentItem = ({
               border: "1px solid $colors$slate1",
             }}
             src={
-              account?.profile.avatarURL === config.accountAvatarDefault
-                ? `https://source.boringavatars.com/marble/40/${owner}`
-                : account?.profile.avatarURL
+              account?.avatar
+                ? account?.avatar
+                : `https://source.boringavatars.com/marble/40/${owner}`
             }
           />
           <AvatarFallback>{name?.slice(0, 2).toUpperCase()}</AvatarFallback>
@@ -53,21 +52,23 @@ export const CommentItem = ({
         <Flex align="center" justify="between">
           <Flex gap="1">
             <Typography weight="6">{name}</Typography>
-            <Box
-              css={{
-                "& svg": {
-                  fill: "$indigo11",
-                  size: "$4",
-                  verticalAlign: "middle",
-                },
-              }}
-              as="span"
-            >
-              <BsPatchCheckFill />
-            </Box>
-            {account?.handle && (
+            {account?.vouched && (
+              <Box
+                css={{
+                  "& svg": {
+                    fill: "$indigo11",
+                    size: "$4",
+                    verticalAlign: "middle",
+                  },
+                }}
+                as="span"
+              >
+                <BsPatchCheckFill />
+              </Box>
+            )}
+            {account?.uniqueHandle && (
               <Typography css={{ color: "$slate11" }}>
-                {account.handle}
+                {account.uniqueHandle}
               </Typography>
             )}
             {isOwner && (

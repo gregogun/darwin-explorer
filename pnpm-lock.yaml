@@ -102,6 +102,9 @@ dependencies:
   react-zoom-pan-pinch:
     specifier: 2.1.3
     version: 2.1.3(patch_hash=jy465l3gynwzfw7erg6p6wvq5e)(react-dom@18.2.0)(react@18.2.0)
+  vouchdao:
+    specifier: 0.2.6
+    version: 0.2.6
   warp-contracts:
     specifier: 1.4.8
     version: 1.4.8

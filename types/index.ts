@@ -83,3 +83,13 @@ export interface Comment {
   sourceTx: string;
   comment: string;
 }
+
+export interface Account {
+  address: string;
+  handle: string | undefined;
+  uniqueHandle: string | undefined;
+  bio: string | undefined;
+  avatar: string | undefined;
+  banner: string | undefined;
+  vouched: boolean;
+}

@@ -1,7 +1,8 @@
-import { arweave, getAccount } from "./arweave";
+import { arweave } from "./arweave";
 import arweaveGql from "arweave-graphql";
 import { config } from "../config";
 import { Comment } from "../types";
+import { getAccount } from "./account";
 
 export const writeComment = async ({ comment, sourceTx }: Comment) => {
   try {

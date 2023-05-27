@@ -36,6 +36,7 @@ import { CommentItem } from "./CommentItem";
 import { Loader } from "../../ui/Loader";
 import { useConnect } from "arweave-wallet-ui-test";
 import { config } from "../../config";
+import { getAccount } from "../../lib/account";
 
 interface VersionProps {
   title: string;
@@ -214,6 +215,20 @@ const AppVersion = () => {
   };
 
   const commentLabel = walletAddress ? "Comment" : "Connect to comment";
+
+  useEffect(() => {
+    fetchAccount();
+  }, [walletAddress]);
+
+  const fetchAccount = async () => {
+    if (!walletAddress) {
+      return;
+    }
+
+    const account = await getAccount(walletAddress);
+
+    console.log(account);
+  };
 
   return (
     <Flex
@@ -507,7 +522,7 @@ const AppVersion = () => {
                   isOwner={version?.owner === comment?.owner}
                   published={comment?.published}
                   comment={comment?.comment}
-                  account={comment?.account}
+                  account={comment?.account[0]}
                 />
               ))}
             </Flex>
