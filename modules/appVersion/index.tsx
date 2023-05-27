@@ -9,6 +9,7 @@ import {
   Grid,
   Separator,
   Textarea,
+  Toast,
   Typography,
 } from "@aura-ui/react";
 import {
@@ -34,6 +35,7 @@ import { Comment } from "../../types";
 import { CommentItem } from "./CommentItem";
 import { Loader } from "../../ui/Loader";
 import { useConnect } from "arweave-wallet-ui-test";
+import { config } from "../../config";
 
 interface VersionProps {
   title: string;
@@ -51,6 +53,7 @@ const AppVersion = () => {
   const [version, setVersion] = useState<VersionProps>();
   const [isCopied, setIsCopied] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [commentSuccess, setCommentSuccess] = useState("");
   const { walletAddress, account } = useConnect();
   const location = useLocation();
   const queryClient = useQueryClient();
@@ -133,11 +136,20 @@ const AppVersion = () => {
   const commentMutation = useMutation({
     mutationFn: writeComment,
     onSuccess: (data) => {
-      console.log(data);
-      queryClient.invalidateQueries({ queryKey: ["comments"] });
       if (submitting) {
         setSubmitting(false);
       }
+      setCommentSuccess(
+        `Comment successfully created: ${abbreviateAddress({
+          address: data.id,
+        })}`
+      );
+
+      // we do this to give data time to be read back from network
+      setTimeout(() => {
+        queryClient.invalidateQueries({ queryKey: ["comments"] });
+      }, 250);
+
       formik.resetForm();
     },
     onError: (error: any) => {
@@ -201,15 +213,7 @@ const AppVersion = () => {
     mutation.mutate(version?.txid);
   };
 
-  useEffect(() => {
-    console.log(submitting);
-  }, [submitting]);
-
   const commentLabel = walletAddress ? "Comment" : "Connect to comment";
-
-  useEffect(() => {
-    console.log(comments);
-  }, [comments]);
 
   return (
     <Flex
@@ -417,19 +421,27 @@ const AppVersion = () => {
             direction="column"
             gap="2"
           >
-            <Flex gap="3">
+            <Flex gap="2">
               {walletAddress && (
-                <Avatar size="3">
-                  <AvatarImage
-                    css={{
-                      border: "1px solid $colors$slate1",
-                    }}
-                    src={account?.profile.avatarURL}
-                  />
-                  <AvatarFallback>
-                    {walletAddress.slice(0, 2).toUpperCase()}
-                  </AvatarFallback>
-                </Avatar>
+                <Box
+                  css={{
+                    pt: "$1",
+                  }}
+                >
+                  <Avatar size="3">
+                    <AvatarImage
+                      src={
+                        account?.profile.avatarURL ===
+                        config.accountAvatarDefault
+                          ? `https://source.boringavatars.com/marble/40/${walletAddress}`
+                          : account?.profile.avatarURL
+                      }
+                    />
+                    <AvatarFallback>
+                      {walletAddress.slice(0, 2).toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                </Box>
               )}
               <Textarea
                 css={{
@@ -445,7 +457,6 @@ const AppVersion = () => {
 
                   "&:focus": {
                     boxShadow: "none",
-                    backgroundColor: "$slateA2",
                   },
                 }}
                 name="comment"
@@ -470,7 +481,8 @@ const AppVersion = () => {
               variant="solid"
               colorScheme="indigo"
             >
-              {submitting ? "Submitting..." : commentLabel}
+              {!submitting && !commentSuccess && commentLabel}
+              {submitting && "Submitting..."}
             </Button>
           </Flex>
           {formik.values.comment.length < 3 && formik.errors.comment && (
@@ -529,6 +541,13 @@ const AppVersion = () => {
             ))}
         </Flex>
       </Box>
+      <Toast
+        open={!!commentSuccess}
+        onOpenChange={() => setCommentSuccess("")}
+        title="Comment submitted"
+        description={commentSuccess}
+        colorScheme="green"
+      />
     </Flex>
   );
 };

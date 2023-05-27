@@ -1,5 +1,10 @@
 import type { AppProps } from "next/app";
-import { darkTheme, globalCss, TooltipProvider } from "@aura-ui/react";
+import {
+  darkTheme,
+  globalCss,
+  ToastProviderValues,
+  TooltipProvider,
+} from "@aura-ui/react";
 import { ThemeProvider } from "next-themes";
 import { ConnectProvider } from "arweave-wallet-ui-test";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -41,18 +46,20 @@ const queryClient = new QueryClient();
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <ThemeProvider
-          disableTransitionOnChange
-          attribute="class"
-          value={{ light: "light-theme", dark: darkTheme.toString() }}
-          forcedTheme="dark"
-        >
-          <ConnectProvider>
-            <Component {...pageProps} />
-          </ConnectProvider>
-        </ThemeProvider>
-      </TooltipProvider>
+      <ToastProviderValues>
+        <TooltipProvider>
+          <ThemeProvider
+            disableTransitionOnChange
+            attribute="class"
+            value={{ light: "light-theme", dark: darkTheme.toString() }}
+            forcedTheme="dark"
+          >
+            <ConnectProvider>
+              <Component {...pageProps} />
+            </ConnectProvider>
+          </ThemeProvider>
+        </TooltipProvider>
+      </ToastProviderValues>
     </QueryClientProvider>
   );
 }

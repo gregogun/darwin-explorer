@@ -53,9 +53,6 @@ export const readComment = async (sourceTx: string) => {
           .then((res) => res.data)
           .catch((error) => console.error(error));
 
-        console.log(account);
-        console.log(comment);
-
         return {
           owner,
           txid,

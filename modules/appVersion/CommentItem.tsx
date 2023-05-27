@@ -9,6 +9,7 @@ import {
 import { abbreviateAddress, timeAgo } from "../../utils";
 import { BsPatchCheckFill } from "react-icons/bs";
 import { ArAccount } from "arweave-account";
+import { config } from "../../config";
 
 interface CommentItemProps {
   owner: string | undefined;
@@ -39,7 +40,11 @@ export const CommentItem = ({
             css={{
               border: "1px solid $colors$slate1",
             }}
-            src={account?.profile.avatarURL}
+            src={
+              account?.profile.avatarURL === config.accountAvatarDefault
+                ? `https://source.boringavatars.com/marble/40/${owner}`
+                : account?.profile.avatarURL
+            }
           />
           <AvatarFallback>{name?.slice(0, 2).toUpperCase()}</AvatarFallback>
         </Avatar>
