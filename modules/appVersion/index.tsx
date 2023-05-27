@@ -3,6 +3,8 @@ import {
   Button,
   darkTheme,
   Flex,
+  Grid,
+  Separator,
   Textarea,
   Typography,
 } from "@aura-ui/react";
@@ -22,6 +24,12 @@ import { Skeleton } from "../../ui/Skeleton";
 import { abbreviateAddress, timeAgo } from "../../utils";
 import { getStampCount, stampAsset } from "../../lib/stamps";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
+import { FormikErrors, useFormik } from "formik";
+import { readComment, writeComment } from "../../lib/comments";
+import { Comment } from "../../types";
+import { CommentItem } from "./CommentItem";
+import { Loader } from "../../ui/Loader";
+import { useConnect } from "arweave-wallet-ui-test";
 
 interface VersionProps {
   title: string;
@@ -38,6 +46,8 @@ interface VersionProps {
 const AppVersion = () => {
   const [version, setVersion] = useState<VersionProps>();
   const [isCopied, setIsCopied] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const { walletAddress } = useConnect();
   const location = useLocation();
   const queryClient = useQueryClient();
   const {
@@ -53,6 +63,83 @@ const AppVersion = () => {
       }
 
       return getStampCount(version.txid);
+    },
+  });
+  const {
+    data: comments,
+    isLoading: commentsLoading,
+    isError: commentsError,
+  } = useQuery({
+    queryKey: ["comments"],
+    enabled: !!version?.txid,
+    queryFn: () => {
+      if (!version?.txid) {
+        throw new Error("No source txid found");
+      }
+
+      return readComment(version.txid);
+    },
+  });
+  const formik = useFormik<Pick<Comment, "comment">>({
+    initialValues: {
+      comment: "",
+    },
+    validateOnBlur: false,
+    validateOnChange: false,
+    validate: (values) => {
+      const errors: FormikErrors<Pick<Comment, "comment">> = {};
+
+      if (values.comment && values.comment.length < 3) {
+        errors.comment = "Comment must be a minimum of 3 characters.";
+      }
+
+      if (values.comment && values.comment.length > 300) {
+        errors.comment = "Comment must be a maximum of 300 characters.";
+      }
+
+      if (submitting) {
+        setSubmitting(false);
+      }
+      return errors;
+    },
+    onSubmit: async (values, { setErrors, validateForm }) => {
+      setSubmitting(true);
+      validateForm();
+
+      const wallet = await window.arweaveWallet;
+
+      if (!wallet) {
+        setErrors({ comment: "Connect a wallet to comment." });
+        return;
+      }
+
+      if (!version?.txid) {
+        setErrors({ comment: "No source transaction ID found." });
+        return;
+      }
+
+      commentMutation.mutate({
+        comment: values.comment as string,
+        sourceTx: version.txid,
+      });
+    },
+  });
+
+  const commentMutation = useMutation({
+    mutationFn: writeComment,
+    onSuccess: (data) => {
+      console.log(data);
+      queryClient.invalidateQueries({ queryKey: ["comments"] });
+      if (submitting) {
+        setSubmitting(false);
+      }
+      formik.resetForm();
+    },
+    onError: (error: any) => {
+      if (submitting) {
+        setSubmitting(false);
+      }
+      console.error(error);
     },
   });
 
@@ -109,12 +196,22 @@ const AppVersion = () => {
     mutation.mutate(version?.txid);
   };
 
+  useEffect(() => {
+    console.log(submitting);
+  }, [submitting]);
+
+  const commentLabel = walletAddress ? "Comment" : "Connect to comment";
+
+  useEffect(() => {
+    console.log(comments);
+  }, [comments]);
+
   return (
     <Flex
       direction="column"
       css={{
         mt: "$10",
-        maxW: 680,
+        maxW: 600,
         mx: "auto",
       }}
     >
@@ -294,6 +391,8 @@ const AppVersion = () => {
           }}
         />
         <Flex
+          as="form"
+          onSubmit={formik.handleSubmit}
           css={{
             mt: "$5",
             p: "$3",
@@ -309,12 +408,12 @@ const AppVersion = () => {
             },
           }}
           direction="column"
-          gap="5"
+          gap="2"
         >
           <Textarea
             css={{
               boxShadow: "none",
-              minHeight: 80,
+              minHeight: 120,
               resize: "none",
 
               "&:hover": {
@@ -325,17 +424,73 @@ const AppVersion = () => {
                 boxShadow: "none",
               },
             }}
+            name="comment"
+            value={formik.values.comment}
+            onChange={formik.handleChange}
+            required
+            minLength={3}
             maxLength={300}
             variant="outline"
             placeholder="Share your thoughts..."
           />
           <Button
+            type="submit"
+            disabled={
+              !version || submitting || !walletAddress || !formik.values.comment
+            }
             css={{ alignSelf: "end" }}
             variant="solid"
             colorScheme="indigo"
           >
-            Comment
+            {submitting ? "Submitting..." : commentLabel}
           </Button>
+        </Flex>
+        {formik.values.comment.length < 3 && formik.errors.comment && (
+          <Typography
+            size="2"
+            css={{
+              mt: "$2",
+              color: "$red11",
+            }}
+          >
+            {formik.errors.comment}
+          </Typography>
+        )}
+
+        <Flex css={{ mt: "$7", py: "$3" }} direction="column" gap="3">
+          <Typography as="h3" size="5" weight="6">
+            Comments
+          </Typography>
+          <Separator
+            css={{
+              background:
+                "linear-gradient(89.46deg, #1A1B1E 1.67%, rgba(26, 29, 30, 0) 89.89%)",
+            }}
+          />
+          <Flex direction="column" gap="3">
+            {comments &&
+              comments.length > 0 &&
+              comments.map((comment) => (
+                <CommentItem
+                  key={comment?.txid}
+                  txid={comment?.txid}
+                  owner={comment?.owner}
+                  isOwner={version?.owner === comment?.owner}
+                  published={comment?.published}
+                />
+              ))}
+          </Flex>
+          {commentsLoading && (
+            <Grid
+              css={{
+                width: "100%",
+                min: 80,
+                placeItems: "center",
+              }}
+            >
+              <Loader />
+            </Grid>
+          )}
         </Flex>
       </Box>
     </Flex>

@@ -1,7 +1,10 @@
 import { Tag } from "arweave-graphql";
 import { formatDistance } from "date-fns";
 
-export const timeAgo = (date: number) => {
+export const timeAgo = (date: number | undefined) => {
+  if (!date || date === NaN) {
+    return;
+  }
   return formatDistance(new Date(date), new Date(), {
     addSuffix: true,
   }).replace("about", "");

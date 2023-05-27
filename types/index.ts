@@ -78,3 +78,8 @@ export interface AppItemProps {
   topics: Tag[] | undefined;
   published: string | undefined;
 }
+
+export interface Comment {
+  sourceTx: string;
+  comment: string;
+}
