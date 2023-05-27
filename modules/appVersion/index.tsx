@@ -1,4 +1,7 @@
 import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
   Box,
   Button,
   darkTheme,
@@ -10,6 +13,7 @@ import {
 } from "@aura-ui/react";
 import {
   ArrowRightIcon,
+  ChatBubbleIcon,
   CheckIcon,
   CopyIcon,
   DownloadIcon,
@@ -47,7 +51,7 @@ const AppVersion = () => {
   const [version, setVersion] = useState<VersionProps>();
   const [isCopied, setIsCopied] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const { walletAddress } = useConnect();
+  const { walletAddress, account } = useConnect();
   const location = useLocation();
   const queryClient = useQueryClient();
   const {
@@ -382,81 +386,6 @@ const AppVersion = () => {
             {isCopied ? <CheckIcon /> : <CopyIcon />}
           </Button>
         </Flex>
-        <Box
-          css={{
-            background:
-              "linear-gradient(89.46deg, #1A1B1E 1.67%, rgba(26, 29, 30, 0) 89.89%)",
-            height: 1,
-            my: "$3",
-          }}
-        />
-        <Flex
-          as="form"
-          onSubmit={formik.handleSubmit}
-          css={{
-            mt: "$5",
-            p: "$3",
-            boxShadow: "0 0 0 1px $colors$slate3",
-            br: "$3",
-
-            "&:hover": {
-              boxShadow: "0 0 0 1px $colors$slate4",
-            },
-
-            "&:focus-within": {
-              boxShadow: "0 0 0 2px $colors$blue8",
-            },
-          }}
-          direction="column"
-          gap="2"
-        >
-          <Textarea
-            css={{
-              boxShadow: "none",
-              minHeight: 120,
-              resize: "none",
-
-              "&:hover": {
-                boxShadow: "none",
-              },
-
-              "&:focus": {
-                boxShadow: "none",
-              },
-            }}
-            name="comment"
-            value={formik.values.comment}
-            onChange={formik.handleChange}
-            required
-            minLength={3}
-            maxLength={300}
-            variant="outline"
-            placeholder="Share your thoughts..."
-          />
-          <Button
-            type="submit"
-            disabled={
-              !version || submitting || !walletAddress || !formik.values.comment
-            }
-            css={{ alignSelf: "end" }}
-            variant="solid"
-            colorScheme="indigo"
-          >
-            {submitting ? "Submitting..." : commentLabel}
-          </Button>
-        </Flex>
-        {formik.values.comment.length < 3 && formik.errors.comment && (
-          <Typography
-            size="2"
-            css={{
-              mt: "$2",
-              color: "$red11",
-            }}
-          >
-            {formik.errors.comment}
-          </Typography>
-        )}
-
         <Flex css={{ mt: "$7", py: "$3" }} direction="column" gap="3">
           <Typography as="h3" size="5" weight="6">
             Comments
@@ -467,10 +396,97 @@ const AppVersion = () => {
                 "linear-gradient(89.46deg, #1A1B1E 1.67%, rgba(26, 29, 30, 0) 89.89%)",
             }}
           />
-          <Flex direction="column" gap="3">
-            {comments &&
-              comments.length > 0 &&
-              comments.map((comment) => (
+          <Flex
+            as="form"
+            onSubmit={formik.handleSubmit}
+            css={{
+              mt: "$5",
+              p: "$3",
+              boxShadow: "0 0 0 1px $colors$slate3",
+              br: "$3",
+
+              "&:hover": {
+                boxShadow: "0 0 0 1px $colors$slate4",
+              },
+
+              "&:focus-within": {
+                boxShadow: "0 0 0 2px $colors$indigo10",
+              },
+            }}
+            direction="column"
+            gap="2"
+          >
+            <Flex gap="3">
+              {walletAddress && (
+                <Avatar size="4">
+                  <AvatarImage
+                    css={{
+                      border: "1px solid $colors$slate1",
+                    }}
+                    src={account?.profile.avatarURL}
+                  />
+                  <AvatarFallback>
+                    {walletAddress.slice(0, 2).toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
+              )}
+              <Textarea
+                css={{
+                  flex: 1,
+
+                  boxShadow: "none",
+                  minHeight: 100,
+                  resize: "none",
+
+                  "&:hover": {
+                    boxShadow: "none",
+                  },
+
+                  "&:focus": {
+                    boxShadow: "none",
+                    backgroundColor: "$slateA2",
+                  },
+                }}
+                name="comment"
+                value={formik.values.comment}
+                onChange={formik.handleChange}
+                required
+                minLength={3}
+                maxLength={300}
+                variant="outline"
+                placeholder="Share your thoughts..."
+              />
+            </Flex>
+            <Button
+              type="submit"
+              disabled={
+                !version ||
+                submitting ||
+                !walletAddress ||
+                !formik.values.comment
+              }
+              css={{ alignSelf: "end" }}
+              variant="solid"
+              colorScheme="indigo"
+            >
+              {submitting ? "Submitting..." : commentLabel}
+            </Button>
+          </Flex>
+          {formik.values.comment.length < 3 && formik.errors.comment && (
+            <Typography
+              size="2"
+              css={{
+                mt: "$2",
+                color: "$red11",
+              }}
+            >
+              {formik.errors.comment}
+            </Typography>
+          )}
+
+          {comments && comments.length > 0 && (
+            <Flex direction="column" gap="3">
+              {comments.map((comment) => (
                 <CommentItem
                   key={comment?.txid}
                   txid={comment?.txid}
@@ -479,10 +495,12 @@ const AppVersion = () => {
                   published={comment?.published}
                 />
               ))}
-          </Flex>
+            </Flex>
+          )}
           {commentsLoading && (
             <Grid
               css={{
+                my: "$10",
                 width: "100%",
                 min: 80,
                 placeItems: "center",
@@ -491,6 +509,21 @@ const AppVersion = () => {
               <Loader />
             </Grid>
           )}
+          {commentsError ||
+            (comments && comments.length <= 0 && !commentsLoading && (
+              <Flex
+                align="center"
+                css={{ my: "$10", "& svg": { size: "$6" }, color: "$slate11" }}
+                direction="column"
+                gap="5"
+              >
+                <ChatBubbleIcon />
+                <Typography weight="6">No comments yet...</Typography>
+                <Typography size="2">
+                  Be the first to share your thoughts!
+                </Typography>
+              </Flex>
+            ))}
         </Flex>
       </Box>
     </Flex>
