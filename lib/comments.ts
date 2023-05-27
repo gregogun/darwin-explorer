@@ -1,4 +1,4 @@
-import { arweave } from "./arweave";
+import { arweave, getAccount } from "./arweave";
 import arweaveGql from "arweave-graphql";
 import { config } from "../config";
 import { Comment } from "../types";
@@ -41,15 +41,31 @@ export const readComment = async (sourceTx: string) => {
       .filter(
         (edge) => edge.node.tags.find((x) => x.name === "Published")?.value
       )
-      .map((edge) => {
+      .map(async (edge) => {
+        const owner = edge.node.owner.address;
+        const txid = edge.node.id;
+        const published = edge.node.tags.find(
+          (x) => x.name === "Published"
+        )?.value;
+        const account = await getAccount(owner);
+        const comment = await arweave.api
+          .get(txid)
+          .then((res) => res.data)
+          .catch((error) => console.error(error));
+
+        console.log(account);
+        console.log(comment);
+
         return {
-          owner: edge.node.owner.address,
-          txid: edge.node.id,
-          published: edge.node.tags.find((x) => x.name === "Published")?.value,
+          owner,
+          txid,
+          published,
+          account,
+          comment,
         };
       });
 
-    return metadata;
+    return Promise.all(metadata);
   } catch (error) {
     console.error(error);
     throw new Error("Error occured whilst fetching data");

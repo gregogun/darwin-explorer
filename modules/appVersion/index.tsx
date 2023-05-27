@@ -75,6 +75,7 @@ const AppVersion = () => {
     isError: commentsError,
   } = useQuery({
     queryKey: ["comments"],
+    cacheTime: 0,
     enabled: !!version?.txid,
     queryFn: () => {
       if (!version?.txid) {
@@ -386,21 +387,21 @@ const AppVersion = () => {
             {isCopied ? <CheckIcon /> : <CopyIcon />}
           </Button>
         </Flex>
+        <Separator
+          css={{
+            mt: "$1",
+            background:
+              "linear-gradient(89.46deg, #1A1B1E 1.67%, rgba(26, 29, 30, 0) 89.89%)",
+          }}
+        />
         <Flex css={{ mt: "$7", py: "$3" }} direction="column" gap="3">
           <Typography as="h3" size="5" weight="6">
             Comments
           </Typography>
-          <Separator
-            css={{
-              background:
-                "linear-gradient(89.46deg, #1A1B1E 1.67%, rgba(26, 29, 30, 0) 89.89%)",
-            }}
-          />
           <Flex
             as="form"
             onSubmit={formik.handleSubmit}
             css={{
-              mt: "$5",
               p: "$3",
               boxShadow: "0 0 0 1px $colors$slate3",
               br: "$3",
@@ -485,7 +486,7 @@ const AppVersion = () => {
           )}
 
           {comments && comments.length > 0 && (
-            <Flex direction="column" gap="3">
+            <Flex css={{ mt: "$5" }} direction="column" gap="3">
               {comments.map((comment) => (
                 <CommentItem
                   key={comment?.txid}
@@ -493,6 +494,8 @@ const AppVersion = () => {
                   owner={comment?.owner}
                   isOwner={version?.owner === comment?.owner}
                   published={comment?.published}
+                  comment={comment?.comment}
+                  account={comment?.account}
                 />
               ))}
             </Flex>
