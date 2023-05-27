@@ -64,6 +64,7 @@ export const VersionItem = ({
     isError: stampsError,
   } = useQuery({
     queryKey: ["stamps"],
+    cacheTime: 0,
     queryFn: () => getStampCount(id),
   });
 
@@ -93,7 +94,9 @@ export const VersionItem = ({
     mutationFn: stampAsset,
     onSuccess: (data) => {
       console.log(data);
-      queryClient.invalidateQueries({ queryKey: ["stamps"] });
+      setTimeout(() => {
+        queryClient.invalidateQueries({ queryKey: ["stamps"] });
+      }, 500);
     },
     onError: (error: any) => {
       console.error(error);
