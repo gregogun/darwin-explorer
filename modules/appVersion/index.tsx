@@ -419,7 +419,7 @@ const AppVersion = () => {
           >
             <Flex gap="3">
               {walletAddress && (
-                <Avatar size="4">
+                <Avatar size="3">
                   <AvatarImage
                     css={{
                       border: "1px solid $colors$slate1",
