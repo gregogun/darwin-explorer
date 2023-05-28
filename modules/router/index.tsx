@@ -5,15 +5,26 @@ import AppGroup from "../../modules/appGroup";
 import AppVersion from "../../modules/appVersion";
 import { AppHeader } from "../layout/AppHeader";
 import Search from "../search/search";
+import { Box, darkTheme } from "@aura-ui/react";
 
 export const Router = () => (
   <HashRouter>
-    <AppHeader />
-    <Routes>
-      <Route path={"/"} element={<Explore />} />
-      <Route path={"/app/"} element={<AppGroup />} />
-      <Route path={"/version/"} element={<AppVersion />} />
-      <Route path={"/search/"} element={<Search />} />
-    </Routes>
+    <Box
+      css={{
+        backgroundColor: "$indigo1",
+
+        [`.${darkTheme} &`]: {
+          backgroundColor: "#08090A",
+        },
+      }}
+    >
+      <AppHeader />
+      <Routes>
+        <Route path={"/"} element={<Explore />} />
+        <Route path={"/app/"} element={<AppGroup />} />
+        <Route path={"/version/"} element={<AppVersion />} />
+        <Route path={"/search/"} element={<Search />} />
+      </Routes>
+    </Box>
   </HashRouter>
 );

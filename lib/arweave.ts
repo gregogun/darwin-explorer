@@ -15,9 +15,7 @@ export const account = new ArweaveAccount();
 export const getAccount = async (address: string) => {
   try {
     const acc: ArAccount = await account.get(address);
-    if (acc) {
-      return acc;
-    }
+    return acc;
   } catch (error) {
     console.log(error);
   }

@@ -14,7 +14,6 @@ import { Link } from "react-router-dom";
 import { HiArrowUp } from "react-icons/hi";
 import { config } from "../../config";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
-import { isTopicArray } from "../../utils";
 
 const StampButton = styled("button", {
   all: "unset",
@@ -65,6 +64,7 @@ export const VersionItem = ({
     isError: stampsError,
   } = useQuery({
     queryKey: ["stamps"],
+    cacheTime: 0,
     queryFn: () => getStampCount(id),
   });
 
@@ -94,7 +94,9 @@ export const VersionItem = ({
     mutationFn: stampAsset,
     onSuccess: (data) => {
       console.log(data);
-      queryClient.invalidateQueries({ queryKey: ["stamps"] });
+      setTimeout(() => {
+        queryClient.invalidateQueries({ queryKey: ["stamps"] });
+      }, 500);
     },
     onError: (error: any) => {
       console.error(error);
@@ -162,18 +164,8 @@ export const VersionItem = ({
               </Typography>
             </Flex>
             <Flex gap="2">
-              {isTopicArray(topics)
-                ? topics.map((topic) => (
-                    <Typography
-                      key={topic.value}
-                      css={{ color: "$slate11", opacity: 0.7 }}
-                      size="1"
-                      as="span"
-                    >
-                      {topic.value}
-                    </Typography>
-                  ))
-                : topics?.split(",").map((topic) => (
+              {typeof topics === "string"
+                ? topics?.split(",").map((topic) => (
                     <Typography
                       key={topic}
                       css={{ color: "$slate11", opacity: 0.7 }}
@@ -181,6 +173,16 @@ export const VersionItem = ({
                       as="span"
                     >
                       {topic}
+                    </Typography>
+                  ))
+                : topics.map((topic) => (
+                    <Typography
+                      key={topic.value}
+                      css={{ color: "$slate11", opacity: 0.7 }}
+                      size="1"
+                      as="span"
+                    >
+                      {topic.value}
                     </Typography>
                   ))}
             </Flex>
