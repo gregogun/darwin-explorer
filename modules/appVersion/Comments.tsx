@@ -22,8 +22,10 @@ import {
 } from "@tanstack/react-query";
 import { useConnect } from "arweave-wallet-ui-test";
 import { ChatBubbleIcon } from "@radix-ui/react-icons";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { abbreviateAddress } from "../../utils";
+import { useMotionAnimate } from "motion-hooks";
+import { stagger } from "motion";
 
 interface CommentsProps {
   versionTx: string;
@@ -35,6 +37,15 @@ export const Comments = ({ versionTx, versionOwner }: CommentsProps) => {
   const [commentSuccess, setCommentSuccess] = useState("");
   const { profile, walletAddress } = useConnect();
   const queryClient = useQueryClient();
+  const { play } = useMotionAnimate(
+    ".comment",
+    { opacity: 1 },
+    {
+      delay: stagger(0.075),
+      duration: 0.5,
+      easing: "ease-in-out",
+    }
+  );
   const {
     data: commentsData,
     isLoading: commentsLoading,
@@ -130,12 +141,16 @@ export const Comments = ({ versionTx, versionOwner }: CommentsProps) => {
     },
   });
 
-  const commentLabel = walletAddress ? "Comment" : "Connect to comment";
+  const commentList = commentsData?.pages.flatMap((page) => page.data);
 
-  // get the cursor of the last element in array
-  const lastCommentCursor =
-    commentsData?.pages[commentsData.pages.length - 1].data.slice(-1)[0]
-      ?.cursor;
+  // Play the animation on mount of the component
+  useEffect(() => {
+    if (commentList && commentList.length > 0) {
+      play();
+    }
+  }, [commentsData]);
+
+  const commentLabel = walletAddress ? "Comment" : "Connect to comment";
 
   return (
     <>
@@ -254,52 +269,53 @@ export const Comments = ({ versionTx, versionOwner }: CommentsProps) => {
             ))}
           </Flex>
         </Box>
-        {moreComments && (
+        {commentsLoading && (
+          <Grid
+            css={{
+              my: "$10",
+              width: "100%",
+              min: 80,
+              placeItems: "center",
+            }}
+          >
+            <Loader />
+          </Grid>
+        )}
+        {/* prevent false pagination for excluded/filtered results that are not factored into hasNextPage */}
+        {moreComments && commentList && commentList?.length > 0 && (
           <Button
+            disabled={isFetchingNextPage}
             colorScheme="indigo"
             css={{
               alignSelf: "center",
             }}
             onClick={() => fetchNextPage()}
           >
-            Load more comments
+            {isFetchingNextPage
+              ? "Loading more comments..."
+              : "Load more comments"}
           </Button>
         )}
-        {isFetchingNextPage ||
-          (commentsLoading && (
-            <Grid
+        {commentsError ||
+          // if there is no comment items on the first page, show no data view
+          (commentsData?.pages[0].data.length === 0 && !commentsLoading && (
+            <Flex
+              align="center"
               css={{
                 my: "$10",
-                width: "100%",
-                min: 80,
-                placeItems: "center",
+                "& svg": { size: "$6" },
+                color: "$slate11",
               }}
+              direction="column"
+              gap="5"
             >
-              <Loader />
-            </Grid>
+              <ChatBubbleIcon />
+              <Typography weight="6">No comments yet...</Typography>
+              <Typography size="2">
+                Be the first to share your thoughts!
+              </Typography>
+            </Flex>
           ))}
-        {commentsError ||
-          // if there are no items in the comment list show no data view
-          (commentsData &&
-            commentsData.pages.map((data) => data.data).length <= 0 &&
-            !commentsLoading && (
-              <Flex
-                align="center"
-                css={{
-                  my: "$10",
-                  "& svg": { size: "$6" },
-                  color: "$slate11",
-                }}
-                direction="column"
-                gap="5"
-              >
-                <ChatBubbleIcon />
-                <Typography weight="6">No comments yet...</Typography>
-                <Typography size="2">
-                  Be the first to share your thoughts!
-                </Typography>
-              </Flex>
-            ))}
       </Flex>
       <Toast
         open={!!commentSuccess}

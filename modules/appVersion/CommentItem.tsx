@@ -32,7 +32,16 @@ export const CommentItem = ({
       : abbreviateAddress({ address: owner });
 
   return (
-    <Flex css={{ my: "$3", position: "relative" }} gap="3">
+    <Flex
+      // className and opacity are for motion one animation
+      className="comment"
+      css={{
+        opacity: 0,
+        my: "$3",
+        position: "relative",
+      }}
+      gap="3"
+    >
       <Flex direction="column" gap="2" align="center">
         <Avatar size="4">
           <AvatarImage
