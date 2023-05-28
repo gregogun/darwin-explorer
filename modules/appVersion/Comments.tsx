@@ -22,7 +22,7 @@ import {
 } from "@tanstack/react-query";
 import { useConnect } from "arweave-wallet-ui-test";
 import { ChatBubbleIcon } from "@radix-ui/react-icons";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { abbreviateAddress } from "../../utils";
 import { useMotionAnimate } from "motion-hooks";
 import { stagger } from "motion";
@@ -37,12 +37,13 @@ export const Comments = ({ versionTx, versionOwner }: CommentsProps) => {
   const [commentSuccess, setCommentSuccess] = useState("");
   const { profile, walletAddress } = useConnect();
   const queryClient = useQueryClient();
+  const commentRef = useRef<HTMLDivElement | null>(null);
   const { play } = useMotionAnimate(
     ".comment",
     { opacity: 1 },
     {
       delay: stagger(0.075),
-      duration: 0.5,
+      duration: 0.75,
       easing: "ease-in-out",
     }
   );
@@ -149,6 +150,15 @@ export const Comments = ({ versionTx, versionOwner }: CommentsProps) => {
       play();
     }
   }, [commentsData]);
+
+  useEffect(() => {
+    // prohibit scroll into view on initial load
+    if (commentsData && commentsData?.pages.length > 1) {
+      commentRef.current?.lastElementChild?.scrollIntoView({
+        behavior: "smooth",
+      });
+    }
+  }, [commentsData, commentsData?.pages]);
 
   const commentLabel = walletAddress ? "Comment" : "Connect to comment";
 
@@ -263,6 +273,7 @@ export const Comments = ({ versionTx, versionOwner }: CommentsProps) => {
                     published={comment.published}
                     comment={comment.comment}
                     account={comment.account[0]}
+                    ref={commentRef}
                   />
                 ))}
               </React.Fragment>
