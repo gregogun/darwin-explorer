@@ -17,10 +17,6 @@ export const getAccount = async (address: string, gateway?: string) => {
       .filter((edge) => edge.node.owner.address === address)
       .map((edge) => transform(edge.node as Transaction));
 
-    // if (data.length === 0) {
-    //   return;
-    // }
-
     return Promise.all(data);
   } catch (error) {
     console.error(error);
