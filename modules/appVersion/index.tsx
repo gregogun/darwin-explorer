@@ -35,7 +35,6 @@ import { Comment } from "../../types";
 import { CommentItem } from "./CommentItem";
 import { Loader } from "../../ui/Loader";
 import { useConnect } from "arweave-wallet-ui-test";
-import { config } from "../../config";
 import { getAccount } from "../../lib/account";
 
 interface VersionProps {
