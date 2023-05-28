@@ -32,7 +32,7 @@
     "arweave": "1.13.7",
     "arweave-account": "1.3.4",
     "arweave-graphql": "0.0.5",
-    "arweave-wallet-ui-test": "0.0.11",
+    "arweave-wallet-ui-test": "0.0.12",
     "crocks": "^0.12.4",
     "date-fns": "2.29.3",
     "eslint": "8.29.0",

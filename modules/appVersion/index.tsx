@@ -55,7 +55,7 @@ const AppVersion = () => {
   const [isCopied, setIsCopied] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [commentSuccess, setCommentSuccess] = useState("");
-  const { walletAddress, account } = useConnect();
+  const { walletAddress, profile } = useConnect();
   const location = useLocation();
   const queryClient = useQueryClient();
   const {
@@ -227,7 +227,7 @@ const AppVersion = () => {
 
     const account = await getAccount(walletAddress);
 
-    console.log(account);
+    // console.log(account);
   };
 
   return (
@@ -446,10 +446,9 @@ const AppVersion = () => {
                   <Avatar size="3">
                     <AvatarImage
                       src={
-                        account?.profile.avatarURL ===
-                        config.accountAvatarDefault
-                          ? `https://source.boringavatars.com/marble/40/${walletAddress}`
-                          : account?.profile.avatarURL
+                        profile?.avatar
+                          ? profile.avatar
+                          : `https://source.boringavatars.com/marble/40/${walletAddress}`
                       }
                     />
                     <AvatarFallback>

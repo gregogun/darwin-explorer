@@ -40,14 +40,20 @@ export const AppHeader = () => (
       </Flex>
     </Flex>
     <ConnectWallet
-      arweaveAccount={account}
-      permissions={["ACCESS_ADDRESS", "DISPATCH", "SIGN_TRANSACTION"]}
+      permissions={[
+        "ACCESS_ADDRESS",
+        "DISPATCH",
+        "SIGN_TRANSACTION",
+        "ACCESS_ARWEAVE_CONFIG",
+      ]}
       appName="Evolutionary App Explorer"
-      connectButtonColorScheme="indigo"
-      connectButtonVariant="ghost"
-      connectButtonSize="3"
-      connectButtonStyles={{
-        justifySelf: "end",
+      options={{
+        connectButtonColorScheme: "indigo",
+        connectButtonVariant: "ghost",
+        connectButtonSize: "3",
+        connectButtonStyles: {
+          justifySelf: "end",
+        },
       }}
     />
   </Flex>
