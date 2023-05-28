@@ -1,5 +1,5 @@
 import { arweave } from "./arweave";
-import arweaveGql from "arweave-graphql";
+import arweaveGql, { GetTransactionsQueryVariables } from "arweave-graphql";
 import { config } from "../config";
 import { Comment } from "../types";
 import { getAccount } from "./account";
@@ -23,20 +23,43 @@ export const writeComment = async ({ comment, sourceTx }: Comment) => {
   }
 };
 
-export const readComment = async (sourceTx: string) => {
+interface CommentQueryParams {
+  sourceTx: string | undefined;
+  cursor?: string;
+  limit?: number;
+}
+
+export const readComment = async ({
+  sourceTx,
+  cursor,
+  limit,
+}: CommentQueryParams) => {
+  if (!sourceTx) {
+    throw new Error("No source transaction ID found");
+  }
+
+  const query: GetTransactionsQueryVariables = {
+    first: limit || 3,
+    tags: [
+      { name: "Content-Type", values: ["text/plain"] },
+      { name: "Variant", values: ["0.0.1-alpha"] },
+      { name: "Data-Protocol", values: ["Comment"] },
+      { name: "Type", values: ["comment"] },
+      { name: "Data-Source", values: [sourceTx] },
+    ],
+  };
+
+  if (cursor) {
+    query.after = cursor;
+  }
+
   try {
     const metaRes = await arweaveGql(
       `${config.gatewayUrl}/graphql`
     ).getTransactions({
-      first: 10,
-      tags: [
-        { name: "Content-Type", values: ["text/plain"] },
-        { name: "Variant", values: ["0.0.1-alpha"] },
-        { name: "Data-Protocol", values: ["Comment"] },
-        { name: "Type", values: ["comment"] },
-        { name: "Data-Source", values: [sourceTx] },
-      ],
+      ...query,
     });
+
     const metadata = metaRes.transactions.edges
       .filter((edge) => Number(edge.node.data.size) < 320)
       .filter(
@@ -49,6 +72,7 @@ export const readComment = async (sourceTx: string) => {
           (x) => x.name === "Published"
         )?.value;
         const account = await getAccount(owner);
+        const cursor = edge.cursor;
         const comment = await arweave.api
           .get(txid)
           .then((res) => res.data)
@@ -60,10 +84,17 @@ export const readComment = async (sourceTx: string) => {
           published,
           account,
           comment,
+          cursor,
         };
       });
 
-    return Promise.all(metadata);
+    const data = await Promise.all(metadata);
+    const hasNextPage = metaRes.transactions.pageInfo.hasNextPage;
+
+    return {
+      data,
+      hasNextPage,
+    };
   } catch (error) {
     console.error(error);
     throw new Error("Error occured whilst fetching data");
