@@ -93,3 +93,23 @@ export interface Account {
   banner: string | undefined;
   vouched: boolean;
 }
+
+export interface AssetItem {
+  id: string;
+  type: string;
+  title: string;
+  description: string | undefined;
+  metaId: string;
+  groupId: string;
+  forks: string | undefined;
+  published: string;
+  stamps: number;
+  topics: string | undefined;
+}
+
+export interface AssetGraph {
+  id: string;
+  group: string;
+  node: AssetItem;
+  children: AssetGraph[];
+}

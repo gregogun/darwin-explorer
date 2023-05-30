@@ -17,6 +17,7 @@ import { useLocation } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getAppInfo } from "../../lib/getAppInfo";
 import { flattenGraph } from "../../utils/flattenGraph";
+import { getAppGraph } from "../../lib/getAppGraph";
 
 const AppGroup = () => {
   const [showDialog, setShowDialog] = useState(false);
@@ -92,9 +93,15 @@ const AppGroup = () => {
   }, [optionKeyPressed]);
 
   const getVersions = async (tx: string) => {
-    const graphRes = await graph(tx);
+    try {
+      // const graphRes = await graph(tx);
+      const graphRes = await getAppGraph(tx);
+      console.log(graphRes);
 
-    return graphRes;
+      return graphRes;
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleShowDialog = () => setShowDialog(true);
