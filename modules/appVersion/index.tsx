@@ -283,7 +283,7 @@ const AppVersion = () => {
             disabled={!version}
             onClick={() => handleCopy(version?.txid)}
           >
-            {isCopied ? "Copied!" : "Copy Version ID"}
+            {isCopied ? "Copied to clipboard!" : "Copy Version ID"}
             {isCopied ? <CheckIcon /> : <CopyIcon />}
           </Button>
         </Flex>
