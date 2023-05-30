@@ -35,6 +35,7 @@ interface CommentsProps {
 export const Comments = ({ versionTx, versionOwner }: CommentsProps) => {
   const [submitting, setSubmitting] = useState(false);
   const [commentSuccess, setCommentSuccess] = useState("");
+  const [loadingMore, setLoadingMore] = useState(false);
   const { profile, walletAddress } = useConnect();
   const queryClient = useQueryClient();
   const commentRef = useRef<HTMLDivElement | null>(null);
@@ -153,12 +154,14 @@ export const Comments = ({ versionTx, versionOwner }: CommentsProps) => {
 
   useEffect(() => {
     // prohibit scroll into view on initial load
-    if (commentsData && commentsData?.pages.length > 1) {
+    // adding loadingMore solves issue where other actions result in fetch, scrolling at undesirable times
+    if (commentsData && commentsData?.pages.length > 1 && loadingMore) {
       commentRef.current?.lastElementChild?.scrollIntoView({
         behavior: "smooth",
       });
+      setLoadingMore(false);
     }
-  }, [commentsData, commentsData?.pages]);
+  }, [commentsData?.pages]);
 
   const commentLabel = walletAddress ? "Comment" : "Connect to comment";
 
@@ -241,8 +244,7 @@ export const Comments = ({ versionTx, versionOwner }: CommentsProps) => {
             variant="solid"
             colorScheme="indigo"
           >
-            {!submitting && !commentSuccess && commentLabel}
-            {submitting && "Submitting..."}
+            {submitting ? "Submitting..." : commentLabel}
           </Button>
         </Flex>
         {formik.values.comment.length < 3 && formik.errors.comment && (
@@ -300,7 +302,10 @@ export const Comments = ({ versionTx, versionOwner }: CommentsProps) => {
             css={{
               alignSelf: "center",
             }}
-            onClick={() => fetchNextPage()}
+            onClick={() => {
+              setLoadingMore(true);
+              fetchNextPage();
+            }}
           >
             {isFetchingNextPage
               ? "Loading more comments..."
