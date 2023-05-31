@@ -2,6 +2,8 @@ import {
   Box,
   Button,
   Flex,
+  Grid,
+  styled,
   Tooltip,
   TooltipContent,
   TooltipPortal,
@@ -14,26 +16,58 @@ import { TreeGraphDialog } from "../treeGraph/TreeGraphDialog";
 import { VersionItem } from "./VersionItem";
 import { Skeleton } from "../../ui/Skeleton";
 import { useLocation } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
 import { getAppInfo } from "../../lib/getAppInfo";
 import { flattenGraph } from "../../utils/flattenGraph";
 import { getAppGraph } from "../../lib/getAppGraph";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+
+const ErrorIllustration = styled("img", {
+  width: 300,
+  height: 200,
+});
+
+const ErrorStateView = () => (
+  <Grid>
+    <Flex direction="column" gap="5" align="center">
+      <ErrorIllustration src="error.svg" />
+      <Typography weight="5">
+        Oops! Something went wrong. <br /> Please try and refresh the page.
+      </Typography>
+    </Flex>
+  </Grid>
+);
 
 const AppGroup = () => {
   const [showDialog, setShowDialog] = useState(false);
   const [optionKeyPressed, setOptionKeyPressed] = useState(false);
-  const [appTree, setAppTree] = useState<any>();
-  const [appInfo, setAppInfo] = useState<{
-    title: string | undefined;
-    description: string | undefined;
-    txid: string;
-    baseId: string | undefined;
-  }>();
+  // const [appTree, setAppTree] = useState<any>();
+  // const [appInfo, setAppInfo] = useState<{
+  //   title: string | undefined;
+  //   description: string | undefined;
+  //   txid: string;
+  //   baseId: string | undefined;
+  // }>();
   const location = useLocation();
+  const {
+    data: appInfo,
+    isLoading: appInfoLoading,
+    isError: appInfoError,
+  } = useQuery({
+    queryKey: ["appInfo"],
+    queryFn: () => getInfo(),
+  });
+  const {
+    data: appTree,
+    isLoading: appTreeLoading,
+    isError: appTreeError,
+  } = useQuery({
+    queryKey: ["appTree"],
+    queryFn: () => getAppTree(),
+  });
 
-  useEffect(() => {
-    getInfo();
-  }, []);
+  // useEffect(() => {
+  //   getInfo();
+  // }, []);
 
   const getInfo = async () => {
     const query = location.search;
@@ -45,13 +79,14 @@ const AppGroup = () => {
       return;
     }
 
-    const res = await getAppInfo(id);
-    setAppInfo(res);
+    const info = await getAppInfo(id);
+    return info;
+    // setAppInfo(res);
   };
 
   useEffect(() => {
-    getAppTree();
-  }, []);
+    console.log(appTree);
+  }, [appTree]);
 
   const getAppTree = async () => {
     const query = location.search;
@@ -63,9 +98,10 @@ const AppGroup = () => {
       return;
     }
 
-    const res = await getVersions(id);
+    const graphRes = await getAppGraph(id);
+    console.log(graphRes);
 
-    setAppTree(res);
+    return graphRes;
   };
 
   useEffect(() => {
@@ -92,18 +128,6 @@ const AppGroup = () => {
     };
   }, [optionKeyPressed]);
 
-  const getVersions = async (tx: string) => {
-    try {
-      // const graphRes = await graph(tx);
-      const graphRes = await getAppGraph(tx);
-      console.log(graphRes);
-
-      return graphRes;
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   const handleShowDialog = () => setShowDialog(true);
   const handleCancelDialog = () => setShowDialog(false);
 
@@ -120,11 +144,12 @@ const AppGroup = () => {
     >
       <Flex css={{ width: "100%" }} justify="between">
         <Flex direction="column" gap="1">
-          {appInfo ? (
+          {appInfo && (
             <Typography size="5" weight="6">
               {appInfo.title}
             </Typography>
-          ) : (
+          )}
+          {appInfoLoading && (
             <Skeleton
               css={{
                 br: "$1",
@@ -133,11 +158,12 @@ const AppGroup = () => {
               }}
             />
           )}
-          {appInfo ? (
+          {appInfo && (
             <Typography size="2" css={{ color: "$slate11" }}>
               {appInfo.description}
             </Typography>
-          ) : (
+          )}
+          {appInfoLoading && (
             <Skeleton
               css={{
                 br: "$1",
@@ -147,31 +173,35 @@ const AppGroup = () => {
             />
           )}
         </Flex>
-        <Flex gap="3">
-          <Tooltip delayDuration={200}>
-            <TooltipTrigger asChild>
-              <Button
-                onClick={handleShowDialog}
-                variant="subtle"
-                colorScheme="indigo"
-                as="a"
-              >
-                View Fork Tree
-              </Button>
-            </TooltipTrigger>
-            <TooltipPortal>
-              <TooltipContent>⌥ + Tab</TooltipContent>
-            </TooltipPortal>
-          </Tooltip>
-          <Button
-            variant="outline"
-            colorScheme="indigo"
-            as="a"
-            href={`https://g8way.io/${appInfo?.txid}`}
-          >
-            Visit app
-          </Button>
-        </Flex>
+        {!appInfoError && (
+          <Flex gap="3">
+            <Tooltip delayDuration={200}>
+              <TooltipTrigger asChild>
+                <Button
+                  disabled={!appTree}
+                  onClick={handleShowDialog}
+                  variant="subtle"
+                  colorScheme="indigo"
+                  as="a"
+                >
+                  View Fork Tree
+                </Button>
+              </TooltipTrigger>
+              <TooltipPortal>
+                <TooltipContent>⌥ + Tab</TooltipContent>
+              </TooltipPortal>
+            </Tooltip>
+            <Button
+              disabled={!appInfo}
+              variant="outline"
+              colorScheme="indigo"
+              as="a"
+              href={`https://g8way.io/${appInfo?.txid}`}
+            >
+              Visit app
+            </Button>
+          </Flex>
+        )}
       </Flex>
       <Box
         css={{
@@ -181,7 +211,7 @@ const AppGroup = () => {
           maxW: 600,
         }}
       />
-      {appTree ? (
+      {appTree &&
         flattenGraph(appTree).map((version) => (
           <VersionItem
             key={version.id}
@@ -190,8 +220,8 @@ const AppGroup = () => {
             topics={version.topics}
             id={version.id}
           />
-        ))
-      ) : (
+        ))}
+      {appTreeLoading && (
         <>
           <Skeleton
             css={{
@@ -216,12 +246,15 @@ const AppGroup = () => {
           />
         </>
       )}
+      {appTreeError && <ErrorStateView />}
 
-      <TreeGraphDialog
-        rawTree={appTree}
-        open={showDialog}
-        onClose={handleCancelDialog}
-      />
+      {/* {appTree && (
+        <TreeGraphDialog
+          rawTree={appTree}
+          open={showDialog}
+          onClose={handleCancelDialog}
+        />
+      )} */}
     </Flex>
   );
 };
