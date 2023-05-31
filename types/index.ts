@@ -41,10 +41,10 @@ export type TypeFilter = "app" | "version";
 
 export interface VersionItemProps {
   id: string;
-  title: string | undefined;
+  title: string;
   description: string | undefined;
   logo?: string;
-  topics: Tag[] | string;
+  topics: string | undefined;
   // stamps: number;
 }
 
@@ -54,7 +54,7 @@ export interface AppItemProps {
   txid: string;
   baseId: string | undefined;
   logo: string | undefined;
-  topics: Tag[] | undefined;
+  topics: string | undefined;
   published: string | undefined;
 }
 

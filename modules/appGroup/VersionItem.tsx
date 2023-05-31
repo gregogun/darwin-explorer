@@ -165,27 +165,16 @@ export const VersionItem = ({
               </Typography>
             </Flex>
             <Flex gap="2">
-              {/* {typeof topics === "string"
-                ? topics?.split(",").map((topic) => (
-                    <Typography
-                      key={topic}
-                      css={{ color: "$slate11", opacity: 0.7 }}
-                      size="1"
-                      as="span"
-                    >
-                      {topic}
-                    </Typography>
-                  ))
-                : topics.map((topic) => (
-                    <Typography
-                      key={topic.value}
-                      css={{ color: "$slate11", opacity: 0.7 }}
-                      size="1"
-                      as="span"
-                    >
-                      {topic.value}
-                    </Typography>
-                  ))} */}
+              {topics?.split(",").map((topic) => (
+                <Typography
+                  key={topic}
+                  css={{ color: "$slate11", opacity: 0.7 }}
+                  size="1"
+                  as="span"
+                >
+                  {topic}
+                </Typography>
+              ))}
             </Flex>
           </Flex>
         </Flex>
