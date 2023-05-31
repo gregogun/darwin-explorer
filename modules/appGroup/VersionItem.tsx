@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@aura-ui/react";
 import arweaveGql from "arweave-graphql";
-import { VersionItemProps } from "../../types";
+import { AssetItem, VersionItemProps } from "../../types";
 import { getStampCount, stampAsset } from "../../lib/stamps";
 import { Link } from "react-router-dom";
 import { HiArrowUp } from "react-icons/hi";
@@ -48,7 +48,7 @@ export const VersionItem = ({
   description,
   topics,
   id,
-}: VersionItemProps) => {
+}: Pick<AssetItem, "description" | "id" | "title" | "topics">) => {
   const queryClient = useQueryClient();
   const {
     data: info,
@@ -63,8 +63,9 @@ export const VersionItem = ({
     isLoading: stampsLoading,
     isError: stampsError,
   } = useQuery({
-    queryKey: ["stamps"],
+    queryKey: [`stamp-${id}`],
     cacheTime: 0,
+    enabled: !!id,
     queryFn: () => getStampCount(id),
   });
 
@@ -164,7 +165,7 @@ export const VersionItem = ({
               </Typography>
             </Flex>
             <Flex gap="2">
-              {typeof topics === "string"
+              {/* {typeof topics === "string"
                 ? topics?.split(",").map((topic) => (
                     <Typography
                       key={topic}
@@ -184,7 +185,7 @@ export const VersionItem = ({
                     >
                       {topic.value}
                     </Typography>
-                  ))}
+                  ))} */}
             </Flex>
           </Flex>
         </Flex>
