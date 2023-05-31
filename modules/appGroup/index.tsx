@@ -11,7 +11,6 @@ import {
   Typography,
 } from "@aura-ui/react";
 import { useEffect, useState } from "react";
-import graph from "@permaweb/asset-graph";
 import { TreeGraphDialog } from "../treeGraph/TreeGraphDialog";
 import { VersionItem } from "./VersionItem";
 import { Skeleton } from "../../ui/Skeleton";
@@ -40,13 +39,6 @@ const ErrorStateView = () => (
 const AppGroup = () => {
   const [showDialog, setShowDialog] = useState(false);
   const [optionKeyPressed, setOptionKeyPressed] = useState(false);
-  // const [appTree, setAppTree] = useState<any>();
-  // const [appInfo, setAppInfo] = useState<{
-  //   title: string | undefined;
-  //   description: string | undefined;
-  //   txid: string;
-  //   baseId: string | undefined;
-  // }>();
   const location = useLocation();
   const {
     data: appInfo,
@@ -65,10 +57,6 @@ const AppGroup = () => {
     queryFn: () => getAppTree(),
   });
 
-  // useEffect(() => {
-  //   getInfo();
-  // }, []);
-
   const getInfo = async () => {
     const query = location.search;
     const urlParams = new URLSearchParams(query);
@@ -81,12 +69,7 @@ const AppGroup = () => {
 
     const info = await getAppInfo(id);
     return info;
-    // setAppInfo(res);
   };
-
-  useEffect(() => {
-    console.log(appTree);
-  }, [appTree]);
 
   const getAppTree = async () => {
     const query = location.search;
@@ -99,7 +82,6 @@ const AppGroup = () => {
     }
 
     const graphRes = await getAppGraph(id);
-    console.log(graphRes);
 
     return graphRes;
   };
@@ -248,13 +230,13 @@ const AppGroup = () => {
       )}
       {appTreeError && <ErrorStateView />}
 
-      {/* {appTree && (
+      {appTree && (
         <TreeGraphDialog
           rawTree={appTree}
           open={showDialog}
           onClose={handleCancelDialog}
         />
-      )} */}
+      )}
     </Flex>
   );
 };

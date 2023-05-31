@@ -18,7 +18,7 @@ import {
   Flex,
   Separator as SeparatorBase,
 } from "@aura-ui/react";
-import { NodeProps } from "../../types";
+import { AssetItem } from "../../types";
 import { useEffect, useState } from "react";
 import { config } from "../../config";
 import { HiBadgeCheck } from "react-icons/hi";
@@ -286,17 +286,17 @@ const Separator = styled(SeparatorBase, {
   backgroundColor: "$indigo4",
 });
 
-type MainInfo = Pick<NodeProps, "title" | "published" | "stamps">;
+type MainInfo = Pick<AssetItem, "title" | "published" | "stamps">;
 
 type IdInfo = { author: string | undefined } & Pick<
-  NodeProps,
+  AssetItem,
   "id" | "metaId" | "groupId" | "forks"
 >;
 
 interface NodeDialogProps {
   open: boolean;
   onClose: () => void;
-  node: Omit<NodeProps, "type">;
+  node: Omit<AssetItem, "type">;
 }
 
 export const NodeDialog = ({ onClose, open, node }: NodeDialogProps) => {
