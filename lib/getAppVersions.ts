@@ -1,5 +1,4 @@
-import graph from "@permaweb/asset-graph";
-import arweaveGql, { Tag, Transaction } from "arweave-graphql";
+import arweaveGql, { Transaction } from "arweave-graphql";
 import { config } from "../config";
 import { versionResultsFilter, versionTagFilter } from "../utils/query";
 
