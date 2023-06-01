@@ -15,9 +15,6 @@ dependencies:
   '@fontsource/inter':
     specifier: 4.5.14
     version: 4.5.14
-  '@permaweb/asset-graph':
-    specifier: https://arweave.net/-jYaU7HYX3JNpsOTqkMzEKUK4_5Mfy-a88jtgSNrI_k
-    version: '@arweave.net/-jYaU7HYX3JNpsOTqkMzEKUK4_5Mfy-a88jtgSNrI_k'
   '@permaweb/asset-web-sdk':
     specifier: 0.0.4
     version: 0.0.4(react@18.2.0)
@@ -8575,15 +8572,6 @@ packages:
 
   /zod@3.21.4:
     resolution: {integrity: sha512-m46AKbrzKVzOzs/DZgVnG5H55N1sv1M8qZU3A8RIKbs3mrACDNeIOeilDymVb2HdmP8uwshOCF4uJ8uM9rCqJw==}
-    dev: false
-
-  '@arweave.net/-jYaU7HYX3JNpsOTqkMzEKUK4_5Mfy-a88jtgSNrI_k':
-    resolution: {tarball: https://arweave.net/-jYaU7HYX3JNpsOTqkMzEKUK4_5Mfy-a88jtgSNrI_k}
-    name: '@permaweb/asset-graph'
-    version: 0.0.3
-    dependencies:
-      ramda: 0.28.0
-      zod: 3.21.4
     dev: false
 
   github.com/Bundlr-Network/avsc/a730cc8018b79e114b6a3381bbb57760a24c6cef:
