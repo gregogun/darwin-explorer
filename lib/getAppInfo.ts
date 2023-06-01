@@ -1,8 +1,11 @@
 import arweaveGql, { Transaction } from "arweave-graphql";
+import { config } from "../config";
 
 export const getAppInfo = async (tx: string) => {
   try {
-    const res = await arweaveGql(`${"arweave.net"}/graphql`).getTransactions({
+    const res = await arweaveGql(
+      `${config.gatewayUrl}/graphql`
+    ).getTransactions({
       ids: [tx],
     });
     const data = res.transactions.edges

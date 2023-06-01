@@ -1,26 +1,5 @@
 import { Tag } from "arweave-graphql";
 
-export interface NodeProps {
-  description: string;
-  forks?: string;
-  groupId: string;
-  id: string;
-  metaId: string;
-  published: number;
-  stamps: number;
-  title: string;
-  topics?: string;
-  type: string;
-}
-
-export interface TreeNode {
-  children?: this[];
-  group: string;
-  id: string;
-  node: NodeProps;
-  version: string;
-}
-
 type Balances = {
   [key: string]: number;
 };
@@ -62,10 +41,10 @@ export type TypeFilter = "app" | "version";
 
 export interface VersionItemProps {
   id: string;
-  title: string | undefined;
+  title: string;
   description: string | undefined;
   logo?: string;
-  topics: Tag[] | string;
+  topics: string | undefined;
   // stamps: number;
 }
 
@@ -75,7 +54,7 @@ export interface AppItemProps {
   txid: string;
   baseId: string | undefined;
   logo: string | undefined;
-  topics: Tag[] | undefined;
+  topics: string | undefined;
   published: string | undefined;
 }
 
@@ -92,4 +71,24 @@ export interface Account {
   avatar: string | undefined;
   banner: string | undefined;
   vouched: boolean;
+}
+
+export interface AssetItem {
+  id: string;
+  type: string;
+  title: string;
+  description: string | undefined;
+  metaId: string;
+  groupId: string;
+  forks: string | undefined;
+  published: string;
+  stamps: number;
+  topics: string | undefined;
+}
+
+export interface AssetGraph {
+  id: string;
+  group: string;
+  node: AssetItem;
+  children: AssetGraph[];
 }

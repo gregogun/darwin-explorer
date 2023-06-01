@@ -9,7 +9,7 @@ import {
 import { withParentSize } from "@visx/responsive";
 import { LinkHorizontal } from "@visx/shape";
 import { NodeDialog } from "../nodeDialog/NodeDialog";
-import { TreeNode } from "../../types";
+import { AssetGraph } from "../../types";
 import { Box, darkTheme, styled, theme } from "@aura-ui/react";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 
@@ -21,7 +21,7 @@ const StyledLinkHorizontal = styled(LinkHorizontal);
 
 export const background = "#08090A";
 
-type HierarchyNode = HierarchyPointNode<TreeNode>;
+type HierarchyNode = HierarchyPointNode<AssetGraph>;
 
 const author = "QyvsIuytjHV8kDgnnjC66IoeZyWpGzZ0uffb_TxFg7g";
 const sourceBaseUrl = "https://github.com/gregogun/fair-forks-test-app/tree/";
@@ -325,7 +325,7 @@ const defaultMargin = { top: 10, left: 80, right: 80, bottom: 10 };
 
 interface TreeGraphProps extends WithParentSizeProps {
   margin?: { top: number; right: number; bottom: number; left: number };
-  rawTree: TreeNode;
+  rawTree: AssetGraph;
 }
 
 const TreeGraph = ({
@@ -362,7 +362,7 @@ const TreeGraph = ({
                 height={height}
                 rx={14}
               />
-              <Tree<TreeNode> root={data} size={[yMax, xMax]}>
+              <Tree<AssetGraph> root={data} size={[yMax, xMax]}>
                 {(tree) => (
                   <Group top={margin.top} left={margin.left}>
                     {tree.links().map((link, i) => (

@@ -11,7 +11,7 @@ import {
 } from "@aura-ui/react";
 import { TreeGraph } from "./TreeGraph";
 import { Cross1Icon } from "@radix-ui/react-icons";
-import { TreeNode } from "../../types";
+import { AssetGraph } from "../../types";
 
 const StyledDialogContent = styled(DialogContent, {
   width: "100%",
@@ -26,7 +26,7 @@ const StyledDialogContent = styled(DialogContent, {
 interface TreeGraphDialogProps {
   open: boolean;
   onClose: () => void;
-  rawTree: TreeNode | undefined;
+  rawTree: AssetGraph | undefined;
 }
 
 export const TreeGraphDialog = ({

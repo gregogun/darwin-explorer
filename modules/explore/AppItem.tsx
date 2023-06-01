@@ -65,14 +65,14 @@ export const AppItem = ({
             </Typography>
           </Flex>
           <Flex gap="2">
-            {topics?.map((topic) => (
+            {topics?.split(",").map((topic) => (
               <Typography
-                key={topic.value}
+                key={topic}
                 css={{ color: "$slate11", opacity: 0.7 }}
                 size="1"
                 as="span"
               >
-                {topic.value}
+                {topic}
               </Typography>
             ))}
           </Flex>

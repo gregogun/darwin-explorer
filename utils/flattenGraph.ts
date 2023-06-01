@@ -1,3 +1,5 @@
+import { AssetGraph, AssetItem } from "../types";
+
 interface TreeNode {
   id: string;
   group: string;
@@ -9,14 +11,16 @@ interface TreeNode {
   children?: TreeNode[];
 }
 
-export function flattenGraph(tree: TreeNode) {
+export function flattenGraph(tree: AssetGraph) {
   const result: {
     title: string;
-    description: string;
-    topics: string;
+    description: string | undefined;
+    topics: string | undefined;
     id: string;
   }[] = [];
-  function traverse(tree: TreeNode) {
+  function traverse(tree: AssetGraph) {
+    console.log("tree", tree);
+
     const title = tree.node.title;
     const description = tree.node.description;
     const topics = tree.node.topics;
@@ -28,7 +32,7 @@ export function flattenGraph(tree: TreeNode) {
       id,
     });
     if (tree.children) {
-      tree.children.forEach((child: TreeNode) => traverse(child));
+      tree.children.forEach((child: AssetGraph) => traverse(child));
     }
   }
 

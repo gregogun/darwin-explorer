@@ -29,7 +29,8 @@ const filter = async (node: Transaction) => {
   const baseId = node.tags.find((x) => x.name === "Wrapper-For")?.value;
   const published = node.tags.find((x) => x.name === "Published")?.value;
   const logo = node.tags.find((x) => x.name === "Logo")?.value;
-  const topics = node.tags.filter((x) => x.name.includes("Topic"));
+  const topicTags = node.tags.filter((x) => x.name.includes("Topic:"));
+  const topics = topicTags.map((topic) => topic.value).join(",");
   const txid = node.id;
 
   return {

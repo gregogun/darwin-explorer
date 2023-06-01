@@ -18,10 +18,11 @@ export const versionTagFilter: TagFilter[] = [
 export const versionResultsFilter = async (
   node: Transaction
 ): Promise<VersionItemProps> => {
-  const title = node.tags.find((x) => x.name === "Title")?.value;
+  const title = node.tags.find((x) => x.name === "Title")?.value as string;
   const description = node.tags.find((x) => x.name === "Description")?.value;
   const logo = node.tags.find((x) => x.name === "Logo")?.value;
-  const topics = node.tags.filter((x) => x.name.includes("Topic"));
+  const topicTags = node.tags.filter((x) => x.name.includes("Topic:"));
+  const topics = topicTags.map((topic) => topic.value).join(",");
   const id = node.id;
 
   return {

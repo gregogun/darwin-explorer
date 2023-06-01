@@ -1,8 +1,7 @@
-import graph from "@permaweb/asset-graph";
 import AssetSDK from "@permaweb/asset-web-sdk";
 import { WarpFactory } from "warp-contracts";
 import { arweave } from "./arweave";
-import { Asset, NodeProps } from "../types";
+import { Asset } from "../types";
 
 export const getAsset = async (id: string): Promise<Asset> => {
   const warp = WarpFactory.forMainnet();
@@ -13,10 +12,4 @@ export const getAsset = async (id: string): Promise<Asset> => {
   console.log(result);
 
   return result;
-};
-
-export const getGraph = async (id: string) => {
-  const res = await graph(id);
-
-  console.log(res);
 };
