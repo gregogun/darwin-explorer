@@ -41,13 +41,18 @@ const AppVersion = () => {
   const [version, setVersion] = useState<VersionProps>();
   const [isCopied, setIsCopied] = useState(false);
   const location = useLocation();
+  const query = location.search;
+  const urlParams = new URLSearchParams(query);
+
+  const id = urlParams.get("tx");
+
   const queryClient = useQueryClient();
   const {
     data: stamps,
     isLoading: stampsLoading,
     isError: stampsError,
   } = useQuery({
-    queryKey: ["stamps"],
+    queryKey: [`stamps-${id}`],
     enabled: !!version?.txid,
     queryFn: () => {
       if (!version?.txid) {
@@ -59,11 +64,6 @@ const AppVersion = () => {
   });
 
   useEffect(() => {
-    const query = location.search;
-    const urlParams = new URLSearchParams(query);
-
-    const id = urlParams.get("tx");
-
     if (id) {
       fetchVersionInfo(id);
     } else {

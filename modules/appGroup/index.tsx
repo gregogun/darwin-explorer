@@ -40,12 +40,15 @@ const AppGroup = () => {
   const [showDialog, setShowDialog] = useState(false);
   const [optionKeyPressed, setOptionKeyPressed] = useState(false);
   const location = useLocation();
+  const query = location.search;
+  const urlParams = new URLSearchParams(query);
+  const id = urlParams.get("tx");
   const {
     data: appInfo,
     isLoading: appInfoLoading,
     isError: appInfoError,
   } = useQuery({
-    queryKey: ["appInfo"],
+    queryKey: [`appInfo-${id}`],
     queryFn: () => getInfo(),
   });
   const {
@@ -53,15 +56,11 @@ const AppGroup = () => {
     isLoading: appTreeLoading,
     isError: appTreeError,
   } = useQuery({
-    queryKey: ["appTree"],
+    queryKey: [`appTree-${id}`],
     queryFn: () => getAppTree(),
   });
 
   const getInfo = async () => {
-    const query = location.search;
-    const urlParams = new URLSearchParams(query);
-    const id = urlParams.get("tx");
-
     if (!id) {
       console.error("No transaction ID was found");
       return;

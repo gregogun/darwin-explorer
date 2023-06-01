@@ -56,8 +56,8 @@ export const Comments = ({ versionTx, versionOwner }: CommentsProps) => {
     hasNextPage: moreComments,
     isFetchingNextPage,
   } = useInfiniteQuery({
-    queryKey: ["comments"],
-    cacheTime: 0,
+    queryKey: [`comments-${versionTx}`],
+    cacheTime: 1 * 60 * 1000,
     enabled: !!versionTx,
     queryFn: ({ pageParam }) =>
       readComment({ sourceTx: versionTx, cursor: pageParam }),
@@ -130,7 +130,7 @@ export const Comments = ({ versionTx, versionOwner }: CommentsProps) => {
 
       // we do this to give data time to be read back from network
       setTimeout(() => {
-        queryClient.invalidateQueries({ queryKey: ["comments"] });
+        queryClient.invalidateQueries({ queryKey: [`comments-${versionTx}`] });
       }, 250);
 
       formik.resetForm();

@@ -55,7 +55,7 @@ export const VersionItem = ({
     isLoading,
     isError,
   } = useQuery({
-    queryKey: ["versionItemInfo"],
+    queryKey: [`versionItemInfo-${id}`],
     queryFn: () => getInfo(),
   });
   const {
@@ -64,7 +64,6 @@ export const VersionItem = ({
     isError: stampsError,
   } = useQuery({
     queryKey: [`stamp-${id}`],
-    cacheTime: 0,
     enabled: !!id,
     queryFn: () => getStampCount(id),
   });
