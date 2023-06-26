@@ -90,7 +90,8 @@ export const MobileHeader = () => {
               css={{
                 "& a": {
                   color: "$slate12",
-                  fontSize: "$5",
+                  fontSize: "$4",
+                  pl: "$5",
                   "&:hover": { color: "$indigo11" },
                 },
                 height: "100%",
@@ -115,6 +116,31 @@ export const MobileHeader = () => {
                 <Link to="https://github.com/gregogun/evolutionary-apps-cli/blob/main/README.md">
                   Create
                 </Link>
+              </DialogClose>
+              <DialogClose
+                asChild
+                css={{
+                  position: "relative",
+                }}
+              >
+                <ConnectWallet
+                  permissions={[
+                    "ACCESS_ADDRESS",
+                    "DISPATCH",
+                    "SIGN_TRANSACTION",
+                    "ACCESS_ARWEAVE_CONFIG",
+                  ]}
+                  appName="Evolutionary App Explorer"
+                  options={{
+                    // connectButtonColorScheme: "indigo",
+                    // connectButtonVariant: "ghost",
+                    connectButtonSize: "3",
+                    connectButtonStyles: {
+                      justifySelf: "end",
+                    },
+                    connectButtonLabel: "Connect",
+                  }}
+                />
               </DialogClose>
             </Flex>
             <DialogClose asChild>
