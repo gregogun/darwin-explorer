@@ -156,7 +156,26 @@ export const VersionItem = ({
           )}
           <Flex justify="center" direction="column" gap="1">
             <Flex direction="column">
-              <Typography size="2" css={{ color: "$slate12" }}>
+              <Typography
+                size="2"
+                css={{
+                  display: "-webkit-box",
+                  "-webkit-line-clamp": 1,
+                  "-webkit-box-orient": "vertical",
+                  typographyOverflow: "ellipsis",
+                  overflow: "hidden",
+                  maxW: "16ch",
+                  color: "$slate12",
+
+                  "@bp1": {
+                    maxW: "32ch",
+                  },
+
+                  "@bp2": {
+                    maxW: "60ch",
+                  },
+                }}
+              >
                 {title}
               </Typography>
               <Typography size="2" css={{ color: "$slate11" }}>

@@ -22,11 +22,6 @@ const globalStyles = globalCss({
     height: "100%",
     fontFamily: "$body",
     margin: 0,
-    backgroundColor: "$indigo1",
-
-    [`.${darkTheme} &`]: {
-      backgroundColor: "#08090A",
-    },
   },
 
   "#__next": {

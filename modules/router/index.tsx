@@ -6,12 +6,14 @@ import AppVersion from "../../modules/appVersion";
 import { AppHeader } from "../layout/AppHeader";
 import Search from "../search/search";
 import { Box, darkTheme } from "@aura-ui/react";
+import { MobileHeader } from "../layout/MobileHeader";
 
 export const Router = () => (
   <HashRouter>
     <Box
       css={{
-        backgroundColor: "$indigo1",
+        backgroundColor: "$indigo2",
+        minHeight: "100%",
 
         [`.${darkTheme} &`]: {
           backgroundColor: "#08090A",
@@ -19,6 +21,7 @@ export const Router = () => (
       }}
     >
       <AppHeader />
+      <MobileHeader />
       <Routes>
         <Route path={"/"} element={<Explore />} />
         <Route path={"/app/"} element={<AppGroup />} />

@@ -15,7 +15,7 @@ export const Explore = () => {
     <Flex
       direction="column"
       align="center"
-      css={{ mt: "$10", mx: "auto", maxW: 600 }}
+      css={{ mt: "$10", mx: "auto", maxW: 600, width: "100%" }}
     >
       <Typography css={{ mb: "$5" }} size="6" weight="6">
         Explore

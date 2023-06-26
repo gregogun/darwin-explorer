@@ -3,11 +3,7 @@ import { ConnectWallet, useConnect } from "arweave-wallet-ui-test";
 import { Link } from "react-router-dom";
 import { Search } from "../search";
 import { HeaderDropdown } from "./HeaderDropdown";
-
-const Image = styled("img", {
-  width: 40,
-  height: 40,
-});
+import { Image } from "../../ui/Image";
 
 export const AppHeader = () => {
   const { profile, walletAddress } = useConnect();
@@ -17,17 +13,17 @@ export const AppHeader = () => {
       css={{
         p: "$5",
         borderBottom: "1px solid $colors$slate2",
+        display: "none",
+        "@bp2": {
+          display: "flex",
+        },
       }}
       justify="between"
       align="center"
     >
       <Flex gap="5">
         <Link to="/">
-          <Image
-            css={{ cursor: "pointer" }}
-            src="app-logo.svg"
-            alt="app logo"
-          />
+          <Image css={{ cursor: "pointer" }} src="logo.svg" alt="Darwin logo" />
         </Link>
         <Search />
         <Flex

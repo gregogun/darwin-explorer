@@ -1,6 +1,9 @@
-const fs = require("fs");
-const path = require("path");
-const Bundlr = require("@bundlr-network/client");
+// const fs = require("fs");
+// const path = require("path");
+// const Bundlr = require("@bundlr-network/client");
+import fs from 'fs'
+import path from 'path'
+import Bundlr from '@bundlr-network/client'
 
 async function main() {
   const keyfile = JSON.parse(
@@ -21,7 +24,7 @@ async function main() {
       indexFile: "index.html",
       manifestTags: tags,
     });
-    console.log(`App successfully deployed - https://g8way.io/${res?.id}`);
+    console.log(`App successfully deployed - https://arweave.net/${res.id}`);
   } catch (error) {
     console.error(error);
   }

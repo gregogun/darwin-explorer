@@ -10,7 +10,7 @@
     "start": "next start",
     "lint": "next lint",
     "clean": "rm -rf node_modules out",
-    "upload": "pnpm build && node deploy.mjs"
+    "upload": "pnpm build && node scripts/deploy.mjs"
   },
   "dependencies": {
     "@aura-ui/react": "0.0.5-alpha.2",
