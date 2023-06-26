@@ -6,7 +6,7 @@ export const getApps = async (gateway?: string) => {
       // update to support pagination/load more
       first: 8,
       tags: [
-        { name: "Data-Protocol", values: ["Evoapps"] },
+        { name: "Data-Protocol", values: ["EvolutionaryApps"] },
         {
           name: "Content-Type",
           values: ["application/x.arweave-manifest+json"],
@@ -14,6 +14,7 @@ export const getApps = async (gateway?: string) => {
       ],
     });
     const data = res.transactions.edges
+      .filter((edge) => Number(edge.node.data.size) < 400)
       .filter((edge) => edge.node.tags.find((x) => x.name === "Title"))
       .filter((edge) => edge.node.tags.find((x) => x.name === "Wrapper-For"))
       .filter((edge) => edge.node.tags.find((x) => x.name === "Published"))
