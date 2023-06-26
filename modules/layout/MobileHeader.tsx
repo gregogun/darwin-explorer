@@ -132,8 +132,6 @@ export const MobileHeader = () => {
                   ]}
                   appName="Evolutionary App Explorer"
                   options={{
-                    // connectButtonColorScheme: "indigo",
-                    // connectButtonVariant: "ghost",
                     connectButtonSize: "3",
                     connectButtonStyles: {
                       justifySelf: "end",
