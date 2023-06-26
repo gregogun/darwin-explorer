@@ -3,6 +3,8 @@ import arweaveGql, { Transaction } from "arweave-graphql";
 export const getApps = async (gateway?: string) => {
   try {
     const res = await arweaveGql(`${gateway}/graphql`).getTransactions({
+      // update to support pagination/load more
+      first: 8,
       tags: [
         { name: "Data-Protocol", values: ["Evoapps"] },
         {
