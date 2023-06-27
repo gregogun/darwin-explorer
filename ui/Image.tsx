@@ -1,4 +1,4 @@
-import { styled } from "@stitches/react";
+import { styled } from "@aura-ui/react";
 
 export const Image = styled("img", {
   width: 40,
