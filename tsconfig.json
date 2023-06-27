@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -17,11 +13,7 @@
     "resolveJsonModule": true,
     "jsx": "preserve",
     "incremental": false,
-    "typeRoots": [
-      "./index.d.ts",
-      "./node_modules/@types"
-    ],
-    "isolatedModules": true
+    "typeRoots": ["./index.d.ts", "./node_modules/@types"]
   },
   "include": [
     "next-env.d.ts",
@@ -31,8 +23,5 @@
     "index.d.ts",
     "deploy.js" // "lib/asset-sdk.ts"
   ],
-  "exclude": [
-    "node_modules",
-    "deploy.js"
-  ]
+  "exclude": ["node_modules", "deploy.js"]
 }
