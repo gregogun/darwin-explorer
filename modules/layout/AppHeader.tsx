@@ -27,12 +27,11 @@ export const AppHeader = () => {
     <Flex
       as="header"
       css={{
-        p: "$3",
+        p: "$5",
         borderBottom: "1px solid $colors$slate2",
         display: "none",
         "@bp2": {
           display: "flex",
-          p: "$5",
         },
       }}
       justify="between"

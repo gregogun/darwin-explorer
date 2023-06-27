@@ -51,11 +51,7 @@ export const Landing = () => {
         display: "flex",
         minHeight: "100dvh",
         flexDirection: "column",
-        padding: 12,
-
-        "@bp2": {
-          padding: 20,
-        },
+        padding: "$5",
       }}
     >
       <Image
