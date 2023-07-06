@@ -116,19 +116,42 @@ const AppVersion = () => {
       direction="column"
       css={{
         mt: "$10",
-        maxW: 600,
+        px: "$5",
         mx: "auto",
+        width: "100%",
+
+        "@bp1": {
+          maxW: 700,
+        },
+
+        "@bp3": {
+          mx: "auto",
+        },
+
+        "@bp4": {
+          maxW: 700,
+        },
       }}
     >
       <Box>
-        <Flex justify="between">
+        <Flex
+          justify="between"
+          direction={{
+            "@initial": "columnReverse",
+            "@bp1": "row",
+          }}
+          gap="3"
+        >
           {version ? (
             <Typography
               as="h2"
               css={{
                 color: "$slate12",
               }}
-              size="8"
+              size={{
+                "@initial": "5",
+                "@bp2": "8",
+              }}
               weight="6"
             >
               {version.title}
@@ -149,6 +172,10 @@ const AppVersion = () => {
               href={`https://g8way.io/${version?.txid}`}
               colorScheme="indigo"
               css={{ gap: "$2" }}
+              size={{
+                "@initial": "1",
+                "@bp2": "2",
+              }}
             >
               Visit
               <ArrowRightIcon />
@@ -158,6 +185,10 @@ const AppVersion = () => {
               disabled={!version}
               colorScheme="indigo"
               variant="solid"
+              size={{
+                "@initial": "1",
+                "@bp2": "2",
+              }}
             >
               <HiThumbUp />
               Stamp
@@ -230,7 +261,14 @@ const AppVersion = () => {
             />
           )}
         </Flex>
-        <Flex css={{ mt: "$10" }} gap="5">
+        <Flex
+          direction={{
+            "@initial": "column",
+            "@bp1": "row",
+          }}
+          css={{ mt: "$10" }}
+          gap="5"
+        >
           <Button
             variant="ghost"
             css={{

@@ -41,7 +41,10 @@ export const AppItem = ({
     >
       <Flex gap="3">
         <Avatar
-          size="5"
+          size={{
+            "@initial": "4",
+            "@bp2": "5",
+          }}
           css={{
             br: "$3",
           }}
@@ -57,7 +60,28 @@ export const AppItem = ({
         </Avatar>
         <Flex justify="center" direction="column" gap="1">
           <Flex direction="column">
-            <Typography as="h3" size="2" weight="6" css={{ color: "$slate12" }}>
+            <Typography
+              as="h3"
+              size="2"
+              weight="6"
+              css={{
+                display: "-webkit-box",
+                "-webkit-line-clamp": 1,
+                "-webkit-box-orient": "vertical",
+                typographyOverflow: "ellipsis",
+                overflow: "hidden",
+                maxW: "16ch",
+                color: "$slate12",
+
+                "@bp1": {
+                  maxW: "32ch",
+                },
+
+                "@bp2": {
+                  maxW: "60ch",
+                },
+              }}
+            >
               {title}
             </Typography>
             <Typography size="2" css={{ color: "$slate11" }}>

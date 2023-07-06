@@ -27,7 +27,11 @@ export const Search = () => {
       as="form"
       css={{
         position: "relative",
-        minWidth: 300,
+        width: "100%",
+
+        "@bp2": {
+          minWidth: 300,
+        },
       }}
       gap="1"
       align="center"
@@ -37,10 +41,18 @@ export const Search = () => {
         value={value || ""}
         css={{
           "&[type]": {
+            maxHeight: 36,
             lineHeight: "$sizes$11",
+
+            "@bp2": {
+              maxHeight: 44,
+            },
           },
         }}
-        size="2"
+        size={{
+          "@initial": "1",
+          "@bp2": "2",
+        }}
         variant="outline"
         placeholder="Search..."
         border
@@ -48,11 +60,16 @@ export const Search = () => {
       <Flex
         css={{
           position: "absolute",
-          right: "$2",
-          bottom: "$2",
+          right: "$1",
+          bottom: "$1",
           backgroundColor: "$indigo1",
           [`.${darkTheme} &`]: {
             backgroundColor: "#08090A",
+          },
+
+          "@bp2": {
+            right: "$2",
+            bottom: "$2",
           },
         }}
         gap="1"
