@@ -26,11 +26,10 @@ export const Router = () => (
       <MobileHeader />
       <Routes>
         <Route path={"/"} element={<Landing />} />
-        <Route path={"/explore"} element={<Explore />}>
-          <Route path={"/explore/app/"} element={<AppGroup />} />
-          <Route path={"/explore/version/"} element={<AppVersion />} />
-          <Route path={"/explore/search/"} element={<Search />} />
-        </Route>
+        <Route path={"/explore"} element={<Explore />} />
+        <Route path={"/app"} element={<AppGroup />} />
+        <Route path={"/version"} element={<AppVersion />} />
+        <Route path={"/search"} element={<Search />} />
       </Routes>
     </Box>
   </HashRouter>

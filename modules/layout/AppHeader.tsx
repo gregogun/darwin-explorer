@@ -8,20 +8,20 @@ import { useEffect, useState } from "react";
 
 export const AppHeader = () => {
   const { profile, walletAddress } = useConnect();
-  const [isExplore, setIsExplore] = useState(false);
+  const [isHome, setIsHome] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      if (window.location.href.includes("explore")) {
-        setIsExplore(true);
+      if (location && location.pathname === "/") {
+        setIsHome(true);
       } else {
-        setIsExplore(false);
+        setIsHome(false);
       }
     }
   }, [location]);
 
-  if (!isExplore) return null;
+  if (isHome) return null;
 
   return (
     <Flex
