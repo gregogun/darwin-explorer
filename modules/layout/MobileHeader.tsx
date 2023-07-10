@@ -9,13 +9,29 @@ import {
   IconButton,
   darkTheme,
 } from "@aura-ui/react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Image } from "../../ui/Image";
 import { Cross2Icon, HamburgerMenuIcon } from "@radix-ui/react-icons";
 import { Search } from "../search";
 import { ConnectWallet } from "arweave-wallet-ui-test";
+import { useEffect, useState } from "react";
 
 export const MobileHeader = () => {
+  const [isExplore, setIsExplore] = useState(false);
+  const location = useLocation();
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      if (window.location.href.includes("explore")) {
+        setIsExplore(true);
+      } else {
+        setIsExplore(false);
+      }
+    }
+  }, [location]);
+
+  if (!isExplore) return null;
+
   return (
     <Flex
       as="header"

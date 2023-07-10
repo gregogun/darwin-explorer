@@ -1,12 +1,28 @@
 import { Flex, styled } from "@aura-ui/react";
 import { ConnectWallet, useConnect } from "arweave-wallet-ui-test";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Search } from "../search";
 import { HeaderDropdown } from "./HeaderDropdown";
 import { Image } from "../../ui/Image";
+import { useEffect, useState } from "react";
 
 export const AppHeader = () => {
   const { profile, walletAddress } = useConnect();
+  const [isHome, setIsHome] = useState(false);
+  const location = useLocation();
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      if (location && location.pathname === "/") {
+        setIsHome(true);
+      } else {
+        setIsHome(false);
+      }
+    }
+  }, [location]);
+
+  if (isHome) return null;
+
   return (
     <Flex
       as="header"
@@ -23,7 +39,11 @@ export const AppHeader = () => {
     >
       <Flex gap="5">
         <Link to="/">
-          <Image css={{ cursor: "pointer" }} src="logo.svg" alt="Darwin logo" />
+          <Image
+            css={{ cursor: "pointer", size: 44 }}
+            src="logo.svg"
+            alt="Darwin logo"
+          />
         </Link>
         <Search />
         <Flex
